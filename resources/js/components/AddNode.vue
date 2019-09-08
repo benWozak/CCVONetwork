@@ -17,7 +17,11 @@
             :rules="{ required: true, message: 'Please enter the name of your Organization', trigger: 'blur' }"
             label-width="240px" @submit.native.prevent>
                 <el-form-item  label="Your Organization" prop="organization_name">
-                    <el-input v-model="organization.organization_name"></el-input>
+                    <el-autocomplete
+                        v-model="organization.organization_name"
+                        :trigger-on-focus="false"
+                        :fetch-suggestions="getOrganizations">
+                    </el-autocomplete>
                 </el-form-item>
 
                 <el-form-item label="Is your organization a current or recent CCVO member?" prop="affiliated">
@@ -47,7 +51,11 @@
                 </span>
                 <label for="">Please list up to 10 organizations represented by the people you connected with.</label>
                 <el-form-item v-for="(connection, index) in awareness.connections" :key="index" :label="'Connection' + (index + 1)" >
-                    <el-input v-model="connection.name" @keyup.enter.native="$event.target.nextElementSibling.focus()"></el-input>
+                    <el-autocomplete
+                        v-model="connection.name" @keyup.enter.native="$event.target.nextElementSibling.focus()"
+                        :trigger-on-focus="false"
+                        :fetch-suggestions="getOrganizations">
+                    </el-autocomplete>
                 </el-form-item>
 
                 <div class="clearfix">
@@ -70,7 +78,11 @@
                     Please list up to 10 organizations represented by the people to whom you reached out.
                 </span>
                 <el-form-item v-for="(connection, index) in shared.connections" :key="index" :label="'Connection' + (index + 1)" >
-                    <el-input v-model="connection.name" @keyup.enter.native="$event.target.nextElementSibling.focus()"></el-input>
+                    <el-autocomplete
+                        v-model="connection.name" @keyup.enter.native="$event.target.nextElementSibling.focus()"
+                        :trigger-on-focus="false"
+                        :fetch-suggestions="getOrganizations">
+                    </el-autocomplete>
                 </el-form-item>
                 <div class="clearfix">
                     <el-form-item class="footer">
@@ -93,7 +105,11 @@
                     Please list up to 10 organizations involved in these collaborations.
                 </span>
                 <el-form-item v-for="(connection, index) in partners.connections" :key="index" :label="'Connection' + (index + 1)" >
-                    <el-input v-model="connection.name" @keyup.enter.native="$event.target.nextElementSibling.focus()"></el-input>
+                    <el-autocomplete
+                        v-model="connection.name" @keyup.enter.native="$event.target.nextElementSibling.focus()"
+                        :trigger-on-focus="false"
+                        :fetch-suggestions="getOrganizations">
+                    </el-autocomplete>
                 </el-form-item>
             </div>
         </el-form>
@@ -169,6 +185,18 @@ export default {
         },
     },
     methods: {
+        getOrganizations(search, cb) {
+            let results = [];
+
+            axios.get(`/api/organizations?search=${search}`, {
+                search
+            }).then((response) => {
+                results = response.data;
+
+                cb(results.data);
+            });
+        },
+
         addOrganization() {
             // for(let i = 0; i < this.nodes.length; i++) {
             //     if(this.organization.organization_name.toUpperCase() === this.nodes[i].organization_name.toUpperCase()) {
