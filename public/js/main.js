@@ -1855,7 +1855,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-<<<<<<< Updated upstream
 //
 //
 //
@@ -1866,21 +1865,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-<<<<<<< HEAD
-//
-//
-//
-//
-=======
->>>>>>> a2b0c9eaef918d5cad07b222fdd30054a51b9d1a
-=======
->>>>>>> Stashed changes
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2007,15 +1991,19 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    getOrganizations: function getOrganizations(search, cb) {
+      var results = [];
+      axios.get("/api/organizations?search=".concat(search), {
+        search: search
+      }).then(function (response) {
+        results = response.data;
+        cb(results.data);
+      });
+    },
     addOrganization: function addOrganization() {
-      // for(let i = 0; i < this.nodes.length; i++) {
-      //     if(this.organization.organization_name.toUpperCase() === this.nodes[i].organization_name.toUpperCase()) {
-      //         this.organization.id = this.nodes[i].id;
-      //         return;
-      //     }
-      // }
+      this.organization.id = this.nextId;
       this.nodes.push({
-        id: this.nextId,
+        id: this.organization.id,
         name: this.organization.organization_name
       });
       this.nextId++;
@@ -2024,12 +2012,10 @@ __webpack_require__.r(__webpack_exports__);
     setAware: function setAware() {
       for (var i = 0; i < this.awareness.connections.length; i++) {
         if (this.awareness.connections[i].name === '') {
-          console.log('--here?--');
           this.awareness.connections.splice(i, 1);
         } else {
           this.awareness.connections[i].id = this.nextId;
           this.nextId++;
-          console.log(this.awareness.connections[i].id);
           this.nodes.push({
             id: this.awareness.connections[i].id,
             name: this.awareness.connections[i].name
@@ -2044,9 +2030,85 @@ __webpack_require__.r(__webpack_exports__);
       this.active = 3;
     },
     setShared: function setShared() {
+      for (var i = 0; i < this.shared.connections.length; i++) {
+        if (this.shared.connections[i].name === '') {
+          this.shared.connections.splice(i, 1);
+        } else {
+          for (var j = 0; j < this.nodes.length; j++) {
+            if (this.shared.connections[i].name.toUpperCase() === this.nodes[j].name.toUpperCase()) {
+              this.shared.connections[i].id = this.nodes[j].id;
+              this.links.push({
+                sid: this.organization.id,
+                tid: this.shared.connections[i].id,
+                _svgAttrs: {
+                  "stroke-width": 4,
+                  opacity: 1
+                },
+                name: "Shared"
+              });
+              this.shared.connections.splice(i, 1);
+            }
+          }
+
+          this.shared.connections[i].id = this.nextId;
+          this.nextId++;
+          this.nodes.push({
+            id: this.shared.connections[i].id,
+            name: this.shared.connections[i].name
+          });
+          this.links.push({
+            sid: this.organization.id,
+            tid: this.shared.connections[i].id,
+            _svgAttrs: {
+              "stroke-width": 4,
+              opacity: 1
+            },
+            name: "Shared"
+          });
+        }
+      }
+
       this.active = 4;
     },
     setPartners: function setPartners() {
+      for (var i = 0; i < this.partners.connections.length; i++) {
+        if (this.partners.connections[i].name === '') {
+          this.partners.connections.splice(i, 1);
+        } else {
+          for (var j = 0; j < this.nodes.length; j++) {
+            if (this.partners.connections[i].name.toUpperCase() === this.nodes[j].name.toUpperCase()) {
+              this.partners.connections[i].id = this.nodes[j].id;
+              this.links.push({
+                sid: this.organization.id,
+                tid: this.partners.connections[i].id,
+                _svgAttrs: {
+                  "stroke-width": 8,
+                  opacity: 1
+                },
+                name: "Partners"
+              });
+              this.partners.connections.splice(i, 1);
+            }
+          }
+
+          this.partners.connections[i].id = this.nextId;
+          this.nextId++;
+          this.nodes.push({
+            id: this.partners.connections[i].id,
+            name: this.partners.connections[i].name
+          });
+          this.links.push({
+            sid: this.organization.id,
+            tid: this.partners.connections[i].id,
+            _svgAttrs: {
+              "stroke-width": 8,
+              opacity: 1
+            },
+            name: "Partners"
+          });
+        }
+      }
+
       this.active = 5;
     },
 
@@ -2084,51 +2146,53 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     },
+    addConnections: function addConnections() {
+      for (var i = 0; i < this.nodes.length; i++) {
+        this.connections.push({
+          organization_name: this.nodes[i].name,
+          connection_type: 'unknown'
+        });
+      }
+    },
 
     /**
      * Submits data to state
      */
-    onSubmit: function onSubmit(formName) {
-      var _this = this;
+    onSubmit: function onSubmit() {
+      // this.$refs[formName].validate((valid) => {
+      //     if (valid) {
+      // this.addOrganization();
+      // this.checkExistingNodes();
+      // this.addNewNodes();
+      this.addConnections();
+      axios.post('/api/connections', {
+        organization_name: this.organization.organization_name,
+        is_member: this.organization.is_member,
+        connections: this.connections
+      }); // axios.post(/api/connections, {
+      //     organization_name: this.form.organization_name
+      // })
+      // this.$store.dispatch('submitForm').then((response) => {
+      //     // return Promise('') --> Validate whether or not the form is good
+      // })
+      // .catch(() => {
+      //     this.$message({
+      //         type: 'error',
+      //         message: 'Oops! Something went wrong.'
+      //     });
+      // });
 
-      this.$refs[formName].validate(function (valid) {
-        if (valid) {
-          _this.addOrganization();
-
-          _this.checkExistingNodes();
-
-          _this.addNewNodes();
-
-          axios.post('/api/connections', {
-            organization_name: _this.organization.organization_name,
-            is_member: _this.organization.is_member,
-            connections: _this.connections
-          }); // axios.post(/api/connections, {
-          //     organization_name: this.form.organization_name
-          // })
-          // this.$store.dispatch('submitForm').then((response) => {
-          //     // return Promise('') --> Validate whether or not the form is good
-          // })
-          // .catch(() => {
-          //     this.$message({
-          //         type: 'error',
-          //         message: 'Oops! Something went wrong.'
-          //     });
-          // });
-
-          _this.resetForm();
-
-          _this.$message({
-            showClose: true,
-            message: 'New Connection Established',
-            type: 'success'
-          });
-        } else {
-          _this.$message.error('Oops, Looks like you missed a field.');
-
-          return false;
-        }
-      });
+      this.resetForm();
+      this.$router.push("/network");
+      this.$message({
+        showClose: true,
+        message: 'New Connection Established',
+        type: 'success'
+      }); //     } else {
+      //         this.$message.error('Oops, Looks like you missed a field.');
+      //         return false;
+      //     }
+      // });
     },
     resetForm: function resetForm() {
       this.organization.id = this.nextId++;
@@ -2142,15 +2206,8 @@ __webpack_require__.r(__webpack_exports__);
      * back end generated IDs
      */
     setIdValues: function setIdValues() {
-      //Iterate through nodes list to find next available id
-      // for(var i = 0; i <= this.nodes.length; i++){
-      //     this.nextId++;
-      // }
-      //Assign New organization_name id, then increment for next use
       this.organization.id = this.nextId;
-      this.nextId++; //Assign first available connection id, then increment for next use
-      // this.connections[0].id = this.nextId;
-      // this.nextId++;
+      this.nextId++;
     }
   },
   created: function created() {// this.setIdValues();
@@ -71239,7 +71296,11 @@ var render = function() {
                   }
                 },
                 [
-                  _c("el-input", {
+                  _c("el-autocomplete", {
+                    attrs: {
+                      "trigger-on-focus": false,
+                      "fetch-suggestions": _vm.getOrganizations
+                    },
                     model: {
                       value: _vm.organization.organization_name,
                       callback: function($$v) {
@@ -71296,17 +71357,15 @@ var render = function() {
                     "el-form-item",
                     { staticClass: "footer" },
                     [
-                      _vm.active === 1
-                        ? _c(
-                            "el-button",
-                            {
-                              staticClass: "button",
-                              attrs: { type: "primary" },
-                              on: { click: _vm.addOrganization }
-                            },
-                            [_vm._v("Next")]
-                          )
-                        : _vm._e(),
+                      _c(
+                        "el-button",
+                        {
+                          staticClass: "button",
+                          attrs: { type: "primary" },
+                          on: { click: _vm.addOrganization }
+                        },
+                        [_vm._v("Next")]
+                      ),
                       _vm._v(" "),
                       _c("el-button", { on: { click: _vm.resetForm } }, [
                         _vm._v("Cancel")
@@ -71340,6 +71399,8 @@ var render = function() {
                   "\n                Think back over the past three months and consider any nonprofit events\n                or collaboratives you’ve attended. Recall the people you noticed there\n                and those you quickly connected with – such as a brief “Hello” before\n                the event started, or a catch-up during a break.\n            "
                 )
               ]),
+              _c("br"),
+              _c("br"),
               _vm._v(" "),
               _c("label", { attrs: { for: "" } }, [
                 _vm._v(
@@ -71352,7 +71413,11 @@ var render = function() {
                   "el-form-item",
                   { key: index, attrs: { label: "Connection" + (index + 1) } },
                   [
-                    _c("el-input", {
+                    _c("el-autocomplete", {
+                      attrs: {
+                        "trigger-on-focus": false,
+                        "fetch-suggestions": _vm.getOrganizations
+                      },
                       nativeOn: {
                         keyup: function($event) {
                           if (
@@ -71391,17 +71456,15 @@ var render = function() {
                     "el-form-item",
                     { staticClass: "footer" },
                     [
-                      _vm.active === 2
-                        ? _c(
-                            "el-button",
-                            {
-                              staticClass: "button",
-                              attrs: { type: "primary" },
-                              on: { click: _vm.setAware }
-                            },
-                            [_vm._v("Next")]
-                          )
-                        : _vm._e(),
+                      _c(
+                        "el-button",
+                        {
+                          staticClass: "button",
+                          attrs: { type: "primary" },
+                          on: { click: _vm.setAware }
+                        },
+                        [_vm._v("Next")]
+                      ),
                       _vm._v(" "),
                       _c("el-button", { on: { click: _vm.resetForm } }, [
                         _vm._v("Cancel")
@@ -71432,7 +71495,15 @@ var render = function() {
             [
               _c("span", [
                 _vm._v(
-                  "\n                Think back over the past six months, and consider situations in which you’ve\n                encountered a challenge or concern at work, and needed to “pick someone’s brain”\n                outside of your own organization.\n\n                Please list up to 10 organizations represented by the people to whom you reached out.\n            "
+                  "\n                Think back over the past six months, and consider situations in which you’ve\n                encountered a challenge or concern at work, and needed to “pick someone’s brain”\n                outside of your own organization.\n            "
+                )
+              ]),
+              _c("br"),
+              _c("br"),
+              _vm._v(" "),
+              _c("label", { attrs: { for: "" } }, [
+                _vm._v(
+                  "Please list up to 10 organizations represented by the people to whom you reached out."
                 )
               ]),
               _vm._v(" "),
@@ -71441,7 +71512,11 @@ var render = function() {
                   "el-form-item",
                   { key: index, attrs: { label: "Connection" + (index + 1) } },
                   [
-                    _c("el-input", {
+                    _c("el-autocomplete", {
+                      attrs: {
+                        "trigger-on-focus": false,
+                        "fetch-suggestions": _vm.getOrganizations
+                      },
                       nativeOn: {
                         keyup: function($event) {
                           if (
@@ -71480,17 +71555,15 @@ var render = function() {
                     "el-form-item",
                     { staticClass: "footer" },
                     [
-                      _vm.active === 3
-                        ? _c(
-                            "el-button",
-                            {
-                              staticClass: "button",
-                              attrs: { type: "primary" },
-                              on: { click: _vm.setShared }
-                            },
-                            [_vm._v("Next")]
-                          )
-                        : _vm._e(),
+                      _c(
+                        "el-button",
+                        {
+                          staticClass: "button",
+                          attrs: { type: "primary" },
+                          on: { click: _vm.setShared }
+                        },
+                        [_vm._v("Next")]
+                      ),
                       _vm._v(" "),
                       _c("el-button", { on: { click: _vm.resetForm } }, [
                         _vm._v("Cancel")
@@ -71519,11 +71592,64 @@ var render = function() {
               }
             },
             [
+              _c("span", [
+                _vm._v(
+                  "\n                Thinking back over the past two years, consider formal partnerships your organization\n                has been involved in for joint funding, shared resources, or any collaborative in which\n                decision-making would be made jointly.\n            "
+                )
+              ]),
+              _c("br"),
+              _c("br"),
+              _vm._v(" "),
+              _c("label", { attrs: { for: "" } }, [
+                _vm._v(
+                  "Please list up to 10 organizations involved in these collaborations."
+                )
+              ]),
+              _vm._v(" "),
+              _vm._l(_vm.partners.connections, function(connection, index) {
+                return _c(
+                  "el-form-item",
+                  { key: index, attrs: { label: "Connection" + (index + 1) } },
+                  [
+                    _c("el-autocomplete", {
+                      attrs: {
+                        "trigger-on-focus": false,
+                        "fetch-suggestions": _vm.getOrganizations
+                      },
+                      nativeOn: {
+                        keyup: function($event) {
+                          if (
+                            !$event.type.indexOf("key") &&
+                            _vm._k(
+                              $event.keyCode,
+                              "enter",
+                              13,
+                              $event.key,
+                              "Enter"
+                            )
+                          ) {
+                            return null
+                          }
+                          return $event.target.nextElementSibling.focus()
+                        }
+                      },
+                      model: {
+                        value: connection.name,
+                        callback: function($$v) {
+                          _vm.$set(connection, "name", $$v)
+                        },
+                        expression: "connection.name"
+                      }
+                    })
+                  ],
+                  1
+                )
+              }),
+              _vm._v(" "),
               _c(
                 "div",
+                { staticClass: "clearfix" },
                 [
-<<<<<<< Updated upstream
-<<<<<<< HEAD
                   _c(
                     "el-form-item",
                     { staticClass: "footer" },
@@ -71544,173 +71670,91 @@ var render = function() {
                     ],
                     1
                   )
-=======
-=======
->>>>>>> Stashed changes
-                  _c("span", [
-                    _vm._v(
-                      "\n                Thinking back over the past two years, consider formal partnerships your organization\n                has been involved in for joint funding, shared resources, or any collaborative in which\n                decision-making would be made jointly.\n\n                Please list up to 10 organizations involved in these collaborations.\n            "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _vm._l(_vm.partners.connections, function(connection, index) {
-                    return _c(
-                      "el-form-item",
-                      {
-                        key: index,
-                        attrs: { label: "Connection" + (index + 1) }
-                      },
-                      [
-<<<<<<< Updated upstream
-                        _c("el-autocomplete", {
-                          attrs: {
-                            "trigger-on-focus": false,
-                            "fetch-suggestions": _vm.getOrganizations
-                          },
-=======
-                        _c("el-input", {
->>>>>>> Stashed changes
-                          nativeOn: {
-                            keyup: function($event) {
-                              if (
-                                !$event.type.indexOf("key") &&
-                                _vm._k(
-                                  $event.keyCode,
-                                  "enter",
-                                  13,
-                                  $event.key,
-                                  "Enter"
-                                )
-                              ) {
-                                return null
-                              }
-                              return $event.target.nextElementSibling.focus()
-                            }
-                          },
-                          model: {
-                            value: connection.name,
-                            callback: function($$v) {
-                              _vm.$set(connection, "name", $$v)
-                            },
-                            expression: "connection.name"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  })
-<<<<<<< Updated upstream
->>>>>>> a2b0c9eaef918d5cad07b222fdd30054a51b9d1a
-=======
->>>>>>> Stashed changes
                 ],
-                2
+                1
               )
-            ]
+            ],
+            2
           )
         : _vm._e(),
       _vm._v(" "),
       _vm.active === 5
-        ? _c("el-form", [
-            _c(
-              "div",
-              [
+        ? _c(
+            "el-form",
+            {
+              attrs: { "label-width": "240px" },
+              nativeOn: {
+                submit: function($event) {
+                  $event.preventDefault()
+                }
+              }
+            },
+            [
+              _c("el-form-item", [
                 _c(
-                  "el-form-item",
+                  "label",
+                  { staticClass: "custom-label", attrs: { for: "" } },
                   [
-                    _c(
-                      "label",
-                      { staticClass: "custom-label", attrs: { for: "" } },
-                      [
-                        _vm._v(
-                          "Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020?"
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "el-checkbox",
-                      {
-                        model: {
-                          value: _vm.join_raffle,
-                          callback: function($$v) {
-                            _vm.join_raffle = $$v
-                          },
-                          expression: "join_raffle"
-                        }
-                      },
-                      [_vm._v("Join Raffle")]
+                    _vm._v(
+                      "Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020?"
                     )
-                  ],
-                  1
+                  ]
                 ),
                 _vm._v(" "),
-                _vm.join_raffle
-                  ? _c("div", [
-                      _vm._v("\n                do stuff\n            ")
-                    ])
-                  : _vm._e()
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "clearfix" },
-              [
-                _c(
-                  "el-form-item",
-                  { staticClass: "footer" },
-                  [
-                    _vm.active === 4
-                      ? _c(
-                          "el-button",
-                          {
-                            staticClass: "button",
-                            attrs: { type: "primary" },
-                            on: { click: _vm.setPartners }
-                          },
-                          [_vm._v("Next")]
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.active === 5
-                      ? _c(
-                          "span",
-                          { staticClass: "margin-right" },
-                          [
-                            _c(
-                              "el-button",
-                              {
-                                staticClass: "button",
-                                attrs: { type: "primary" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.onSubmit("form")
-                                  },
-                                  submit: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.onSubmit("form")
-                                  }
+                _c("p", [
+                  _vm._v("Click "),
+                  _c("a", { attrs: { href: "https://www.hellokrd.net/" } }, [
+                    _vm._v("here")
+                  ]),
+                  _vm._v(" to enter")
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "clearfix" },
+                [
+                  _c(
+                    "el-form-item",
+                    { staticClass: "footer" },
+                    [
+                      _c(
+                        "span",
+                        { staticClass: "margin-right" },
+                        [
+                          _c(
+                            "el-button",
+                            {
+                              staticClass: "button",
+                              attrs: { type: "primary" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.onSubmit()
+                                },
+                                submit: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.onSubmit()
                                 }
-                              },
-                              [_vm._v("Create")]
-                            )
-                          ],
-                          1
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _c("el-button", { on: { click: _vm.resetForm } }, [
-                      _vm._v("Cancel")
-                    ])
-                  ],
-                  1
-                )
-              ],
-              1
-            )
-          ])
+                              }
+                            },
+                            [_vm._v("Submit")]
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("el-button", { on: { click: _vm.resetForm } }, [
+                        _vm._v("Cancel")
+                      ])
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
         : _vm._e()
     ],
     1
@@ -88784,7 +88828,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/rupert/www/sites/OSNApp/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\OSNApp\resources\js\main.js */"./resources/js/main.js");
 
 
 /***/ })
