@@ -23,8 +23,8 @@ html, body {
   text-align: center;
   color: #2c3e50;
   background-color: #EEEEEE;
-  height: 100%;
-  width: 100%;
+  min-height: 100%;
+  min-width: 100%;
 }
 #nav {
   padding: 30px;
