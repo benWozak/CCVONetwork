@@ -1997,7 +1997,8 @@ __webpack_require__.r(__webpack_exports__);
     },
     setAware: function setAware() {
       for (var i = 0; i < this.awareness.connections.length; i++) {
-        if (this.awareness.connection[i].name === '') {
+        if (this.awareness.connections[i].name === '') {
+          console.log('--here?--');
           this.awareness.connections.splice(i, 1);
         } else {
           this.awareness.connections[i].id = this.nextId;
@@ -2111,7 +2112,7 @@ __webpack_require__.r(__webpack_exports__);
     },
 
     /**
-     * Data inside this method should be replaced with a fetch of 
+     * Data inside this method should be replaced with a fetch of
      * back end generated IDs
      */
     setIdValues: function setIdValues() {
@@ -71310,7 +71311,7 @@ var render = function() {
             [
               _c("span", [
                 _vm._v(
-                  "\n                Think back over the past three months and consider any nonprofit events \n                or collaboratives you’ve attended. Recall the people you noticed there \n                and those you quickly connected with – such as a brief “Hello” before \n                the event started, or a catch-up during a break.  \n            "
+                  "\n                Think back over the past three months and consider any nonprofit events\n                or collaboratives you’ve attended. Recall the people you noticed there\n                and those you quickly connected with – such as a brief “Hello” before\n                the event started, or a catch-up during a break.\n            "
                 )
               ]),
               _vm._v(" "),
@@ -71405,7 +71406,7 @@ var render = function() {
             [
               _c("span", [
                 _vm._v(
-                  "\n                Think back over the past six months, and consider situations in which you’ve \n                encountered a challenge or concern at work, and needed to “pick someone’s brain” \n                outside of your own organization.\n\n                Please list up to 10 organizations represented by the people to whom you reached out.\n            "
+                  "\n                Think back over the past six months, and consider situations in which you’ve\n                encountered a challenge or concern at work, and needed to “pick someone’s brain”\n                outside of your own organization.\n\n                Please list up to 10 organizations represented by the people to whom you reached out.\n            "
                 )
               ]),
               _vm._v(" "),
@@ -71497,7 +71498,7 @@ var render = function() {
                 [
                   _c("span", [
                     _vm._v(
-                      "\n                Thinking back over the past two years, consider formal partnerships your organization \n                has been involved in for joint funding, shared resources, or any collaborative in which \n                decision-making would be made jointly.\n\n                Please list up to 10 organizations involved in these collaborations.\n            "
+                      "\n                Thinking back over the past two years, consider formal partnerships your organization\n                has been involved in for joint funding, shared resources, or any collaborative in which\n                decision-making would be made jointly.\n\n                Please list up to 10 organizations involved in these collaborations.\n            "
                     )
                   ]),
                   _vm._v(" "),
@@ -88720,7 +88721,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\OSNApp\resources\js\main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /Users/rupert/www/sites/OSNApp/resources/js/main.js */"./resources/js/main.js");
 
 
 /***/ })

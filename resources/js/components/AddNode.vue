@@ -34,16 +34,16 @@
                 </el-form-item>
             </div>
         </el-form>
-        
+
         <el-form v-if="active === 2"
             ref="awareness"
             :model="awareness"
             label-width="240px" @submit.native.prevent>
                 <span>
-                    Think back over the past three months and consider any nonprofit events 
-                    or collaboratives you’ve attended. Recall the people you noticed there 
-                    and those you quickly connected with – such as a brief “Hello” before 
-                    the event started, or a catch-up during a break.  
+                    Think back over the past three months and consider any nonprofit events
+                    or collaboratives you’ve attended. Recall the people you noticed there
+                    and those you quickly connected with – such as a brief “Hello” before
+                    the event started, or a catch-up during a break.
                 </span>
                 <label for="">Please list up to 10 organizations represented by the people you connected with.</label>
                 <el-form-item v-for="(connection, index) in awareness.connections" :key="index" :label="'Connection' + (index + 1)" >
@@ -63,8 +63,8 @@
             :model="shared"
             label-width="240px" @submit.native.prevent>
                 <span>
-                    Think back over the past six months, and consider situations in which you’ve 
-                    encountered a challenge or concern at work, and needed to “pick someone’s brain” 
+                    Think back over the past six months, and consider situations in which you’ve
+                    encountered a challenge or concern at work, and needed to “pick someone’s brain”
                     outside of your own organization.
 
                     Please list up to 10 organizations represented by the people to whom you reached out.
@@ -86,8 +86,8 @@
             label-width="240px" @submit.native.prevent>
             <div >
                 <span>
-                    Thinking back over the past two years, consider formal partnerships your organization 
-                    has been involved in for joint funding, shared resources, or any collaborative in which 
+                    Thinking back over the past two years, consider formal partnerships your organization
+                    has been involved in for joint funding, shared resources, or any collaborative in which
                     decision-making would be made jointly.
 
                     Please list up to 10 organizations involved in these collaborations.
@@ -111,21 +111,21 @@
 
             <div class="clearfix">
                 <el-form-item class="footer">
-                    
-                    
+
+
                     <el-button v-if="active === 4" type="primary" class="button" @click="setPartners">Next</el-button>
                     <span v-if="active === 5" class="margin-right">
-                        <!-- <el-button v-if="form.connections.length < 10" 
-                            type="primary" 
-                            class="button button-align" 
+                        <!-- <el-button v-if="form.connections.length < 10"
+                            type="primary"
+                            class="button button-align"
                             icon="el-icon-plus" @click="addConnection">Add Connection</el-button> -->
                         <el-button type="primary" class="button" @click="onSubmit('form')" @submit.prevent="onSubmit('form')">Create</el-button>
                     </span>
-                    
+
                     <el-button @click="resetForm">Cancel</el-button>
                 </el-form-item>
             </div>
-            
+
         </el-form>
     </el-card>
 </template>
@@ -161,10 +161,10 @@ export default {
       }
     },
     computed: {
-        nodes: { 
+        nodes: {
             get() { return this.$store.state.nodes },
         },
-        links: { 
+        links: {
             get() { return this.$store.state.links },
         },
     },
@@ -176,18 +176,20 @@ export default {
             //         return;
             //     }
             // }
-            this.nodes.push({ 
-                id: this.nextId, 
-                name: this.organization.organization_name 
+            this.nodes.push({
+                id: this.nextId,
+                name: this.organization.organization_name
             })
             this.nextId++;
-            
+
             this.active = 2;
         },
         setAware() {
             for(let i = 0; i < this.awareness.connections.length; i++) {
-                
-                if(this.awareness.connection[i].name === '') {
+
+                if(this.awareness.connections[i].name === '') {
+                    console.log('--here?--');
+
                     this.awareness.connections.splice(i, 1);
                 } else {
                     this.awareness.connections[i].id = this.nextId;
@@ -204,7 +206,7 @@ export default {
                         tid: this.awareness.connections[i].id
                     })
                 }
-                
+
             }
             this.active = 3;
         },
@@ -228,7 +230,7 @@ export default {
                         })
                         this.connections.splice(j, 1)
                     }
-                }  
+                }
             }
         },
 
@@ -257,7 +259,7 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.addOrganization();
-                    
+
                     this.checkExistingNodes();
                     this.addNewNodes();
 
@@ -294,14 +296,14 @@ export default {
             });
         },
         resetForm() {
-            
+
             this.organization.id = this.nextId++;
             this.organization.organization_name = '';
             this.connections = []
             this.active = 1;
         },
         /**
-         * Data inside this method should be replaced with a fetch of 
+         * Data inside this method should be replaced with a fetch of
          * back end generated IDs
          */
         setIdValues() {
