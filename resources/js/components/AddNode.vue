@@ -119,7 +119,7 @@
         </el-form>
 
         <el-form v-if="active === 5"
-            label-width="240px" 
+            label-width="240px"
             @submit.native.prevent>
                 <el-form-item>
                     <label for="" class="custom-label">Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020?</label>
@@ -213,7 +213,8 @@ export default {
 
                     this.nodes.push({
                         id: this.awareness.connections[i].id,
-                        name: this.awareness.connections[i].name
+                        name: this.awareness.connections[i].name,
+                        connection_type: 'awareness'
                     })
 
                     this.links.push({
@@ -247,7 +248,8 @@ export default {
 
                     this.nodes.push({
                         id: this.shared.connections[i].id,
-                        name: this.shared.connections[i].name
+                        name: this.shared.connections[i].name,
+                        connection_type: 'shared knowledge'
                     })
 
                     this.links.push({
@@ -282,7 +284,8 @@ export default {
 
                     this.nodes.push({
                         id: this.partners.connections[i].id,
-                        name: this.partners.connections[i].name
+                        name: this.partners.connections[i].name,
+                        connection_type: 'partnership'
                     })
 
                     this.links.push({
@@ -332,10 +335,10 @@ export default {
         },
 
         addConnections() {
-            for(let i = 0; i < this.nodes.length; i++) {
+            for(let i = 1; i < this.nodes.length; i++) {
                 this.connections.push({
                     organization_name: this.nodes[i].name,
-                    connection_type: 'unknown'
+                    connection_type: this.nodes[i].connection_type,
                 })
             }
         },

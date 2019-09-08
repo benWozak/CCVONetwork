@@ -3761,7 +3761,8 @@ __webpack_require__.r(__webpack_exports__);
           this.nextId++;
           this.nodes.push({
             id: this.awareness.connections[i].id,
-            name: this.awareness.connections[i].name
+            name: this.awareness.connections[i].name,
+            connection_type: 'awareness'
           });
           this.links.push({
             sid: this.organization.id,
@@ -3797,7 +3798,8 @@ __webpack_require__.r(__webpack_exports__);
           this.nextId++;
           this.nodes.push({
             id: this.shared.connections[i].id,
-            name: this.shared.connections[i].name
+            name: this.shared.connections[i].name,
+            connection_type: 'shared knowledge'
           });
           this.links.push({
             sid: this.organization.id,
@@ -3838,7 +3840,8 @@ __webpack_require__.r(__webpack_exports__);
           this.nextId++;
           this.nodes.push({
             id: this.partners.connections[i].id,
-            name: this.partners.connections[i].name
+            name: this.partners.connections[i].name,
+            connection_type: 'partnership'
           });
           this.links.push({
             sid: this.organization.id,
@@ -3890,10 +3893,10 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     addConnections: function addConnections() {
-      for (var i = 0; i < this.nodes.length; i++) {
+      for (var i = 1; i < this.nodes.length; i++) {
         this.connections.push({
           organization_name: this.nodes[i].name,
-          connection_type: 'unknown'
+          connection_type: this.nodes[i].connection_type
         });
       }
     },
