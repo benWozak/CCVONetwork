@@ -21,8 +21,8 @@ class CreateOrganizationsTable extends Migration
         Schema::create('organizations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->boolean('is_member');
-            $table->unsignedInteger('subsector_id');
+            $table->boolean('is_member')->default(FALSE);
+            $table->unsignedInteger('subsector_id')->default('99');
             $table->timestamps();
 
             $table->foreign('subsector_id')->references('id')->on('subsectors');
