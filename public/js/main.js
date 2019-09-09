@@ -4282,22 +4282,38 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     axios.get('api/connections').then(function (response) {
-      _this.connections = response.data;
+      _this.connections = response.data.data;
+      console.log(_this.connections);
     });
     axios.get('api/organizations').then(function (response) {
-      _this.organizations = response.data;
+      _this.organizations = response.data.data;
+      console.log(_this.organizations);
     });
   },
   computed: {
-    nodes: {
-      get: function get() {
-        return this.nodesDisplay();
+    nodes: function nodes() {
+      var nodes = [];
+
+      for (var i = 0; i < this.organizations.length; i++) {
+        nodes.push({
+          id: this.organizations[i].id,
+          name: this.organizations[i].organization_name
+        });
       }
+
+      return nodes;
     },
-    links: {
-      get: function get() {
-        return this.linksDisplay();
+    links: function links() {
+      var links = [];
+
+      for (var i = 0; i < this.connections.length; i++) {
+        links.push({
+          sid: this.connections[i].host_id,
+          tid: this.connections[i].contact_id
+        });
       }
+
+      return links;
     },
     options: function options() {
       return {
@@ -4313,22 +4329,8 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    nodesDisplay: function nodesDisplay() {
-      for (var i = 0; i < this.organizations.length; i++) {
-        this.nodes.push({
-          id: this.organizations.id,
-          name: this.organizations.organization_name
-        });
-      }
-    },
-    linksDisplay: function linksDisplay() {
-      for (var i = 0; i < this.connections.length; i++) {
-        this.links.push({
-          sid: this.connections.host_id,
-          tid: this.connections.contact_id
-        });
-      }
-    }
+    nodesDisplay: function nodesDisplay() {},
+    linksDisplay: function linksDisplay() {}
   }
 });
 
@@ -90592,7 +90594,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\OSNApp\resources\js\main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /Users/rupert/www/sites/OSNApp/resources/js/main.js */"./resources/js/main.js");
 
 
 /***/ })

@@ -5,7 +5,7 @@ Route::get('/', function () {
 
 // Catch all route
 Route::get('/{all}', function () {
-    return redirect('/');
+    return view('welcome');
 });
 
 Route::get('/api/organizations', 'OrganizationController@index');

@@ -1,9 +1,9 @@
 <template>
     <div class="network">
         <div class="main">
-            <d3-network ref='net' 
-                :net-nodes="nodes" 
-                :net-links="links" 
+            <d3-network ref='net'
+                :net-nodes="nodes"
+                :net-links="links"
                 :options="options"/>
         </div>
     </div>
@@ -19,7 +19,7 @@ export default {
     components: {
         D3Network,
         Selection
-        
+
     },
     data() {
         return {
@@ -32,26 +32,44 @@ export default {
     },
     mounted () {
         axios.get('api/connections')
-        .then((response) => {
-            this.connections = response.data 
+        .then(response => {
+            this.connections = response.data.data;
+
+            console.log(this.connections);
         });
         axios.get('api/organizations')
-        .then((response) => {
-            this.organizations = response.data  
+        .then(response => {
+            this.organizations = response.data.data
+
+            console.log(this.organizations);
         });
     },
     computed:{
-        
-        nodes: {
-            get() {
-                return this.nodesDisplay();
+
+        nodes() {
+            let nodes = [];
+
+            for(let i = 0; i < this.organizations.length; i++) {
+                nodes.push({
+                    id: this.organizations[i].id,
+                    name: this.organizations[i].organization_name
+                })
             }
+
+            return nodes;
         },
 
-        links: { 
-           get() {
-               return this.linksDisplay();
-           }
+        links() {
+            let links = [];
+
+            for(let i = 0; i < this.connections.length; i++) {
+                links.push({
+                    sid: this.connections[i].host_id,
+                    tid: this.connections[i].contact_id
+                })
+            }
+
+            return links;
         },
 
         options(){
@@ -67,22 +85,12 @@ export default {
 
     methods: {
         nodesDisplay(){
-            for(let i = 0; i < this.organizations.length; i++) {
-                this.nodes.push({
-                    id: this.organizations.id,
-                    name: this.organizations.organization_name
-                })
-            }
+
         },
         linksDisplay(){
-            for(let i = 0; i < this.connections.length; i++) {
-                this.links.push({
-                    sid: this.connections.host_id,
-                    tid: this.connections.contact_id
-                })
-            }
+
         },
-        
+
     }
 };
 </script>

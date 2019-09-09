@@ -35,7 +35,7 @@ class ConnectionController extends Controller
     		$organization = Organization::firstOrCreate(
 	    		['name' => $contact['organization_name']],
 	    		[
-	    			'is_member' => false, 
+	    			'is_member' => false,
 	    			'subsector_id' => $other->id
 	    		],
 	    	);
