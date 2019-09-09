@@ -4273,22 +4273,30 @@ __webpack_require__.r(__webpack_exports__);
     return {
       nodeSize: 20,
       selected: {},
-      linksSelected: {}
+      linksSelected: {},
+      connections: [],
+      organizations: []
     };
   },
-  // mounted () {
-  //     axios.get('api/connections').then(response => (this.connections = response));
-  //     axios.get('api/organizations').then(response => (this.connections = response));
-  // },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get('api/connections').then(function (response) {
+      _this.connections = response.data;
+    });
+    axios.get('api/organizations').then(function (response) {
+      _this.organizations = response.data;
+    });
+  },
   computed: {
-    organizations: {
+    nodes: {
       get: function get() {
-        return this.$store.state.organizations;
+        return this.nodesDisplay();
       }
     },
-    connections: {
+    links: {
       get: function get() {
-        return this.$store.state.connections;
+        return this.linksDisplay();
       }
     },
     options: function options() {
@@ -4304,57 +4312,23 @@ __webpack_require__.r(__webpack_exports__);
       };
     }
   },
-  methods: {// linkClick (event, link) {
-    //     if (this.tool === 'killer') {
-    //         this.removeLink(link)
-    //     } else {
-    //         if (this.linksSelected[link.id]) {
-    //             this.unSelectLink(link.id)
-    //         } else {
-    //             this.selectLink(link)
-    //         }
-    //     }
-    //     this.updateSelection()
-    // },
-    // updateSelection () {
-    //     this.showSelection = (Object.keys(this.selected).length | Object.keys(this.linksSelected).length)
-    // },
-    // clearSelection () {
-    //     this.selected = {}
-    //     this.linksSelected = {}
-    // },
-    // selectNodesLinks () {
-    //     for (let link of this.links) {
-    //         // node is selected
-    //         if (this.selected[link.sid] || this.selected[link.tid]) {
-    //         this.selectLink(link)
-    //         // node is not selected
-    //         } else {
-    //         this.unSelectLink(link.id)
-    //         }
-    //     }
-    // },
-    // selectNode(node) {
-    //     this.selected[node.id] = node
-    // },
-    // selectLink (link) {
-    //     this.$set(this.linksSelected, link.id, link)
-    // },
-    // unSelectNode (nodeId) {
-    //     if (this.selected[nodeId]) {
-    //         delete (this.selected[nodeId])
-    //     }
-    //     this.selectNodesLinks()
-    // },
-    // unSelectLink (linkId) {
-    //     if (this.linksSelected[linkId]) {
-    //         delete (this.linksSelected[linkId])
-    //     }
-    // },
-    // setShowMenu (show) {
-    //     this.showMenu = show
-    //     this.showHint = false
-    // }
+  methods: {
+    nodesDisplay: function nodesDisplay() {
+      for (var i = 0; i < this.organizations.length; i++) {
+        this.nodes.push({
+          id: this.organizations.id,
+          name: this.organizations.organization_name
+        });
+      }
+    },
+    linksDisplay: function linksDisplay() {
+      for (var i = 0; i < this.connections.length; i++) {
+        this.links.push({
+          sid: this.connections.host_id,
+          tid: this.connections.contact_id
+        });
+      }
+    }
   }
 });
 
@@ -73743,8 +73717,8 @@ var render = function() {
         _c("d3-network", {
           ref: "net",
           attrs: {
-            "net-nodes": _vm.organizations,
-            "net-links": _vm.connections,
+            "net-nodes": _vm.nodes,
+            "net-links": _vm.links,
             options: _vm.options
           }
         })
@@ -90618,7 +90592,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/rupert/www/sites/OSNApp/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\OSNApp\resources\js\main.js */"./resources/js/main.js");
 
 
 /***/ })

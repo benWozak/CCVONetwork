@@ -2,8 +2,8 @@
     <div class="network">
         <div class="main">
             <d3-network ref='net' 
-                :net-nodes="organizations" 
-                :net-links="connections" 
+                :net-nodes="nodes" 
+                :net-links="links" 
                 :options="options"/>
         </div>
     </div>
@@ -25,21 +25,33 @@ export default {
         return {
             nodeSize:20,
             selected: {},
-            linksSelected: {}
+            linksSelected: {},
+            connections: [],
+            organizations: [],
         }
     },
-    // mounted () {
-    //     axios.get('api/connections').then(response => (this.connections = response));
-    //     axios.get('api/organizations').then(response => (this.connections = response));
-    // },
+    mounted () {
+        axios.get('api/connections')
+        .then((response) => {
+            this.connections = response.data 
+        });
+        axios.get('api/organizations')
+        .then((response) => {
+            this.organizations = response.data  
+        });
+    },
     computed:{
         
-        organizations: { 
-            get() { return this.$store.state.organizations } 
+        nodes: {
+            get() {
+                return this.nodesDisplay();
+            }
         },
 
-        connections: { 
-            get() { return this.$store.state.connections } 
+        links: { 
+           get() {
+               return this.linksDisplay();
+           }
         },
 
         options(){
@@ -51,66 +63,26 @@ export default {
                 linkLabels:true,
             }
         },
-        // selection() {
-        //     return {
-        //         nodes: this.selected,
-        //         links: this.linksSelected
-        //     }
-        // },
     },
 
     methods: {
-        // linkClick (event, link) {
-        //     if (this.tool === 'killer') {
-        //         this.removeLink(link)
-        //     } else {
-        //         if (this.linksSelected[link.id]) {
-        //             this.unSelectLink(link.id)
-        //         } else {
-        //             this.selectLink(link)
-        //         }
-        //     }
-        //     this.updateSelection()
-        // },
-        // updateSelection () {
-        //     this.showSelection = (Object.keys(this.selected).length | Object.keys(this.linksSelected).length)
-        // },
-        // clearSelection () {
-        //     this.selected = {}
-        //     this.linksSelected = {}
-        // },
-        // selectNodesLinks () {
-        //     for (let link of this.links) {
-        //         // node is selected
-        //         if (this.selected[link.sid] || this.selected[link.tid]) {
-        //         this.selectLink(link)
-        //         // node is not selected
-        //         } else {
-        //         this.unSelectLink(link.id)
-        //         }
-        //     }
-        // },
-        // selectNode(node) {
-        //     this.selected[node.id] = node
-        // },
-        // selectLink (link) {
-        //     this.$set(this.linksSelected, link.id, link)
-        // },
-        // unSelectNode (nodeId) {
-        //     if (this.selected[nodeId]) {
-        //         delete (this.selected[nodeId])
-        //     }
-        //     this.selectNodesLinks()
-        // },
-        // unSelectLink (linkId) {
-        //     if (this.linksSelected[linkId]) {
-        //         delete (this.linksSelected[linkId])
-        //     }
-        // },
-        // setShowMenu (show) {
-        //     this.showMenu = show
-        //     this.showHint = false
-        // }
+        nodesDisplay(){
+            for(let i = 0; i < this.organizations.length; i++) {
+                this.nodes.push({
+                    id: this.organizations.id,
+                    name: this.organizations.organization_name
+                })
+            }
+        },
+        linksDisplay(){
+            for(let i = 0; i < this.connections.length; i++) {
+                this.links.push({
+                    sid: this.connections.host_id,
+                    tid: this.connections.contact_id
+                })
+            }
+        },
+        
     }
 };
 </script>
