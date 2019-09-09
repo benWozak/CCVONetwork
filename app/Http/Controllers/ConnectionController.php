@@ -37,7 +37,7 @@ class ConnectionController extends Controller
 	    		[
 	    			'is_member' => false,
 	    			'subsector_id' => $other->id
-	    		],
+	    		]
 	    	);
 
 	    	$contactIds[$organization->id] = [ 'connection_type' => $contact['connection_type'] ];
