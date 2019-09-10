@@ -34,14 +34,10 @@ export default {
         axios.get('api/connections')
         .then(response => {
             this.connections = response.data.data;
-
-            console.log(this.connections);
         });
-        axios.get('api/organizations')
+        axios.get('api/organizations?has_connections=true')
         .then(response => {
             this.organizations = response.data.data
-
-            console.log(this.organizations);
         });
     },
     computed:{

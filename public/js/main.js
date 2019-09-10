@@ -4283,11 +4283,9 @@ __webpack_require__.r(__webpack_exports__);
 
     axios.get('api/connections').then(function (response) {
       _this.connections = response.data.data;
-      console.log(_this.connections);
     });
-    axios.get('api/organizations').then(function (response) {
+    axios.get('api/organizations?has_connections=true').then(function (response) {
       _this.organizations = response.data.data;
-      console.log(_this.organizations);
     });
   },
   computed: {
