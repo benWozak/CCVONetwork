@@ -3608,10 +3608,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      active: 1,
+      active: 0,
       nextId: 1,
       organization: {
         id: 0,
@@ -3750,7 +3751,7 @@ __webpack_require__.r(__webpack_exports__);
         name: this.organization.organization_name
       });
       this.nextId++;
-      this.active = 2;
+      this.active = 1;
     },
     setAware: function setAware() {
       for (var i = 0; i < this.awareness.connections.length; i++) {
@@ -3771,7 +3772,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
 
-      this.active = 3;
+      this.active = 2;
     },
     setShared: function setShared() {
       for (var i = 0; i < this.shared.connections.length; i++) {
@@ -3783,12 +3784,7 @@ __webpack_require__.r(__webpack_exports__);
               this.shared.connections[i].id = this.nodes[j].id;
               this.links.push({
                 sid: this.organization.id,
-                tid: this.shared.connections[i].id,
-                _svgAttrs: {
-                  "stroke-width": 4,
-                  opacity: 1
-                },
-                name: "Shared"
+                tid: this.shared.connections[i].id
               });
               this.shared.connections.splice(i, 1);
             }
@@ -3803,17 +3799,12 @@ __webpack_require__.r(__webpack_exports__);
           });
           this.links.push({
             sid: this.organization.id,
-            tid: this.shared.connections[i].id,
-            _svgAttrs: {
-              "stroke-width": 4,
-              opacity: 1
-            },
-            name: "Shared"
+            tid: this.shared.connections[i].id
           });
         }
       }
 
-      this.active = 4;
+      this.active = 3;
     },
     setPartners: function setPartners() {
       for (var i = 0; i < this.partners.connections.length; i++) {
@@ -3825,12 +3816,7 @@ __webpack_require__.r(__webpack_exports__);
               this.partners.connections[i].id = this.nodes[j].id;
               this.links.push({
                 sid: this.organization.id,
-                tid: this.partners.connections[i].id,
-                _svgAttrs: {
-                  "stroke-width": 8,
-                  opacity: 1
-                },
-                name: "Partners"
+                tid: this.partners.connections[i].id
               });
               this.partners.connections.splice(i, 1);
             }
@@ -3845,17 +3831,12 @@ __webpack_require__.r(__webpack_exports__);
           });
           this.links.push({
             sid: this.organization.id,
-            tid: this.partners.connections[i].id,
-            _svgAttrs: {
-              "stroke-width": 8,
-              opacity: 1
-            },
-            name: "Partners"
+            tid: this.partners.connections[i].id
           });
         }
       }
 
-      this.active = 5;
+      this.active = 4;
     },
 
     /**
@@ -3902,49 +3883,28 @@ __webpack_require__.r(__webpack_exports__);
     },
 
     /**
-     * Submits data to state
+     * Submits data to the backend
      */
     onSubmit: function onSubmit() {
-      // this.$refs[formName].validate((valid) => {
-      //     if (valid) {
-      // this.addOrganization();
-      // this.checkExistingNodes();
-      // this.addNewNodes();
       this.addConnections();
       axios.post('/api/connections', {
         organization_name: this.organization.organization_name,
         is_member: this.organization.is_member,
         connections: this.connections
-      }); // axios.post(/api/connections, {
-      //     organization_name: this.form.organization_name
-      // })
-      // this.$store.dispatch('submitForm').then((response) => {
-      //     // return Promise('') --> Validate whether or not the form is good
-      // })
-      // .catch(() => {
-      //     this.$message({
-      //         type: 'error',
-      //         message: 'Oops! Something went wrong.'
-      //     });
-      // });
-
+      });
       this.resetForm();
       this.$router.push("/network");
       this.$message({
         showClose: true,
         message: 'New Connection Established',
         type: 'success'
-      }); //     } else {
-      //         this.$message.error('Oops, Looks like you missed a field.');
-      //         return false;
-      //     }
-      // });
+      });
     },
     resetForm: function resetForm() {
       this.organization.id = this.nextId++;
       this.organization.organization_name = '';
       this.connections = [];
-      this.active = 1;
+      this.active = 0;
     },
 
     /**
@@ -4261,6 +4221,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
  // import Selection from './Selection.vue'
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4309,6 +4274,13 @@ __webpack_require__.r(__webpack_exports__);
           sid: this.connections[i].host_id,
           tid: this.connections[i].contact_id
         });
+        /**
+         * if host_id === contact_id
+         * 
+         * add 
+         * 
+         * _svgAttrs: {"stroke-width":4,opacity:1},name: "Mutual"
+         */
       }
 
       return links;
@@ -4317,8 +4289,8 @@ __webpack_require__.r(__webpack_exports__);
       return {
         force: 3000,
         size: {
-          w: 600,
-          h: 600
+          w: 1400,
+          h: 1400
         },
         nodeSize: this.nodeSize,
         nodeLabels: true,
@@ -6187,7 +6159,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "html, body {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin: 0 auto;\n}\n#app {\n  font-family: \"Avenir\", Helvetica, Arial, sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n  background-color: #EEEEEE;\n  height: 100%;\n  width: 100%;\n}\n#nav {\n  padding: 30px;\n}\n#nav a {\n  font-weight: bold;\n  color: #2c3e50;\n}\n#nav a.router-link-exact-active {\n  color: #42b983;\n}", ""]);
+exports.push([module.i, "html, body {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin: 0 auto;\n  background-color: #EEEEEE;\n  height: 100%;\n  width: 100%;\n}\n#app {\n  font-family: \"Avenir\", Helvetica, Arial, sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n}\n#nav {\n  padding: 30px;\n}\n#nav a {\n  font-weight: bold;\n  color: #2c3e50;\n}\n#nav a.router-link-exact-active {\n  color: #42b983;\n}", ""]);
 
 // exports
 
@@ -6206,7 +6178,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".text[data-v-3f489bb0] {\n  font-size: 14px;\n  font-weight: bold;\n}\n.item[data-v-3f489bb0] {\n  margin-bottom: 18px;\n}\n.clearfix[data-v-3f489bb0]:before,\n.clearfix[data-v-3f489bb0]:after {\n  display: table;\n  content: \"\";\n}\n.clearfix[data-v-3f489bb0]:after {\n  clear: both;\n}\n.footer[data-v-3f489bb0] {\n  margin-top: 8px;\n  position: relative;\n  bottom: 0;\n  right: 0;\n}\n.box-card[data-v-3f489bb0] {\n  width: 780px;\n}\n.inside-box[data-v-3f489bb0] {\n  margin: 0 !important;\n  padding: 0 !important;\n}\nh3[data-v-3f489bb0] {\n  color: #1aad8d;\n}\n.margin-right[data-v-3f489bb0] {\n  margin-right: 12px;\n}\n.button-container[data-v-3f489bb0] {\n  display: inline;\n}\n.button[data-v-3f489bb0] {\n  background-color: #1aad8d;\n}\n.custom-label[data-v-3f489bb0] {\n  text-align: right;\n  float: left;\n  font-size: 14px;\n  color: #606266;\n  padding: 0 4px 0 0;\n}\n.el-form-item[data-v-3f489bb0] {\n  margin-top: 20px;\n}", ""]);
+exports.push([module.i, ".text-container[data-v-3f489bb0] {\n  max-width: 60%;\n  margin: auto;\n  margin-top: 30px;\n  margin-bottom: 30px;\n}\n.text[data-v-3f489bb0] {\n  font-size: 14px;\n  font-weight: bold;\n}\n.item[data-v-3f489bb0] {\n  margin-bottom: 18px;\n}\n.clearfix[data-v-3f489bb0]:before,\n.clearfix[data-v-3f489bb0]:after {\n  display: table;\n  content: \"\";\n}\n.clearfix[data-v-3f489bb0]:after {\n  clear: both;\n}\n.footer[data-v-3f489bb0] {\n  margin-top: 8px;\n  position: relative;\n  bottom: 0;\n  right: 0;\n}\n.box-card[data-v-3f489bb0] {\n  width: 780px;\n}\n.inside-box[data-v-3f489bb0] {\n  margin: 0 !important;\n  padding: 0 !important;\n}\nh3[data-v-3f489bb0] {\n  color: #1aad8d;\n}\n.margin-right[data-v-3f489bb0] {\n  margin-right: 12px;\n}\n.button-container[data-v-3f489bb0] {\n  display: inline;\n}\n.button[data-v-3f489bb0] {\n  background-color: #1aad8d;\n}\n.custom-label[data-v-3f489bb0] {\n  text-align: right;\n  float: left;\n  font-size: 14px;\n  color: #606266;\n  padding: 0 4px 0 0;\n}\n.el-form-item[data-v-3f489bb0] {\n  margin-top: 20px;\n}\n.el-autocomplete[data-v-3f489bb0] {\n  width: 400px !important;\n}", ""]);
 
 // exports
 
@@ -6282,7 +6254,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "h1[data-v-63cd6604], a[data-v-63cd6604] {\n  color: #1aad8d;\n  text-decoration: none;\n}\nh3[data-v-63cd6604], h4[data-v-63cd6604], p[data-v-63cd6604] {\n  text-align: left !important;\n}\n.container[data-v-63cd6604] {\n  display: flex;\n  flex: 11 auto;\n  flex-direction: column;\n  max-width: 60%;\n  margin: auto;\n}\n.main[data-v-63cd6604] {\n  margin: auto;\n}\n.button[data-v-63cd6604] {\n  background-color: #1aad8d;\n  color: white;\n}\na[data-v-63cd6604] {\n  text-decoration: none;\n  color: white;\n}\na[data-v-63cd6604]:hover {\n  color: white;\n}", ""]);
+exports.push([module.i, "h1[data-v-63cd6604], a[data-v-63cd6604] {\n  color: #1aad8d;\n  text-decoration: none;\n}\nh3[data-v-63cd6604], h4[data-v-63cd6604], p[data-v-63cd6604] {\n  text-align: left !important;\n}\n.container[data-v-63cd6604] {\n  display: flex;\n  flex: 11 auto;\n  flex-direction: column;\n  max-width: 50%;\n  margin: auto;\n}\n.main[data-v-63cd6604] {\n  margin: auto;\n}\n.button[data-v-63cd6604] {\n  background-color: #1aad8d;\n  color: white;\n}\na[data-v-63cd6604] {\n  text-decoration: none;\n  color: white;\n}\na[data-v-63cd6604]:hover {\n  color: white;\n}", ""]);
 
 // exports
 
@@ -72978,11 +72950,7 @@ var render = function() {
       _c(
         "div",
         { staticClass: "clearfix", attrs: { slot: "header" }, slot: "header" },
-        [
-          _c("h3", [
-            _c("h1", [_vm._v("Organizational Social Network Analysis")])
-          ])
-        ]
+        [_c("h3", [_vm._v("Establish Your Network")])]
       ),
       _vm._v(" "),
       _c(
@@ -73003,12 +72971,12 @@ var render = function() {
           _vm._v(" "),
           _c("el-step", { attrs: { title: "Partnerships" } }),
           _vm._v(" "),
-          _c("el-step", { attrs: { title: "Raffle" } })
+          _c("el-step", { attrs: { title: "Connect!" } })
         ],
         1
       ),
       _vm._v(" "),
-      _vm.active === 1
+      _vm.active === 0
         ? _c(
             "el-form",
             {
@@ -73123,7 +73091,7 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
-      _vm.active === 2
+      _vm.active === 1
         ? _c(
             "el-form",
             {
@@ -73222,7 +73190,7 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
-      _vm.active === 3
+      _vm.active === 2
         ? _c(
             "el-form",
             {
@@ -73321,7 +73289,7 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
-      _vm.active === 4
+      _vm.active === 3
         ? _c(
             "el-form",
             {
@@ -73420,7 +73388,7 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
-      _vm.active === 5
+      _vm.active === 4
         ? _c(
             "el-form",
             {
@@ -73432,24 +73400,10 @@ var render = function() {
               }
             },
             [
-              _c("el-form-item", [
-                _c(
-                  "label",
-                  { staticClass: "custom-label", attrs: { for: "" } },
-                  [
-                    _vm._v(
-                      "Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020?"
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c("p", [
-                  _vm._v("Click "),
-                  _c("a", { attrs: { href: "https://www.hellokrd.net/" } }, [
-                    _vm._v("here")
-                  ]),
-                  _vm._v(" to enter")
-                ])
+              _c("div", { staticClass: "text-container" }, [
+                _vm._v(
+                  "Thank you for taking the time to fill out this Survey. Now lets see how your connections line up with other organizations!"
+                )
               ]),
               _vm._v(" "),
               _c(
@@ -73494,8 +73448,7 @@ var render = function() {
                 ],
                 1
               )
-            ],
-            1
+            ]
           )
         : _vm._e()
     ],
@@ -73714,6 +73667,10 @@ var render = function() {
       "div",
       { staticClass: "main" },
       [
+        _c("h1", [_vm._v("Organizational Social Network Analysis")]),
+        _vm._v(" "),
+        _vm._m(0),
+        _vm._v(" "),
         _c("d3-network", {
           ref: "net",
           attrs: {
@@ -73727,7 +73684,25 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _vm._v(
+        "\n            Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020?\n                "
+      ),
+      _c("p", [
+        _vm._v("Click "),
+        _c("a", { attrs: { href: "https://www.hellokrd.net/" } }, [
+          _vm._v("here")
+        ]),
+        _vm._v(" to enter")
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -90592,7 +90567,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/rupert/www/sites/OSNApp/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\OSNApp\resources\js\main.js */"./resources/js/main.js");
 
 
 /***/ })

@@ -15,6 +15,9 @@ html, body {
   height: 100%;
   padding: 0;
   margin: 0 auto;
+  background-color: #EEEEEE;
+  height: 100%;
+  width: 100%;
 }
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
@@ -22,9 +25,7 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  background-color: #EEEEEE;
-  height: 100%;
-  width: 100%;
+  
 }
 #nav {
   padding: 30px;

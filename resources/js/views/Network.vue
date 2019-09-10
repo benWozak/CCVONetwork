@@ -1,6 +1,11 @@
 <template>
     <div class="network">
         <div class="main">
+            <h1>Organizational Social Network Analysis</h1>
+            <div>
+                Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020?
+                    <p>Click <a href="https://www.hellokrd.net/">here</a> to enter</p>
+            </div>
             <d3-network ref='net'
                 :net-nodes="nodes"
                 :net-links="links"
@@ -44,34 +49,38 @@ export default {
 
         nodes() {
             let nodes = [];
+                for(let i = 0; i < this.organizations.length; i++) {
+                    nodes.push({
+                        id: this.organizations[i].id,
+                        name: this.organizations[i].organization_name
+                    })
+                }
 
-            for(let i = 0; i < this.organizations.length; i++) {
-                nodes.push({
-                    id: this.organizations[i].id,
-                    name: this.organizations[i].organization_name
-                })
-            }
-
-            return nodes;
+                return nodes;
         },
 
         links() {
             let links = [];
-
-            for(let i = 0; i < this.connections.length; i++) {
-                links.push({
-                    sid: this.connections[i].host_id,
-                    tid: this.connections[i].contact_id
-                })
-            }
-
-            return links;
+                    for(let i = 0; i < this.connections.length; i++) {
+                    links.push({
+                        sid: this.connections[i].host_id,
+                        tid: this.connections[i].contact_id
+                    })
+                /**
+                 * if host_id === contact_id
+                 * 
+                 * add 
+                 * 
+                 * _svgAttrs: {"stroke-width":4,opacity:1},name: "Mutual"
+                 */
+                }
+                return links;
         },
 
         options(){
             return{
                 force: 3000,
-                size:{ w:600, h:600},
+                size:{ w:1400, h:1400},
                 nodeSize: this.nodeSize,
                 nodeLabels: true,
                 linkLabels:true,

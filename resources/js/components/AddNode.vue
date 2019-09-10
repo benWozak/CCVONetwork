@@ -1,17 +1,17 @@
 <template>
     <el-card class="box-card">
         <div slot="header" class="clearfix">
-            <h3><h1>Organizational Social Network Analysis</h1></h3>
+            <h3>Establish Your Network</h3>
         </div>
         <el-steps align-center :active="active" finish-status="success">
             <el-step title="Your Organization"></el-step>
             <el-step title="Awareness"></el-step>
             <el-step title="Shared Knowledge"></el-step>
             <el-step title="Partnerships"></el-step>
-            <el-step title="Raffle"></el-step>
+            <el-step title="Connect!"></el-step>
         </el-steps>
 
-        <el-form v-if="active === 1"
+        <el-form v-if="active === 0"
             ref="organization"
             :model="organization"
             :rules="{ required: true, message: 'Please enter the name of your Organization', trigger: 'blur' }"
@@ -39,7 +39,7 @@
             </div>
         </el-form>
 
-        <el-form v-if="active === 2"
+        <el-form v-if="active === 1"
             ref="awareness"
             :model="awareness"
             label-width="240px" @submit.native.prevent>
@@ -66,7 +66,7 @@
                 </div>
         </el-form>
 
-        <el-form v-if="active === 3"
+        <el-form v-if="active === 2"
             ref="shared"
             :model="shared"
             label-width="240px" @submit.native.prevent>
@@ -92,7 +92,7 @@
                 </div>
         </el-form>
 
-        <el-form v-if="active === 4"
+        <el-form v-if="active === 3"
             ref="partners"
             :model="partners"
             label-width="240px" @submit.native.prevent>
@@ -118,13 +118,14 @@
                 </div>
         </el-form>
 
-        <el-form v-if="active === 5"
+        <el-form v-if="active === 4"
             label-width="240px"
             @submit.native.prevent>
-                <el-form-item>
+            <div class="text-container">Thank you for taking the time to fill out this Survey. Now lets see how your connections line up with other organizations!</div>
+                <!-- <el-form-item>
                     <label for="" class="custom-label">Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020?</label>
-                    <p>Click <a href="https://www.hellokrd.net/">here</a> to enter</p>
-                </el-form-item>
+                    <div>Click <a href="https://www.hellokrd.net/">here</a> to enter</p>
+                </el-form-item> -->
 
             <div class="clearfix">
                 <el-form-item class="footer">
@@ -144,7 +145,7 @@
 export default {
     data() {
       return {
-        active: 1,
+        active: 0,
         nextId: 1,
         organization: {
             id: 0,
@@ -200,7 +201,7 @@ export default {
             })
             this.nextId++;
 
-            this.active = 2;
+            this.active = 1;
         },
         setAware() {
             for(let i = 0; i < this.awareness.connections.length; i++) {
@@ -224,7 +225,7 @@ export default {
                 }
 
             }
-            this.active = 3;
+            this.active = 2;
         },
         setShared() {
              for(let i = 0; i < this.shared.connections.length; i++) {
@@ -238,7 +239,6 @@ export default {
                             this.links.push({
                                 sid: this.organization.id,
                                 tid: this.shared.connections[i].id,
-                                _svgAttrs: {"stroke-width":4,opacity:1},name: "Shared"
                             })
                             this.shared.connections.splice(i, 1);
                         }
@@ -255,12 +255,11 @@ export default {
                     this.links.push({
                         sid: this.organization.id,
                         tid: this.shared.connections[i].id,
-                        _svgAttrs: {"stroke-width":4,opacity:1},name: "Shared"
                     })
                 }
 
             }
-            this.active = 4;
+            this.active = 3;
         },
         setPartners() {
             for(let i = 0; i < this.partners.connections.length; i++) {
@@ -274,7 +273,6 @@ export default {
                             this.links.push({
                                 sid: this.organization.id,
                                 tid: this.partners.connections[i].id,
-                                _svgAttrs: {"stroke-width":8,opacity:1},name: "Partners"
                             })
                             this.partners.connections.splice(i, 1);
                         }
@@ -291,12 +289,11 @@ export default {
                     this.links.push({
                         sid: this.organization.id,
                         tid: this.partners.connections[i].id,
-                        _svgAttrs: {"stroke-width":8,opacity:1},name: "Partners"
                     })
                 }
 
             }
-            this.active = 5;
+            this.active = 4;
         },
 
         /**
@@ -344,56 +341,32 @@ export default {
         },
 
         /**
-         * Submits data to state
+         * Submits data to the backend
          */
         onSubmit() {
-            // this.$refs[formName].validate((valid) => {
-            //     if (valid) {
-                    // this.addOrganization();
-                    // this.checkExistingNodes();
-                    // this.addNewNodes();
 
-                    this.addConnections();
+            this.addConnections();
 
-                    axios.post('/api/connections', {
-                        organization_name: this.organization.organization_name,
-                        is_member: this.organization.is_member,
-                        connections: this.connections
-                    });
+            axios.post('/api/connections', {
+                organization_name: this.organization.organization_name,
+                is_member: this.organization.is_member,
+                connections: this.connections
+            });
 
-                    // axios.post(/api/connections, {
-                    //     organization_name: this.form.organization_name
-                    // })
-
-                    // this.$store.dispatch('submitForm').then((response) => {
-                    //     // return Promise('') --> Validate whether or not the form is good
-                    // })
-                    // .catch(() => {
-                    //     this.$message({
-                    //         type: 'error',
-                    //         message: 'Oops! Something went wrong.'
-                    //     });
-                    // });
-
-                    this.resetForm();
-                    this.$router.push("/network");
-                    this.$message({
-                        showClose: true,
-                        message: 'New Connection Established',
-                        type: 'success'
-                    });
-            //     } else {
-            //         this.$message.error('Oops, Looks like you missed a field.');
-            //         return false;
-            //     }
-            // });
+            this.resetForm();
+            this.$router.push("/network");
+            this.$message({
+                showClose: true,
+                message: 'New Connection Established',
+                type: 'success'
+            });
         },
         resetForm() {
 
             this.organization.id = this.nextId++;
             this.organization.organization_name = '';
             this.connections = []
-            this.active = 1;
+            this.active = 0;
         },
         /**
          * Data inside this method should be replaced with a fetch of
@@ -411,6 +384,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    .text-container{
+        max-width: 60%;
+        margin: auto;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
     .text {
         font-size: 14px;
         font-weight: bold;
@@ -462,5 +441,8 @@ export default {
     }
     .el-form-item {
         margin-top: 20px;
+    }
+    .el-autocomplete {
+        width: 400px !important;
     }
 </style>

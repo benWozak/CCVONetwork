@@ -66,7 +66,7 @@ h3, h4, p {
     display: flex;
     flex: 11 auto;
     flex-direction: column;
-    max-width: 60%;
+    max-width: 50%;
     margin: auto;
 }
 .main {
