@@ -23,7 +23,12 @@ class CreateOrganizationsTable extends Migration
 
             foreach(config('app.ccvo_members_csv.columns') as $column) {
                 $type = $column['type'];
-                $table->$type($column['name']);
+
+                if($column['nullable']) {
+                    $table->$type($column['name'])->nullable();
+                }else {
+                    $table->$type($column['name']);
+                }
             }
 
             $table->boolean('is_member')->default(FALSE);

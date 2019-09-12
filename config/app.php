@@ -233,67 +233,83 @@ return [
         'columns' => [
             [
                 'name' => 'name',
-                'type' => 'string'
+                'type' => 'string',
+                'nullable' => false
             ],
             [
                 'name' => 'member_status',
-                'type' => 'string'
+                'type' => 'string',
+                'nullable' => true
             ],
             [
                 'name' => 'expiry_date',
-                'type' => 'string'
+                'type' => 'string',
+                'nullable' => true
             ],
             [
                 'name' => 'subsector_id',
-                'type' => 'unsignedInteger'
+                'type' => 'unsignedInteger',
+                'nullable' => false
             ],
             [
                 'name' => 'size',
-                'type' => 'string'
+                'type' => 'string',
+                'nullable' => true
             ],
             [
                 'name' => 'membership',
-                'type' => 'string'
+                'type' => 'string',
+                'nullable' => true
             ],
             [
                 'name' => 'year_founded',
-                'type' => 'string'
+                'type' => 'string',
+                'nullable' => true
             ],
             [
                 'name' => 'events_2018',
-                'type' => 'string'
+                'type' => 'string',
+                'nullable' => true
             ],
             [
                 'name' => 'events_2017',
-                'type' => 'string'
+                'type' => 'string',
+                'nullable' => true
             ],
             [
                 'name' => 'events_2016',
-                'type' => 'string'
+                'type' => 'string',
+                'nullable' => true
             ],
             [
                 'name' => 'events_2015',
-                'type' => 'string'
+                'type' => 'string',
+                'nullable' => true
             ],
             [
                 'name' => 'events_2014',
-                'type' => 'string'
+                'type' => 'string',
+                'nullable' => true
             ],
             [
                 'name' => 'boland_2018',
-                'type' => 'string'
+                'type' => 'string',
+                'nullable' => true
             ],
             [
                 'name' => 'boland_2017',
-                'type' => 'string'
+                'type' => 'string',
+                'nullable' => true
             ],
             [
                 'name' => 'boland_2016',
-                'type' => 'string'
+                'type' => 'string',
+                'nullable' => true
             ],
             [
                 'name' => 'boland_2015',
-                'type' => 'string'
+                'type' => 'string',
+                'nullable' => true
             ],
 
         ]
