@@ -19,11 +19,11 @@ class OrganizationController extends Controller
     	$organizations = $organizations->search($search);
     	$organizations = $organizations->orderBy('name', 'asc');
 
-        if(request('has_connections') === 'true')
+        if(request('has_connections') === 'true') {
             $organizations = $organizations->has('contacts')->orHas('hosts');
+            return (new Organizations($organizations->get()));
+        }
 
-    	$organizations = $organizations->paginate();
-
-		return (new Organizations($organizations));
+		return (new Organizations($organizations->paginate()));
     }
 }
