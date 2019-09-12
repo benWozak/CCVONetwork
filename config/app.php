@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'OSNAPP'),
 
     /*
     |--------------------------------------------------------------------------
@@ -226,6 +226,12 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+    ],
+
+    'ccvo_members_csv' => 'ccvo-members-seed.csv',
+
+    'unknown_subsector' => [
+        'name' => 'Unknown'
     ],
 
 ];

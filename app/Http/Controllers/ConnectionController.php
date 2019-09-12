@@ -21,11 +21,11 @@ class ConnectionController extends Controller
 
     public function store(StoreConnection $request)
     {
-    	$other = Subsector::where('name', 'Other')->first();
+    	$unknown = Subsector::where('name', config('app.unknown_subsector.name'))->first();
 
     	$host = Organization::firstOrCreate(
     		['name' => $request->organization_name],
-    		['is_member' => $request->is_member, 'subsector_id' => $other->id]
+    		['is_member' => $request->is_member, 'subsector_id' => $unknown->id]
     	);
 
     	$contactIds = [];
@@ -36,7 +36,7 @@ class ConnectionController extends Controller
 	    		['name' => $contact['organization_name']],
 	    		[
 	    			'is_member' => false,
-	    			'subsector_id' => $other->id
+	    			'subsector_id' => $unknown->id
 	    		]
 	    	);
 
