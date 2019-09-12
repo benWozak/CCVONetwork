@@ -228,7 +228,76 @@ return [
 
     ],
 
-    'ccvo_members_csv' => 'ccvo-members-seed.csv',
+    'ccvo_members_csv' => [
+        'file_name' => 'ccvo-members-seed.csv',
+        'columns' => [
+            [
+                'name' => 'name',
+                'type' => 'string'
+            ],
+            [
+                'name' => 'member_status',
+                'type' => 'string'
+            ],
+            [
+                'name' => 'expiry_date',
+                'type' => 'string'
+            ],
+            [
+                'name' => 'subsector_id',
+                'type' => 'unsignedInteger'
+            ],
+            [
+                'name' => 'size',
+                'type' => 'string'
+            ],
+            [
+                'name' => 'membership',
+                'type' => 'string'
+            ],
+            [
+                'name' => 'year_founded',
+                'type' => 'string'
+            ],
+            [
+                'name' => 'events_2018',
+                'type' => 'string'
+            ],
+            [
+                'name' => 'events_2017',
+                'type' => 'string'
+            ],
+            [
+                'name' => 'events_2016',
+                'type' => 'string'
+            ],
+            [
+                'name' => 'events_2015',
+                'type' => 'string'
+            ],
+            [
+                'name' => 'events_2014',
+                'type' => 'string'
+            ],
+            [
+                'name' => 'boland_2018',
+                'type' => 'string'
+            ],
+            [
+                'name' => 'boland_2017',
+                'type' => 'string'
+            ],
+            [
+                'name' => 'boland_2016',
+                'type' => 'string'
+            ],
+            [
+                'name' => 'boland_2015',
+                'type' => 'string'
+            ],
+
+        ]
+    ],
 
     'unknown_subsector' => [
         'name' => 'Unknown'

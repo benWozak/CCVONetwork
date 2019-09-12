@@ -20,9 +20,13 @@ class CreateOrganizationsTable extends Migration
 
         Schema::create('organizations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+
+            foreach(config('app.ccvo_members_csv.columns') as $column) {
+                $type = $column['type'];
+                $table->$type($column['name']);
+            }
+
             $table->boolean('is_member')->default(FALSE);
-            $table->unsignedInteger('subsector_id')->default('99');
             $table->timestamps();
 
             $table->foreign('subsector_id')->references('id')->on('subsectors');
