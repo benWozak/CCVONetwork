@@ -17,7 +17,6 @@ class OrganizationsTableSeeder extends Seeder
 
         $csv = fopen($csvPath , 'r');
 
-        // $row should start at 1 because 0 contains the csv columns
         $row = 0;
 
         $organizations = [];
@@ -25,6 +24,7 @@ class OrganizationsTableSeeder extends Seeder
         while (($data = fgetcsv($csv, 1000, ",")) !== FALSE) {
             $numberOfColumns = count($data);
 
+            // skip reading first row
             if($row == 0) {
                 $row++;
                 continue;
