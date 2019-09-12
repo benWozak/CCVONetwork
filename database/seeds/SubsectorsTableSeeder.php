@@ -38,7 +38,7 @@ class SubsectorsTableSeeder extends Seeder
                 continue;
 
             Subsector::firstOrCreate(
-                ['name' => $data[$subsectorsColumnIndex]],
+                ['name' => $data[$subsectorsColumnIndex]]
             );
         }
 
