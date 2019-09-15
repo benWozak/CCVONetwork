@@ -26,4 +26,18 @@ class OrganizationController extends Controller
 
 		return (new Organizations($organizations->paginate()));
     }
+
+    public function store(StoreOrganization $request)
+    {
+    	$organization = new Organization;
+	$organization->name = $request->organization_name;
+	$organization->is_member = $request->is_member;
+	$organization->subsector_id = 
+		Subsector::where(
+			'name', config('app.unknown_subsector.name')
+		)->first()->id;
+	$organization->save();
+
+	return $organization;
+    }
 }

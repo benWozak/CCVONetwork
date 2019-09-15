@@ -71,7 +71,6 @@
             ref="shared"
             :model="shared"
             label-width="240px" @submit.native.prevent>
-                <span>{{ awareness.connections  }}</span>
 		<span>
                     Think back over the past six months, and consider situations in which you’ve
                     encountered a challenge or concern at work, and needed to “pick someone’s brain”
@@ -140,7 +139,6 @@
             </div>
 
         </el-form>
-		<div>{{ connections }}</div>
     </el-card>
 </template>
 
@@ -205,7 +203,8 @@ export default {
             this.nextId++;
 
             this.active = 1;
-        },
+		},
+
         setAware() {
 			this.awareness.connections = this.awareness.connections.filter((connection) => {
 				return connection.organization_name != '';
@@ -226,7 +225,7 @@ export default {
             }
 
             this.active = 2;
-        },
+		 },
         setShared() {
             this.shared.connections = this.shared.connections.filter((connection) => {
 				return connection.organization_name != '';
