@@ -43,7 +43,8 @@
             ref="awareness"
             :model="awareness"
             label-width="240px" @submit.native.prevent>
-                <span>
+                <span>{{ this.awareness.connections  }}</span>
+		<span>
                     Think back over the past three months and consider any nonprofit events
                     or collaboratives you’ve attended. Recall the people you noticed there
                     and those you quickly connected with – such as a brief “Hello” before
@@ -52,7 +53,7 @@
                 <label for="">Please list up to 10 organizations represented by the people you connected with.</label>
                 <el-form-item v-for="(connection, index) in awareness.connections" :key="index" :label="'Connection' + (index + 1)" >
                     <el-autocomplete
-                        v-model="connection.name" @keyup.enter.native="$event.target.nextElementSibling.focus()"
+                        v-model="connection.organization_name" @keyup.enter.native="$event.target.nextElementSibling.focus()"
                         :trigger-on-focus="false"
                         :fetch-suggestions="getOrganizations">
                     </el-autocomplete>
@@ -70,7 +71,8 @@
             ref="shared"
             :model="shared"
             label-width="240px" @submit.native.prevent>
-                <span>
+                <span>{{ awareness.connections  }}</span>
+		<span>
                     Think back over the past six months, and consider situations in which you’ve
                     encountered a challenge or concern at work, and needed to “pick someone’s brain”
                     outside of your own organization.
@@ -78,7 +80,7 @@
                 <label for="">Please list up to 10 organizations represented by the people to whom you reached out.</label>
                 <el-form-item v-for="(connection, index) in shared.connections" :key="index" :label="'Connection' + (index + 1)" >
                     <el-autocomplete
-                        v-model="connection.name" @keyup.enter.native="$event.target.nextElementSibling.focus()"
+                        v-model="connection.organization_name" @keyup.enter.native="$event.target.nextElementSibling.focus()"
                         :trigger-on-focus="false"
                         :fetch-suggestions="getOrganizations">
                     </el-autocomplete>
@@ -104,7 +106,7 @@
                 <label for="">Please list up to 10 organizations involved in these collaborations.</label>
                 <el-form-item v-for="(connection, index) in partners.connections" :key="index" :label="'Connection' + (index + 1)" >
                     <el-autocomplete
-                        v-model="connection.name" @keyup.enter.native="$event.target.nextElementSibling.focus()"
+                        v-model="connection.organization_name" @keyup.enter.native="$event.target.nextElementSibling.focus()"
                         :trigger-on-focus="false"
                         :fetch-suggestions="getOrganizations">
                     </el-autocomplete>
@@ -138,6 +140,7 @@
             </div>
 
         </el-form>
+		<div>{{ connections }}</div>
     </el-card>
 </template>
 
@@ -154,17 +157,17 @@ export default {
         },
         awareness: {
             connections: [
-                {id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},
+                {id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},
             ]
         },
         shared: {
             connections: [
-                {id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},
+                {id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},
             ]
         },
         partners: {
             connections: [
-                {id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},{id: 0, name:''},
+                {id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},
             ]
         },
         connections: [],
@@ -204,94 +207,63 @@ export default {
             this.active = 1;
         },
         setAware() {
+			this.awareness.connections = this.awareness.connections.filter((connection) => {
+				return connection.organization_name != '';
+			});	
+
             for(let i = 0; i < this.awareness.connections.length; i++) {
-
-                if(this.awareness.connections[i].name === '') {
-                    this.awareness.connections.splice(i, 1);
-                } else {
                     this.awareness.connections[i].id = this.nextId;
-                    this.nextId++;
+                    this.awareness.connections[i].connection_type = 'awareness';
+					this.nextId++;
 
-                    this.nodes.push({
-                        id: this.awareness.connections[i].id,
-                        name: this.awareness.connections[i].name,
-                        connection_type: 'awareness'
-                    })
+                    this.nodes.push(this.awareness.connections[i]);
 
                     this.links.push({
                         sid: this.organization.id,
                         tid: this.awareness.connections[i].id
-                    })
-                }
+                    });
 
             }
+
             this.active = 2;
         },
         setShared() {
-             for(let i = 0; i < this.shared.connections.length; i++) {
+            this.shared.connections = this.shared.connections.filter((connection) => {
+				return connection.organization_name != '';
+			});	 
 
-                if(this.shared.connections[i].name === '') {
-                    this.shared.connections.splice(i, 1);
-                } else {
-                    for(let j = 0; j < this.nodes.length; j++) {
-                        if(this.shared.connections[i].name.toUpperCase() === this.nodes[j].name.toUpperCase()) {
-                            this.shared.connections[i].id = this.nodes[j].id;
-                            this.links.push({
-                                sid: this.organization.id,
-                                tid: this.shared.connections[i].id,
-                            })
-                            this.shared.connections.splice(i, 1);
-                        }
-                    }
+			for(let i = 0; i < this.shared.connections.length; i++) {
                     this.shared.connections[i].id = this.nextId;
-                    this.nextId++;
+                    this.shared.connections[i].connection_type = 'shared knowledge';
+					this.nextId++;
 
-                    this.nodes.push({
-                        id: this.shared.connections[i].id,
-                        name: this.shared.connections[i].name,
-                        connection_type: 'shared knowledge'
-                    })
+                    this.nodes.push(this.shared.connections[i]);
 
                     this.links.push({
                         sid: this.organization.id,
                         tid: this.shared.connections[i].id,
                     })
-                }
 
             }
             this.active = 3;
         },
         setPartners() {
-            for(let i = 0; i < this.partners.connections.length; i++) {
-
-                if(this.partners.connections[i].name === '') {
-                    this.partners.connections.splice(i, 1);
-                } else {
-                    for(let j = 0; j < this.nodes.length; j++) {
-                        if(this.partners.connections[i].name.toUpperCase() === this.nodes[j].name.toUpperCase()) {
-                            this.partners.connections[i].id = this.nodes[j].id;
-                            this.links.push({
-                                sid: this.organization.id,
-                                tid: this.partners.connections[i].id,
-                            })
-                            this.partners.connections.splice(i, 1);
-                        }
-                    }
+    		this.partners.connections = this.partners.connections.filter((connection) => {
+				return connection.organization_name != '';
+			});	       
+	
+ 
+			for(let i = 0; i < this.partners.connections.length; i++) {
                     this.partners.connections[i].id = this.nextId;
-                    this.nextId++;
+                    this.partners.connections[i].connection_type = 'partnership';
+					this.nextId++;			
 
-                    this.nodes.push({
-                        id: this.partners.connections[i].id,
-                        name: this.partners.connections[i].name,
-                        connection_type: 'partnership'
-                    })
+                    this.nodes.push(this.partners.connections[i]);
 
                     this.links.push({
                         sid: this.organization.id,
                         tid: this.partners.connections[i].id,
                     })
-                }
-
             }
             this.active = 4;
         },
@@ -332,13 +304,10 @@ export default {
         },
 
         addConnections() {
-            for(let i = 1; i < this.nodes.length; i++) {
-                this.connections.push({
-                    organization_name: this.nodes[i].name,
-                    connection_type: this.nodes[i].connection_type,
-                })
-            }
-        },
+			this.connections = this.connections.concat(this.awareness.connections);
+			this.connections = this.connections.concat(this.shared.connections);
+			this.connections = this.connections.concat(this.partners.connections);
+		},
 
         /**
          * Submits data to the backend
@@ -347,14 +316,24 @@ export default {
 
             this.addConnections();
 
-            axios.post('/api/connections', {
+			const data = {
                 organization_name: this.organization.organization_name,
                 is_member: this.organization.is_member,
                 connections: this.connections
-            });
+			};
+
+
+            axios.post(
+				'/api/connections', 
+				data 
+			).then((response) => {
+				this.connections = response;
+			}).catch((response) => {
+				this.connections = response;
+			});
 
             this.resetForm();
-            this.$router.push("/network");
+            //this.$router.push("/network");
             this.$message({
                 showClose: true,
                 message: 'New Connection Established',
