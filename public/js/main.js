@@ -3609,6 +3609,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3622,100 +3625,100 @@ __webpack_require__.r(__webpack_exports__);
       awareness: {
         connections: [{
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }]
       },
       shared: {
         connections: [{
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }]
       },
       partners: {
         connections: [{
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }, {
           id: 0,
-          name: ''
+          organization_name: ''
         }]
       },
       connections: [],
@@ -3754,86 +3757,55 @@ __webpack_require__.r(__webpack_exports__);
       this.active = 1;
     },
     setAware: function setAware() {
+      this.awareness.connections = this.awareness.connections.filter(function (connection) {
+        return connection.organization_name != '';
+      });
+
       for (var i = 0; i < this.awareness.connections.length; i++) {
-        if (this.awareness.connections[i].name === '') {
-          this.awareness.connections.splice(i, 1);
-        } else {
-          this.awareness.connections[i].id = this.nextId;
-          this.nextId++;
-          this.nodes.push({
-            id: this.awareness.connections[i].id,
-            name: this.awareness.connections[i].name,
-            connection_type: 'awareness'
-          });
-          this.links.push({
-            sid: this.organization.id,
-            tid: this.awareness.connections[i].id
-          });
-        }
+        this.awareness.connections[i].id = this.nextId;
+        this.awareness.connections[i].connection_type = 'awareness';
+        this.nextId++;
+        this.nodes.push(this.awareness.connections[i]);
+        this.links.push({
+          sid: this.organization.id,
+          tid: this.awareness.connections[i].id
+        });
       }
 
       this.active = 2;
     },
     setShared: function setShared() {
-      for (var i = 0; i < this.shared.connections.length; i++) {
-        if (this.shared.connections[i].name === '') {
-          this.shared.connections.splice(i, 1);
-        } else {
-          for (var j = 0; j < this.nodes.length; j++) {
-            if (this.shared.connections[i].name.toUpperCase() === this.nodes[j].name.toUpperCase()) {
-              this.shared.connections[i].id = this.nodes[j].id;
-              this.links.push({
-                sid: this.organization.id,
-                tid: this.shared.connections[i].id
-              });
-              this.shared.connections.splice(i, 1);
-            }
-          }
+      this.shared.connections = this.shared.connections.filter(function (connection) {
+        return connection.organization_name != '';
+      });
 
-          this.shared.connections[i].id = this.nextId;
-          this.nextId++;
-          this.nodes.push({
-            id: this.shared.connections[i].id,
-            name: this.shared.connections[i].name,
-            connection_type: 'shared knowledge'
-          });
-          this.links.push({
-            sid: this.organization.id,
-            tid: this.shared.connections[i].id
-          });
-        }
+      for (var i = 0; i < this.shared.connections.length; i++) {
+        this.shared.connections[i].id = this.nextId;
+        this.shared.connections[i].connection_type = 'shared knowledge';
+        this.nextId++;
+        this.nodes.push(this.shared.connections[i]);
+        this.links.push({
+          sid: this.organization.id,
+          tid: this.shared.connections[i].id
+        });
       }
 
       this.active = 3;
     },
     setPartners: function setPartners() {
-      for (var i = 0; i < this.partners.connections.length; i++) {
-        if (this.partners.connections[i].name === '') {
-          this.partners.connections.splice(i, 1);
-        } else {
-          for (var j = 0; j < this.nodes.length; j++) {
-            if (this.partners.connections[i].name.toUpperCase() === this.nodes[j].name.toUpperCase()) {
-              this.partners.connections[i].id = this.nodes[j].id;
-              this.links.push({
-                sid: this.organization.id,
-                tid: this.partners.connections[i].id
-              });
-              this.partners.connections.splice(i, 1);
-            }
-          }
+      this.partners.connections = this.partners.connections.filter(function (connection) {
+        return connection.organization_name != '';
+      });
 
-          this.partners.connections[i].id = this.nextId;
-          this.nextId++;
-          this.nodes.push({
-            id: this.partners.connections[i].id,
-            name: this.partners.connections[i].name,
-            connection_type: 'partnership'
-          });
-          this.links.push({
-            sid: this.organization.id,
-            tid: this.partners.connections[i].id
-          });
-        }
+      for (var i = 0; i < this.partners.connections.length; i++) {
+        this.partners.connections[i].id = this.nextId;
+        this.partners.connections[i].connection_type = 'partnership';
+        this.nextId++;
+        this.nodes.push(this.partners.connections[i]);
+        this.links.push({
+          sid: this.organization.id,
+          tid: this.partners.connections[i].id
+        });
       }
 
       this.active = 4;
@@ -3874,26 +3846,30 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     addConnections: function addConnections() {
-      for (var i = 1; i < this.nodes.length; i++) {
-        this.connections.push({
-          organization_name: this.nodes[i].name,
-          connection_type: this.nodes[i].connection_type
-        });
-      }
+      this.connections = this.connections.concat(this.awareness.connections);
+      this.connections = this.connections.concat(this.shared.connections);
+      this.connections = this.connections.concat(this.partners.connections);
     },
 
     /**
      * Submits data to the backend
      */
     onSubmit: function onSubmit() {
+      var _this = this;
+
       this.addConnections();
-      axios.post('/api/connections', {
+      var data = {
         organization_name: this.organization.organization_name,
         is_member: this.organization.is_member,
         connections: this.connections
+      };
+      axios.post('/api/connections', data).then(function (response) {
+        _this.connections = response;
+      })["catch"](function (response) {
+        _this.connections = response;
       });
-      this.resetForm();
-      this.$router.push("/network");
+      this.resetForm(); //this.$router.push("/network");
+
       this.$message({
         showClose: true,
         message: 'New Connection Established',
@@ -73104,9 +73080,11 @@ var render = function() {
               }
             },
             [
+              _c("span", [_vm._v(_vm._s(this.awareness.connections))]),
+              _vm._v(" "),
               _c("span", [
                 _vm._v(
-                  "\n                Think back over the past three months and consider any nonprofit events\n                or collaboratives you’ve attended. Recall the people you noticed there\n                and those you quickly connected with – such as a brief “Hello” before\n                the event started, or a catch-up during a break.\n            "
+                  "\n                    Think back over the past three months and consider any nonprofit events\n                    or collaboratives you’ve attended. Recall the people you noticed there\n                    and those you quickly connected with – such as a brief “Hello” before\n                    the event started, or a catch-up during a break.\n                "
                 )
               ]),
               _c("br"),
@@ -73146,11 +73124,11 @@ var render = function() {
                         }
                       },
                       model: {
-                        value: connection.name,
+                        value: connection.organization_name,
                         callback: function($$v) {
-                          _vm.$set(connection, "name", $$v)
+                          _vm.$set(connection, "organization_name", $$v)
                         },
-                        expression: "connection.name"
+                        expression: "connection.organization_name"
                       }
                     })
                   ],
@@ -73203,9 +73181,11 @@ var render = function() {
               }
             },
             [
+              _c("span", [_vm._v(_vm._s(_vm.awareness.connections))]),
+              _vm._v(" "),
               _c("span", [
                 _vm._v(
-                  "\n                Think back over the past six months, and consider situations in which you’ve\n                encountered a challenge or concern at work, and needed to “pick someone’s brain”\n                outside of your own organization.\n            "
+                  "\n                    Think back over the past six months, and consider situations in which you’ve\n                    encountered a challenge or concern at work, and needed to “pick someone’s brain”\n                    outside of your own organization.\n                "
                 )
               ]),
               _c("br"),
@@ -73245,11 +73225,11 @@ var render = function() {
                         }
                       },
                       model: {
-                        value: connection.name,
+                        value: connection.organization_name,
                         callback: function($$v) {
-                          _vm.$set(connection, "name", $$v)
+                          _vm.$set(connection, "organization_name", $$v)
                         },
-                        expression: "connection.name"
+                        expression: "connection.organization_name"
                       }
                     })
                   ],
@@ -73304,7 +73284,7 @@ var render = function() {
             [
               _c("span", [
                 _vm._v(
-                  "\n                Thinking back over the past two years, consider formal partnerships your organization\n                has been involved in for joint funding, shared resources, or any collaborative in which\n                decision-making would be made jointly.\n            "
+                  "\n                    Thinking back over the past two years, consider formal partnerships your organization\n                    has been involved in for joint funding, shared resources, or any collaborative in which\n                    decision-making would be made jointly.\n                "
                 )
               ]),
               _c("br"),
@@ -73344,11 +73324,11 @@ var render = function() {
                         }
                       },
                       model: {
-                        value: connection.name,
+                        value: connection.organization_name,
                         callback: function($$v) {
-                          _vm.$set(connection, "name", $$v)
+                          _vm.$set(connection, "organization_name", $$v)
                         },
-                        expression: "connection.name"
+                        expression: "connection.organization_name"
                       }
                     })
                   ],
@@ -73450,7 +73430,9 @@ var render = function() {
               )
             ]
           )
-        : _vm._e()
+        : _vm._e(),
+      _vm._v(" "),
+      _c("div", [_vm._v(_vm._s(_vm.connections))])
     ],
     1
   )
@@ -90567,7 +90549,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\OSNApp\resources\js\main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /var/www/osnapp/OSNApp/resources/js/main.js */"./resources/js/main.js");
 
 
 /***/ })

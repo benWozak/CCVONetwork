@@ -21,14 +21,13 @@ class ConnectionController extends Controller
 
     public function store(StoreConnection $request)
     {
+
     	$unknown = Subsector::where('name', config('app.unknown_subsector.name'))->first();
 
     	$host = Organization::firstOrCreate(
     		['name' => $request->organization_name],
     		['is_member' => $request->is_member, 'subsector_id' => $unknown->id]
     	);
-
-    	$contactIds = [];
 
     	foreach($request->connections as $contact) {
 
@@ -40,9 +39,12 @@ class ConnectionController extends Controller
 	    		]
 	    	);
 
-	    	$contactIds[$organization->id] = [ 'connection_type' => $contact['connection_type'] ];
-    	}
 
-    	$host->contacts()->syncWithoutDetaching($contactIds);
+		$host->contacts()->attach(
+			$organization->id, ['connection_type' => $contact['connection_type']]
+		);
+
+	}
+
     }
 }
