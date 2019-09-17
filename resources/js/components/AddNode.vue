@@ -43,7 +43,6 @@
             ref="awareness"
             :model="awareness"
             label-width="240px" @submit.native.prevent>
-                <span>{{ this.awareness.connections  }}</span>
 		<span>
                     Think back over the past three months and consider any nonprofit events
                     or collaboratives you’ve attended. Recall the people you noticed there
@@ -71,7 +70,6 @@
             ref="shared"
             :model="shared"
             label-width="240px" @submit.native.prevent>
-                <span>{{ awareness.connections  }}</span>
 		<span>
                     Think back over the past six months, and consider situations in which you’ve
                     encountered a challenge or concern at work, and needed to “pick someone’s brain”
@@ -140,7 +138,6 @@
             </div>
 
         </el-form>
-		<div>{{ connections }}</div>
     </el-card>
 </template>
 
@@ -209,7 +206,7 @@ export default {
         setAware() {
 			this.awareness.connections = this.awareness.connections.filter((connection) => {
 				return connection.organization_name != '';
-			});	
+			});
 
             for(let i = 0; i < this.awareness.connections.length; i++) {
                     this.awareness.connections[i].id = this.nextId;
@@ -230,7 +227,7 @@ export default {
         setShared() {
             this.shared.connections = this.shared.connections.filter((connection) => {
 				return connection.organization_name != '';
-			});	 
+			});
 
 			for(let i = 0; i < this.shared.connections.length; i++) {
                     this.shared.connections[i].id = this.nextId;
@@ -250,13 +247,13 @@ export default {
         setPartners() {
     		this.partners.connections = this.partners.connections.filter((connection) => {
 				return connection.organization_name != '';
-			});	       
-	
- 
+			});
+
+
 			for(let i = 0; i < this.partners.connections.length; i++) {
                     this.partners.connections[i].id = this.nextId;
                     this.partners.connections[i].connection_type = 'partnership';
-					this.nextId++;			
+					this.nextId++;
 
                     this.nodes.push(this.partners.connections[i]);
 
@@ -324,8 +321,8 @@ export default {
 
 
             axios.post(
-				'/api/connections', 
-				data 
+				'/api/connections',
+				data
 			).then((response) => {
 				this.connections = response;
 			}).catch((response) => {
