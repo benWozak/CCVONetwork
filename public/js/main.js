@@ -3719,8 +3719,16 @@ __webpack_require__.r(__webpack_exports__);
         }]
       },
       connections: [],
+      organizations: [],
       join_raffle: false
     };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get("/api/organizations").then(function (response) {
+      _this.organizations = response.data.data;
+    });
   },
   computed: {
     nodes: {
@@ -3745,7 +3753,11 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     addOrganization: function addOrganization() {
-      this.organization.id = this.nextId;
+      this.organization.id = this.nextId; // for(let i = 0; i < this.organizations.lenth; i++) {
+      //     if(this.organization.organization_name === this.organizations[i].organization_name) {
+      //     }
+      // }
+
       this.nodes.push({
         id: this.organization.id,
         name: this.organization.organization_name
@@ -3903,7 +3915,8 @@ __webpack_require__.r(__webpack_exports__);
     resetForm: function resetForm() {
       this.organization.id = this.nextId++;
       this.organization.organization_name = '';
-      this.connections = [];
+      this.nodes = [];
+      this.links = [];
       this.active = 0;
     },
 
@@ -4119,7 +4132,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "form",
+  name: "organization_form",
   components: {
     Visual: _components_Visual_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     UserForm: _components_AddNode_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
@@ -4226,6 +4239,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
  // import Selection from './Selection.vue'
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4236,10 +4250,41 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      renderComponent: true,
       nodeSize: 20,
       selected: {},
       linksSelected: {},
-      connections: [],
+      connections: [// {host_id: 3, contact_id: 4},
+        // {host_id: 3, contact_id: 5},
+        // {host_id: 3, contact_id: 6},
+        // {host_id: 4, contact_id: 3},
+        // {host_id: 4, contact_id: 7},
+        // {host_id: 4, contact_id: 8},
+        // {host_id: 4, contact_id: 17},
+        // {host_id: 17, contact_id: 16},
+        // {host_id: 17, contact_id: 15},
+        // {host_id: 17, contact_id: 14},
+        // {host_id: 17, contact_id: 13},
+        // {host_id: 17, contact_id: 12},
+        // {host_id: 17, contact_id: 11},
+        // {host_id: 17, contact_id: 10},
+        // {host_id: 17, contact_id: 9},
+        // {host_id: 17, contact_id: 8},
+        // {host_id: 17, contact_id: 3},
+        // {host_id: 17, contact_id: 4},
+        // {host_id: 16, contact_id: 3},
+        // {host_id: 15, contact_id: 3},
+        // {host_id: 14, contact_id: 3},
+        // {host_id: 13, contact_id: 3},
+        // {host_id: 12, contact_id: 3},
+        // {host_id: 11, contact_id: 3},
+        // {host_id: 10, contact_id: 3},
+        // {host_id: 9, contact_id: 3},
+        // {host_id: 8, contact_id: 3},
+        // {host_id: 7, contact_id: 3},
+        // {host_id: 6, contact_id: 3},
+        // {host_id: 5, contact_id: 3},
+      ],
       organizations: []
     };
   },
@@ -4252,6 +4297,7 @@ __webpack_require__.r(__webpack_exports__);
     axios.get('api/organizations?has_connections=true').then(function (response) {
       _this.organizations = response.data.data;
     });
+    this.forceRerender();
   },
   computed: {
     nodes: function nodes() {
@@ -4262,6 +4308,7 @@ __webpack_require__.r(__webpack_exports__);
           id: this.organizations[i].id,
           name: this.organizations[i].organization_name
         });
+        console.log(this.organizations[i].id);
       }
 
       return nodes;
@@ -4270,27 +4317,22 @@ __webpack_require__.r(__webpack_exports__);
       var links = [];
 
       for (var i = 0; i < this.connections.length; i++) {
+        console.log('host: ' + this.connections[i].host_id, 'contact: ' + this.connections[i].contact_id);
         links.push({
           sid: this.connections[i].host_id,
           tid: this.connections[i].contact_id
         });
-        /**
-         * if host_id === contact_id
-         * 
-         * add 
-         * 
-         * _svgAttrs: {"stroke-width":4,opacity:1},name: "Mutual"
-         */
+        this.checkLinks();
       }
 
       return links;
     },
     options: function options() {
       return {
-        force: 3000,
+        force: 2000,
         size: {
           w: 1400,
-          h: 1400
+          h: 1200
         },
         nodeSize: this.nodeSize,
         nodeLabels: true,
@@ -4299,8 +4341,17 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    nodesDisplay: function nodesDisplay() {},
-    linksDisplay: function linksDisplay() {}
+    forceRerender: function forceRerender() {
+      var _this2 = this;
+
+      this.renderComponent = false;
+      this.$nextTick().then(function () {
+        _this2.renderComponent = true;
+      });
+    },
+    checkLinks: function checkLinks() {//       if(this.connections[i].host_id === )
+      //   _svgAttrs: {"stroke-width":4,opacity:1},name: "Mutual"
+    }
   }
 });
 
@@ -73671,14 +73722,16 @@ var render = function() {
         _vm._v(" "),
         _vm._m(0),
         _vm._v(" "),
-        _c("d3-network", {
-          ref: "net",
-          attrs: {
-            "net-nodes": _vm.nodes,
-            "net-links": _vm.links,
-            options: _vm.options
-          }
-        })
+        _vm.renderComponent
+          ? _c("d3-network", {
+              ref: "net",
+              attrs: {
+                "net-nodes": _vm.nodes,
+                "net-links": _vm.links,
+                options: _vm.options
+              }
+            })
+          : _vm._e()
       ],
       1
     )
@@ -90495,14 +90548,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!****************************************!*\
   !*** ./resources/js/views/Network.vue ***!
   \****************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Network_vue_vue_type_template_id_b113b142_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Network.vue?vue&type=template&id=b113b142&scoped=true& */ "./resources/js/views/Network.vue?vue&type=template&id=b113b142&scoped=true&");
 /* harmony import */ var _Network_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Network.vue?vue&type=script&lang=js& */ "./resources/js/views/Network.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Network_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Network_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -90532,7 +90586,7 @@ component.options.__file = "resources/js/views/Network.vue"
 /*!*****************************************************************!*\
   !*** ./resources/js/views/Network.vue?vue&type=script&lang=js& ***!
   \*****************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

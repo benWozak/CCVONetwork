@@ -9,7 +9,8 @@
             <d3-network ref='net'
                 :net-nodes="nodes"
                 :net-links="links"
-                :options="options"/>
+                :options="options"
+                v-if="renderComponent"/>
         </div>
     </div>
 </template>
@@ -28,6 +29,7 @@ export default {
     },
     data() {
         return {
+            renderComponent: true,
             nodeSize:20,
             selected: {},
             linksSelected: {},
@@ -42,8 +44,9 @@ export default {
         });
         axios.get('api/organizations?has_connections=true')
         .then(response => {
-            this.organizations = response.data.data
+            this.organizations = response.data.data;
         });
+        this.forceRerender();
     },
     computed:{
 
@@ -55,32 +58,26 @@ export default {
                         name: this.organizations[i].organization_name
                     })
                 }
-
                 return nodes;
         },
 
         links() {
             let links = [];
                     for(let i = 0; i < this.connections.length; i++) {
+                    console.log('host: ' + this.connections[i].host_id, 'contact: ' +this.connections[i].contact_id)
                     links.push({
                         sid: this.connections[i].host_id,
                         tid: this.connections[i].contact_id
                     })
-                /**
-                 * if host_id === contact_id
-                 * 
-                 * add 
-                 * 
-                 * _svgAttrs: {"stroke-width":4,opacity:1},name: "Mutual"
-                 */
+                    this.checkLinks();
                 }
                 return links;
         },
 
         options(){
             return{
-                force: 3000,
-                size:{ w:1400, h:1400},
+                force: 2000,
+                size:{ w:1400, h:1200},
                 nodeSize: this.nodeSize,
                 nodeLabels: true,
                 linkLabels:true,
@@ -89,12 +86,20 @@ export default {
     },
 
     methods: {
-        nodesDisplay(){
-
+        forceRerender() {
+            this.renderComponent = false;
+            
+            this.$nextTick().then(() => {
+                this.renderComponent = true;
+            });
         },
-        linksDisplay(){
-
-        },
+        checkLinks() {
+    //       if(this.connections[i].host_id === )
+                 
+                
+    //   _svgAttrs: {"stroke-width":4,opacity:1},name: "Mutual"
+                 
+        }
 
     }
 };

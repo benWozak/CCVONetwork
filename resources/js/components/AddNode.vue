@@ -168,8 +168,15 @@ export default {
             ]
         },
         connections: [],
+        organizations: [],
         join_raffle: false,
       }
+    },
+    mounted() {
+        axios.get(`/api/organizations`)
+            .then( response => {
+                this.organizations = response.data.data;
+            })
     },
     computed: {
         nodes: {
@@ -194,18 +201,25 @@ export default {
 
         addOrganization() {
             this.organization.id = this.nextId;
+            // for(let i = 0; i < this.organizations.lenth; i++) {
+            //     if(this.organization.organization_name === this.organizations[i].organization_name) {
+                    
+            //     }
+            // }
 
             this.nodes.push({
                 id: this.organization.id,
                 name: this.organization.organization_name
             })
+
             this.nextId++;
 
             this.active = 1;
         },
         setAware() {
             for(let i = 0; i < this.awareness.connections.length; i++) {
-
+                
+                // removes unused connection inputs
                 if(this.awareness.connections[i].name === '') {
                     this.awareness.connections.splice(i, 1);
                 } else {
@@ -222,6 +236,11 @@ export default {
                         sid: this.organization.id,
                         tid: this.awareness.connections[i].id
                     })
+
+                    // Might need to check if org exists first
+                    axios.post('/api/connections', {
+                        organization_name: this.connecitons[i].name,
+                    });
                 }
 
             }
@@ -256,6 +275,11 @@ export default {
                         sid: this.organization.id,
                         tid: this.shared.connections[i].id,
                     })
+
+                    // Might need to check if org exists first
+                    axios.post('/api/connections', {
+                        organization_name: this.connecitons[i].name,
+                    });
                 }
 
             }
@@ -290,6 +314,11 @@ export default {
                         sid: this.organization.id,
                         tid: this.partners.connections[i].id,
                     })
+
+                    // Might need to check if org exists first
+                    axios.post('/api/connections', {
+                        organization_name: this.connecitons[i].name,
+                    });
                 }
 
             }
@@ -365,7 +394,8 @@ export default {
 
             this.organization.id = this.nextId++;
             this.organization.organization_name = '';
-            this.connections = []
+            this.nodes = [];
+            this.links = [];
             this.active = 0;
         },
         /**
