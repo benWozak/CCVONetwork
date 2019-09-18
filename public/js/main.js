@@ -3719,8 +3719,16 @@ __webpack_require__.r(__webpack_exports__);
         }]
       },
       connections: [],
+      organizations: [],
       join_raffle: false
     };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get("/api/organizations").then(function (response) {
+      _this.organizations = response.data.data;
+    });
   },
   computed: {
     nodes: {
@@ -3745,7 +3753,11 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     addOrganization: function addOrganization() {
-      this.organization.id = this.nextId;
+      this.organization.id = this.nextId; // for(let i = 0; i < this.organizations.lenth; i++) {
+      //     if(this.organization.organization_name === this.organizations[i].organization_name) {
+      //     }
+      // }
+
       this.nodes.push({
         id: this.organization.id,
         name: this.organization.organization_name
@@ -3765,8 +3777,16 @@ __webpack_require__.r(__webpack_exports__);
         this.nodes.push(this.awareness.connections[i]);
         this.links.push({
           sid: this.organization.id,
-          tid: this.awareness.connections[i].id
-        });
+          tid: this.awareness.connections[i].id // <<<<<<< HEAD
+
+        }); // =======
+        //                     })
+        //                     // Might need to check if org exists first
+        //                     axios.post('/api/organizations', {
+        //                         organization_name: this.connecitons[i].name,
+        //                     });
+        //                 }
+        // >>>>>>> 0ddce06f6c3e32e70325be0cca7e1270dbc79fbf
       }
 
       this.active = 2;
@@ -3852,7 +3872,7 @@ __webpack_require__.r(__webpack_exports__);
      * Submits data to the backend
      */
     onSubmit: function onSubmit() {
-      var _this = this;
+      var _this2 = this;
 
       this.addConnections();
       var data = {
@@ -3861,25 +3881,26 @@ __webpack_require__.r(__webpack_exports__);
         connections: this.connections
       };
       axios.post('/api/connections', data).then(function (response) {
-        _this.connections = response;
+        _this2.connections = response;
 
-        _this.resetForm();
+        _this2.resetForm();
 
-        _this.$router.push("/network");
+        _this2.$router.push("/network");
 
-        _this.$message({
+        _this2.$message({
           showClose: true,
           message: 'New Connection Established',
           type: 'success'
         });
       })["catch"](function (response) {
-        _this.connections = response;
+        _this2.connections = response;
       });
     },
     resetForm: function resetForm() {
       this.organization.id = this.nextId++;
       this.organization.organization_name = '';
-      this.connections = [];
+      this.nodes = [];
+      this.links = [];
       this.active = 0;
     },
 
@@ -4095,7 +4116,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "form",
+  name: "organization_form",
   components: {
     Visual: _components_Visual_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     UserForm: _components_AddNode_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
@@ -4202,6 +4223,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
  // import Selection from './Selection.vue'
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4212,6 +4234,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      renderComponent: true,
       nodeSize: 20,
       selected: {},
       linksSelected: {},
@@ -4222,7 +4245,6 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    alert('hello');
     axios.get('api/connections').then(function (response) {
       _this.connections = response.data.data;
     });
@@ -4247,6 +4269,7 @@ __webpack_require__.r(__webpack_exports__);
       var links = [];
 
       for (var i = 0; i < this.connections.length; i++) {
+        console.log('host: ' + this.connections[i].host_id, 'contact: ' + this.connections[i].contact_id);
         links.push({
           sid: this.connections[i].host_id,
           tid: this.connections[i].contact_id
@@ -4264,20 +4287,16 @@ __webpack_require__.r(__webpack_exports__);
     },
     options: function options() {
       return {
-        force: 3000,
+        force: 2000,
         size: {
           w: 1400,
-          h: 1400
+          h: 1200
         },
         nodeSize: this.nodeSize,
         nodeLabels: true,
         linkLabels: true
       };
     }
-  },
-  methods: {
-    nodesDisplay: function nodesDisplay() {},
-    linksDisplay: function linksDisplay() {}
   }
 });
 
@@ -73399,7 +73418,7 @@ var render = function() {
                             "el-button",
                             {
                               staticClass: "button",
-                              attrs: { type: "primary" },
+                              attrs: { type: "submit" },
                               on: {
                                 click: function($event) {
                                   return _vm.onSubmit()
@@ -73648,14 +73667,16 @@ var render = function() {
         _vm._v(" "),
         _vm._m(0),
         _vm._v(" "),
-        _c("d3-network", {
-          ref: "net",
-          attrs: {
-            "net-nodes": _vm.nodes,
-            "net-links": _vm.links,
-            options: _vm.options
-          }
-        })
+        _vm.renderComponent
+          ? _c("d3-network", {
+              ref: "net",
+              attrs: {
+                "net-nodes": _vm.nodes,
+                "net-links": _vm.links,
+                options: _vm.options
+              }
+            })
+          : _vm._e()
       ],
       1
     )
@@ -89801,14 +89822,15 @@ module.exports = "/images/abcd-logo.png?2db7d341b1269b50f59508a554ad0f33";
 /*!*********************************************!*\
   !*** ./resources/js/components/AddNode.vue ***!
   \*********************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _AddNode_vue_vue_type_template_id_3f489bb0_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AddNode.vue?vue&type=template&id=3f489bb0&scoped=true& */ "./resources/js/components/AddNode.vue?vue&type=template&id=3f489bb0&scoped=true&");
 /* harmony import */ var _AddNode_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AddNode.vue?vue&type=script&lang=js& */ "./resources/js/components/AddNode.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _AddNode_vue_vue_type_style_index_0_id_3f489bb0_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AddNode.vue?vue&type=style&index=0&id=3f489bb0&lang=scss&scoped=true& */ "./resources/js/components/AddNode.vue?vue&type=style&index=0&id=3f489bb0&lang=scss&scoped=true&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _AddNode_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _AddNode_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _AddNode_vue_vue_type_style_index_0_id_3f489bb0_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AddNode.vue?vue&type=style&index=0&id=3f489bb0&lang=scss&scoped=true& */ "./resources/js/components/AddNode.vue?vue&type=style&index=0&id=3f489bb0&lang=scss&scoped=true&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -89840,7 +89862,7 @@ component.options.__file = "resources/js/components/AddNode.vue"
 /*!**********************************************************************!*\
   !*** ./resources/js/components/AddNode.vue?vue&type=script&lang=js& ***!
   \**********************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -90147,16 +90169,14 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   }, {
     path: "/form",
     name: "form",
-    component: _views_Form_vue__WEBPACK_IMPORTED_MODULE_4__["default"] // route level code-splitting
-    // this generates a separate chunk (from.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    // component: () =>
-    //   import(/* webpackChunkName: "from" */ "./views/Form.vue")
-
+    component: _views_Form_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
   }, {
     path: "/network",
     name: "network",
-    component: _views_Network_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+    component: _views_Network_vue__WEBPACK_IMPORTED_MODULE_3__["default"] // afterEnter: (to, from, next) => {
+    //   vm.$forceUpdate();
+    // }
+
   }]
 }));
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/process/browser.js */ "./node_modules/process/browser.js")))
@@ -90185,86 +90205,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
     // for individual organizaitions and their connections
     links: [],
     // for individual organizaitions and their connections
-    organizations: [// for full network of organizaitions and connections
-      // {
-      //   id: 1,
-      //   name: "Gui",
-      //   is_member: 1,
-      //   info: { subsector: "Marketing" }
-      // },
-      // {
-      //   id: 2,
-      //   name: "Rupert",
-      //   is_member: 1,
-      //   info: { subsector: "Developer" }
-      // },
-      // {
-      //   id: 3,
-      //   name: "Ben",
-      //   is_member: 1,
-      //   info: { subsector: "Developer" }
-      // },
-      // {
-      //   id: 4,
-      //   name: "Alanya",
-      //   is_member: 1,
-      //   info: { subsector: "Communications" }
-      // },
-      // {
-      //   id: 5,
-      //   name: "Amanda",
-      //   is_member: 1,
-      //   info: { subsector: "Accounting" }
-      // },
-      // {
-      //   id: 6,
-      //   name: "Little Ben",
-      //   is_member: 1,
-      //   info: { subsector: "Train Conductor" }
-      // },
-      // {
-      //   id: 7,
-      //   name: "Scott",
-      //   is_member: 1,
-      //   info: { subsector: "Marketing" }
-      // },
-      // {
-      //   id: 8,
-      //   name: "Roman",
-      //   is_member: 1,
-      //   _color: "orange",
-      //   subsector: "Master Consultor"
-      // },
-      // {
-      //   id: 9,
-      //   name: "Christie",
-      //   is_member: 1,
-      //   info: { subsector: "Social Work" }
-      // },
-      // {
-      //   id: 10,
-      //   name: "Erin",
-      //   is_member: 1,
-      //   info: { subsector: "Social Work" }
-      // }
-    ],
-    connections: [// for full network of organizaitions and connections
-      // Temporary Test Data
-      // { sid: 1, tid: 2 },
-      // { sid: 2, tid: 8 },
-      // { sid: 3, tid: 4 },
-      // { sid: 4, tid: 5 },
-      // { sid: 5, tid: 6 },
-      // { sid: 7, tid: 8 },
-      // { sid: 5, tid: 8 },
-      // { sid: 3, tid: 8 },
-      // { sid: 7, tid: 9 },
-      // { sid: 4, tid: 2 },
-      // { sid: 8, tid: 4 },
-      // { sid: 3, tid: 2 },
-      // { sid: 10, tid: 9 }
-      //_svgAttrs:{"stroke-width":8,opacity:1},name: "test" 
-    ]
+    organizations: [],
+    // for full network of organizaitions and connections
+    connections: [] // for full network of organizaitions and connections
+
   },
   mutations: {
     ADD_NODE: function ADD_NODE(state, node) {

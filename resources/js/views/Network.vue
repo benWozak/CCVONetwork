@@ -9,7 +9,8 @@
             <d3-network ref='net'
                 :net-nodes="nodes"
                 :net-links="links"
-                :options="options"/>
+                :options="options"
+                v-if="renderComponent"/>
         </div>
     </div>
 </template>
@@ -28,6 +29,7 @@ export default {
     },
     data() {
         return {
+            renderComponent: true,
             nodeSize:20,
             selected: {},
             linksSelected: {},
@@ -36,8 +38,6 @@ export default {
         }
     },
     created() {
-        alert('hello');
-
         axios.get('api/connections')
         .then(response => {
             this.connections = response.data.data;
@@ -57,13 +57,13 @@ export default {
                         name: this.organizations[i].organization_name
                     })
                 }
-
                 return nodes;
         },
 
         links() {
             let links = [];
                     for(let i = 0; i < this.connections.length; i++) {
+                    console.log('host: ' + this.connections[i].host_id, 'contact: ' +this.connections[i].contact_id)
                     links.push({
                         sid: this.connections[i].host_id,
                         tid: this.connections[i].contact_id
@@ -81,24 +81,14 @@ export default {
 
         options(){
             return{
-                force: 3000,
-                size:{ w:1400, h:1400},
+                force: 2000,
+                size:{ w:1400, h:1200},
                 nodeSize: this.nodeSize,
                 nodeLabels: true,
                 linkLabels:true,
             }
         },
     },
-
-    methods: {
-        nodesDisplay(){
-
-        },
-        linksDisplay(){
-
-        },
-
-    }
 };
 </script>
 
