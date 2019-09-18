@@ -3609,9 +3609,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3865,15 +3862,18 @@ __webpack_require__.r(__webpack_exports__);
       };
       axios.post('/api/connections', data).then(function (response) {
         _this.connections = response;
+
+        _this.resetForm();
+
+        _this.$router.push("/network");
+
+        _this.$message({
+          showClose: true,
+          message: 'New Connection Established',
+          type: 'success'
+        });
       })["catch"](function (response) {
         _this.connections = response;
-      });
-      this.resetForm(); //this.$router.push("/network");
-
-      this.$message({
-        showClose: true,
-        message: 'New Connection Established',
-        type: 'success'
       });
     },
     resetForm: function resetForm() {
@@ -4219,9 +4219,10 @@ __webpack_require__.r(__webpack_exports__);
       organizations: []
     };
   },
-  mounted: function mounted() {
+  created: function created() {
     var _this = this;
 
+    alert('hello');
     axios.get('api/connections').then(function (response) {
       _this.connections = response.data.data;
     });
@@ -4252,9 +4253,9 @@ __webpack_require__.r(__webpack_exports__);
         });
         /**
          * if host_id === contact_id
-         * 
-         * add 
-         * 
+         *
+         * add
+         *
          * _svgAttrs: {"stroke-width":4,opacity:1},name: "Mutual"
          */
       }
@@ -73080,8 +73081,6 @@ var render = function() {
               }
             },
             [
-              _c("span", [_vm._v(_vm._s(this.awareness.connections))]),
-              _vm._v(" "),
               _c("span", [
                 _vm._v(
                   "\n                    Think back over the past three months and consider any nonprofit events\n                    or collaboratives you’ve attended. Recall the people you noticed there\n                    and those you quickly connected with – such as a brief “Hello” before\n                    the event started, or a catch-up during a break.\n                "
@@ -73181,8 +73180,6 @@ var render = function() {
               }
             },
             [
-              _c("span", [_vm._v(_vm._s(_vm.awareness.connections))]),
-              _vm._v(" "),
               _c("span", [
                 _vm._v(
                   "\n                    Think back over the past six months, and consider situations in which you’ve\n                    encountered a challenge or concern at work, and needed to “pick someone’s brain”\n                    outside of your own organization.\n                "
@@ -73430,9 +73427,7 @@ var render = function() {
               )
             ]
           )
-        : _vm._e(),
-      _vm._v(" "),
-      _c("div", [_vm._v(_vm._s(_vm.connections))])
+        : _vm._e()
     ],
     1
   )
@@ -90549,7 +90544,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /var/www/osnapp/OSNApp/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /Users/rupert/www/sites/OSNApp/resources/js/main.js */"./resources/js/main.js");
 
 
 /***/ })

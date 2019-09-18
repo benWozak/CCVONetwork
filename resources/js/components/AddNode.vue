@@ -325,17 +325,18 @@ export default {
 				data
 			).then((response) => {
 				this.connections = response;
+
+                this.resetForm();
+                this.$router.push("/network");
+                this.$message({
+                    showClose: true,
+                    message: 'New Connection Established',
+                    type: 'success'
+                });
+
 			}).catch((response) => {
 				this.connections = response;
 			});
-
-            this.resetForm();
-            //this.$router.push("/network");
-            this.$message({
-                showClose: true,
-                message: 'New Connection Established',
-                type: 'success'
-            });
         },
         resetForm() {
 

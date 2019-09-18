@@ -35,7 +35,9 @@ export default {
             organizations: [],
         }
     },
-    mounted () {
+    created() {
+        alert('hello');
+
         axios.get('api/connections')
         .then(response => {
             this.connections = response.data.data;
@@ -68,9 +70,9 @@ export default {
                     })
                 /**
                  * if host_id === contact_id
-                 * 
-                 * add 
-                 * 
+                 *
+                 * add
+                 *
                  * _svgAttrs: {"stroke-width":4,opacity:1},name: "Mutual"
                  */
                 }
