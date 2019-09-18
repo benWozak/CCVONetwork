@@ -3767,6 +3767,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     setAware: function setAware() {
       for (var i = 0; i < this.awareness.connections.length; i++) {
+        // removes unused connection inputs
         if (this.awareness.connections[i].name === '') {
           this.awareness.connections.splice(i, 1);
         } else {
@@ -3780,6 +3781,10 @@ __webpack_require__.r(__webpack_exports__);
           this.links.push({
             sid: this.organization.id,
             tid: this.awareness.connections[i].id
+          }); // Might need to check if org exists first
+
+          axios.post('/api/organizations', {
+            organization_name: this.connecitons[i].name
           });
         }
       }
@@ -3812,6 +3817,10 @@ __webpack_require__.r(__webpack_exports__);
           this.links.push({
             sid: this.organization.id,
             tid: this.shared.connections[i].id
+          }); // Might need to check if org exists first
+
+          axios.post('/api/organizations', {
+            organization_name: this.connecitons[i].name
           });
         }
       }
@@ -3844,6 +3853,10 @@ __webpack_require__.r(__webpack_exports__);
           this.links.push({
             sid: this.organization.id,
             tid: this.partners.connections[i].id
+          }); // Might need to check if org exists first
+
+          axios.post('/api/organizations', {
+            organization_name: this.connecitons[i].name
           });
         }
       }
@@ -3898,18 +3911,26 @@ __webpack_require__.r(__webpack_exports__);
      * Submits data to the backend
      */
     onSubmit: function onSubmit() {
+      var _this2 = this;
+
       this.addConnections();
-      axios.post('/api/connections', {
+      var data = {
         organization_name: this.organization.organization_name,
         is_member: this.organization.is_member,
         connections: this.connections
-      });
-      this.resetForm();
-      this.$router.push("/network");
-      this.$message({
-        showClose: true,
-        message: 'New Connection Established',
-        type: 'success'
+      };
+      axios.post('/api/connections', data).then(function (response) {
+        _this2.connections = response;
+
+        _this2.resetForm();
+
+        _this2.$router.push("/network");
+
+        _this2.$message({
+          showClose: true,
+          message: 'New Connection Established',
+          type: 'success'
+        });
       });
     },
     resetForm: function resetForm() {
@@ -4254,37 +4275,7 @@ __webpack_require__.r(__webpack_exports__);
       nodeSize: 20,
       selected: {},
       linksSelected: {},
-      connections: [// {host_id: 3, contact_id: 4},
-        // {host_id: 3, contact_id: 5},
-        // {host_id: 3, contact_id: 6},
-        // {host_id: 4, contact_id: 3},
-        // {host_id: 4, contact_id: 7},
-        // {host_id: 4, contact_id: 8},
-        // {host_id: 4, contact_id: 17},
-        // {host_id: 17, contact_id: 16},
-        // {host_id: 17, contact_id: 15},
-        // {host_id: 17, contact_id: 14},
-        // {host_id: 17, contact_id: 13},
-        // {host_id: 17, contact_id: 12},
-        // {host_id: 17, contact_id: 11},
-        // {host_id: 17, contact_id: 10},
-        // {host_id: 17, contact_id: 9},
-        // {host_id: 17, contact_id: 8},
-        // {host_id: 17, contact_id: 3},
-        // {host_id: 17, contact_id: 4},
-        // {host_id: 16, contact_id: 3},
-        // {host_id: 15, contact_id: 3},
-        // {host_id: 14, contact_id: 3},
-        // {host_id: 13, contact_id: 3},
-        // {host_id: 12, contact_id: 3},
-        // {host_id: 11, contact_id: 3},
-        // {host_id: 10, contact_id: 3},
-        // {host_id: 9, contact_id: 3},
-        // {host_id: 8, contact_id: 3},
-        // {host_id: 7, contact_id: 3},
-        // {host_id: 6, contact_id: 3},
-        // {host_id: 5, contact_id: 3},
-      ],
+      connections: [],
       organizations: []
     };
   },
@@ -4296,7 +4287,8 @@ __webpack_require__.r(__webpack_exports__);
     });
     axios.get('api/organizations?has_connections=true').then(function (response) {
       _this.organizations = response.data.data;
-    });
+    }); //  vm.$forceUpdate();
+
     this.forceRerender();
   },
   computed: {
@@ -4308,7 +4300,6 @@ __webpack_require__.r(__webpack_exports__);
           id: this.organizations[i].id,
           name: this.organizations[i].organization_name
         });
-        console.log(this.organizations[i].id);
       }
 
       return nodes;
@@ -4348,6 +4339,7 @@ __webpack_require__.r(__webpack_exports__);
       this.$nextTick().then(function () {
         _this2.renderComponent = true;
       });
+      this.$router.push('/network');
     },
     checkLinks: function checkLinks() {//       if(this.connections[i].host_id === )
       //   _svgAttrs: {"stroke-width":4,opacity:1},name: "Mutual"
@@ -73473,7 +73465,7 @@ var render = function() {
                             "el-button",
                             {
                               staticClass: "button",
-                              attrs: { type: "primary" },
+                              attrs: { type: "submit" },
                               on: {
                                 click: function($event) {
                                   return _vm.onSubmit()
@@ -90223,16 +90215,14 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   }, {
     path: "/form",
     name: "form",
-    component: _views_Form_vue__WEBPACK_IMPORTED_MODULE_4__["default"] // route level code-splitting
-    // this generates a separate chunk (from.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    // component: () =>
-    //   import(/* webpackChunkName: "from" */ "./views/Form.vue")
-
+    component: _views_Form_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
   }, {
     path: "/network",
     name: "network",
-    component: _views_Network_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+    component: _views_Network_vue__WEBPACK_IMPORTED_MODULE_3__["default"] // afterEnter: (to, from, next) => {
+    //   vm.$forceUpdate();
+    // }
+
   }]
 }));
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/process/browser.js */ "./node_modules/process/browser.js")))
@@ -90261,86 +90251,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
     // for individual organizaitions and their connections
     links: [],
     // for individual organizaitions and their connections
-    organizations: [// for full network of organizaitions and connections
-      // {
-      //   id: 1,
-      //   name: "Gui",
-      //   is_member: 1,
-      //   info: { subsector: "Marketing" }
-      // },
-      // {
-      //   id: 2,
-      //   name: "Rupert",
-      //   is_member: 1,
-      //   info: { subsector: "Developer" }
-      // },
-      // {
-      //   id: 3,
-      //   name: "Ben",
-      //   is_member: 1,
-      //   info: { subsector: "Developer" }
-      // },
-      // {
-      //   id: 4,
-      //   name: "Alanya",
-      //   is_member: 1,
-      //   info: { subsector: "Communications" }
-      // },
-      // {
-      //   id: 5,
-      //   name: "Amanda",
-      //   is_member: 1,
-      //   info: { subsector: "Accounting" }
-      // },
-      // {
-      //   id: 6,
-      //   name: "Little Ben",
-      //   is_member: 1,
-      //   info: { subsector: "Train Conductor" }
-      // },
-      // {
-      //   id: 7,
-      //   name: "Scott",
-      //   is_member: 1,
-      //   info: { subsector: "Marketing" }
-      // },
-      // {
-      //   id: 8,
-      //   name: "Roman",
-      //   is_member: 1,
-      //   _color: "orange",
-      //   subsector: "Master Consultor"
-      // },
-      // {
-      //   id: 9,
-      //   name: "Christie",
-      //   is_member: 1,
-      //   info: { subsector: "Social Work" }
-      // },
-      // {
-      //   id: 10,
-      //   name: "Erin",
-      //   is_member: 1,
-      //   info: { subsector: "Social Work" }
-      // }
-    ],
-    connections: [// for full network of organizaitions and connections
-      // Temporary Test Data
-      // { sid: 1, tid: 2 },
-      // { sid: 2, tid: 8 },
-      // { sid: 3, tid: 4 },
-      // { sid: 4, tid: 5 },
-      // { sid: 5, tid: 6 },
-      // { sid: 7, tid: 8 },
-      // { sid: 5, tid: 8 },
-      // { sid: 3, tid: 8 },
-      // { sid: 7, tid: 9 },
-      // { sid: 4, tid: 2 },
-      // { sid: 8, tid: 4 },
-      // { sid: 3, tid: 2 },
-      // { sid: 10, tid: 9 }
-      //_svgAttrs:{"stroke-width":8,opacity:1},name: "test" 
-    ]
+    organizations: [],
+    // for full network of organizaitions and connections
+    connections: [] // for full network of organizaitions and connections
+
   },
   mutations: {
     ADD_NODE: function ADD_NODE(state, node) {
@@ -90548,15 +90462,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!****************************************!*\
   !*** ./resources/js/views/Network.vue ***!
   \****************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Network_vue_vue_type_template_id_b113b142_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Network.vue?vue&type=template&id=b113b142&scoped=true& */ "./resources/js/views/Network.vue?vue&type=template&id=b113b142&scoped=true&");
 /* harmony import */ var _Network_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Network.vue?vue&type=script&lang=js& */ "./resources/js/views/Network.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Network_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Network_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -90586,7 +90499,7 @@ component.options.__file = "resources/js/views/Network.vue"
 /*!*****************************************************************!*\
   !*** ./resources/js/views/Network.vue?vue&type=script&lang=js& ***!
   \*****************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

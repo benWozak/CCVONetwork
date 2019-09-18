@@ -130,7 +130,7 @@
             <div class="clearfix">
                 <el-form-item class="footer">
                     <span class="margin-right">
-                        <el-button type="primary" class="button" @click="onSubmit()" @submit.prevent="onSubmit()">Submit</el-button>
+                        <el-button type="submit" class="button" @click="onSubmit()" @submit.prevent="onSubmit()">Submit</el-button>
                     </span>
 
                     <el-button @click="resetForm">Cancel</el-button>
@@ -238,7 +238,7 @@ export default {
                     })
 
                     // Might need to check if org exists first
-                    axios.post('/api/connections', {
+                    axios.post('/api/organizations', {
                         organization_name: this.connecitons[i].name,
                     });
                 }
@@ -277,7 +277,7 @@ export default {
                     })
 
                     // Might need to check if org exists first
-                    axios.post('/api/connections', {
+                    axios.post('/api/organizations', {
                         organization_name: this.connecitons[i].name,
                     });
                 }
@@ -316,7 +316,7 @@ export default {
                     })
 
                     // Might need to check if org exists first
-                    axios.post('/api/connections', {
+                    axios.post('/api/organizations', {
                         organization_name: this.connecitons[i].name,
                     });
                 }
@@ -375,20 +375,29 @@ export default {
         onSubmit() {
 
             this.addConnections();
-
-            axios.post('/api/connections', {
+            const data = {
                 organization_name: this.organization.organization_name,
                 is_member: this.organization.is_member,
                 connections: this.connections
+            }
+
+            axios.post('/api/connections', data)
+            .then((response) => {
+                this.connections = response;
+                
+                this.resetForm();
+            
+                this.$router.push("/network");
+
+                this.$message({
+                    showClose: true,
+                    message: 'New Connection Established',
+                    type: 'success'
+                });
             });
 
-            this.resetForm();
-            this.$router.push("/network");
-            this.$message({
-                showClose: true,
-                message: 'New Connection Established',
-                type: 'success'
-            });
+           
+            
         },
         resetForm() {
 

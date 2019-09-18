@@ -38,15 +38,16 @@ export default {
         }
     },
     mounted () {
-        axios.get('api/connections')
-        .then(response => {
-            this.connections = response.data.data;
-        });
-        axios.get('api/organizations?has_connections=true')
-        .then(response => {
-            this.organizations = response.data.data;
-        });
-        this.forceRerender();
+             axios.get('api/connections')
+            .then(response => {
+                this.connections = response.data.data;
+            });
+            axios.get('api/organizations?has_connections=true')
+            .then(response => {
+                this.organizations = response.data.data;
+            });
+            //  vm.$forceUpdate();
+            this.forceRerender();
     },
     computed:{
 
@@ -92,6 +93,7 @@ export default {
             this.$nextTick().then(() => {
                 this.renderComponent = true;
             });
+            this.$router.push('/network')
         },
         checkLinks() {
     //       if(this.connections[i].host_id === )
