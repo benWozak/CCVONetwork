@@ -19,16 +19,14 @@ export default new Router({
       path: "/form",
       name: "form",
       component: Form
-      // route level code-splitting
-      // this generates a separate chunk (from.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      // component: () =>
-      //   import(/* webpackChunkName: "from" */ "./views/Form.vue")
     },
     {
       path: "/network",
       name: "network",
-      component: Network
+      component: Network,
+      // afterEnter: (to, from, next) => {
+      //   vm.$forceUpdate();
+      // }
     }
   ]
 });

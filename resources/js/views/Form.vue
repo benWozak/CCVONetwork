@@ -17,7 +17,7 @@ import Visual from "@/components/Visual.vue";
 import UserForm from '@/components/AddNode.vue'
 
 export default {
-  name: "form",
+  name: "organization_form",
   components: {
     Visual,
     UserForm

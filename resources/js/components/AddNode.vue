@@ -130,7 +130,7 @@
             <div class="clearfix">
                 <el-form-item class="footer">
                     <span class="margin-right">
-                        <el-button type="primary" class="button" @click="onSubmit()" @submit.prevent="onSubmit()">Submit</el-button>
+                        <el-button type="submit" class="button" @click="onSubmit()" @submit.prevent="onSubmit()">Submit</el-button>
                     </span>
 
                     <el-button @click="resetForm">Cancel</el-button>
@@ -168,8 +168,15 @@ export default {
             ]
         },
         connections: [],
+        organizations: [],
         join_raffle: false,
       }
+    },
+    mounted() {
+        axios.get(`/api/organizations`)
+            .then( response => {
+                this.organizations = response.data.data;
+            })
     },
     computed: {
         nodes: {
@@ -194,11 +201,17 @@ export default {
 
         addOrganization() {
             this.organization.id = this.nextId;
+            // for(let i = 0; i < this.organizations.lenth; i++) {
+            //     if(this.organization.organization_name === this.organizations[i].organization_name) {
+
+            //     }
+            // }
 
             this.nodes.push({
                 id: this.organization.id,
                 name: this.organization.organization_name
             })
+
             this.nextId++;
 
             this.active = 1;
@@ -218,7 +231,17 @@ export default {
                     this.links.push({
                         sid: this.organization.id,
                         tid: this.awareness.connections[i].id
+// <<<<<<< HEAD
                     });
+// =======
+//                     })
+
+//                     // Might need to check if org exists first
+//                     axios.post('/api/organizations', {
+//                         organization_name: this.connecitons[i].name,
+//                     });
+//                 }
+// >>>>>>> 0ddce06f6c3e32e70325be0cca7e1270dbc79fbf
 
             }
 
@@ -239,8 +262,7 @@ export default {
                     this.links.push({
                         sid: this.organization.id,
                         tid: this.shared.connections[i].id,
-                    })
-
+                    });
             }
             this.active = 3;
         },
@@ -251,17 +273,18 @@ export default {
 
 
 			for(let i = 0; i < this.partners.connections.length; i++) {
-                    this.partners.connections[i].id = this.nextId;
-                    this.partners.connections[i].connection_type = 'partnership';
-					this.nextId++;
+                this.partners.connections[i].id = this.nextId;
+                this.partners.connections[i].connection_type = 'partnership';
+				this.nextId++;
 
-                    this.nodes.push(this.partners.connections[i]);
+                this.nodes.push(this.partners.connections[i]);
 
-                    this.links.push({
-                        sid: this.organization.id,
-                        tid: this.partners.connections[i].id,
-                    })
+                this.links.push({
+                    sid: this.organization.id,
+                    tid: this.partners.connections[i].id,
+                })
             }
+
             this.active = 4;
         },
 
@@ -310,7 +333,6 @@ export default {
          * Submits data to the backend
          */
         onSubmit() {
-
             this.addConnections();
 
 			const data = {
@@ -319,29 +341,30 @@ export default {
                 connections: this.connections
 			};
 
-
             axios.post(
 				'/api/connections',
 				data
 			).then((response) => {
 				this.connections = response;
+
+                this.resetForm();
+                this.$router.push("/network");
+                this.$message({
+                    showClose: true,
+                    message: 'New Connection Established',
+                    type: 'success'
+                });
+
 			}).catch((response) => {
 				this.connections = response;
 			});
-
-            this.resetForm();
-            //this.$router.push("/network");
-            this.$message({
-                showClose: true,
-                message: 'New Connection Established',
-                type: 'success'
-            });
         },
         resetForm() {
 
             this.organization.id = this.nextId++;
             this.organization.organization_name = '';
-            this.connections = []
+            this.nodes = [];
+            this.links = [];
             this.active = 0;
         },
         /**

@@ -3609,9 +3609,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3722,8 +3719,16 @@ __webpack_require__.r(__webpack_exports__);
         }]
       },
       connections: [],
+      organizations: [],
       join_raffle: false
     };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get("/api/organizations").then(function (response) {
+      _this.organizations = response.data.data;
+    });
   },
   computed: {
     nodes: {
@@ -3748,7 +3753,11 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     addOrganization: function addOrganization() {
-      this.organization.id = this.nextId;
+      this.organization.id = this.nextId; // for(let i = 0; i < this.organizations.lenth; i++) {
+      //     if(this.organization.organization_name === this.organizations[i].organization_name) {
+      //     }
+      // }
+
       this.nodes.push({
         id: this.organization.id,
         name: this.organization.organization_name
@@ -3768,8 +3777,16 @@ __webpack_require__.r(__webpack_exports__);
         this.nodes.push(this.awareness.connections[i]);
         this.links.push({
           sid: this.organization.id,
-          tid: this.awareness.connections[i].id
-        });
+          tid: this.awareness.connections[i].id // <<<<<<< HEAD
+
+        }); // =======
+        //                     })
+        //                     // Might need to check if org exists first
+        //                     axios.post('/api/organizations', {
+        //                         organization_name: this.connecitons[i].name,
+        //                     });
+        //                 }
+        // >>>>>>> 0ddce06f6c3e32e70325be0cca7e1270dbc79fbf
       }
 
       this.active = 2;
@@ -3855,7 +3872,7 @@ __webpack_require__.r(__webpack_exports__);
      * Submits data to the backend
      */
     onSubmit: function onSubmit() {
-      var _this = this;
+      var _this2 = this;
 
       this.addConnections();
       var data = {
@@ -3864,22 +3881,26 @@ __webpack_require__.r(__webpack_exports__);
         connections: this.connections
       };
       axios.post('/api/connections', data).then(function (response) {
-        _this.connections = response;
-      })["catch"](function (response) {
-        _this.connections = response;
-      });
-      this.resetForm(); //this.$router.push("/network");
+        _this2.connections = response;
 
-      this.$message({
-        showClose: true,
-        message: 'New Connection Established',
-        type: 'success'
+        _this2.resetForm();
+
+        _this2.$router.push("/network");
+
+        _this2.$message({
+          showClose: true,
+          message: 'New Connection Established',
+          type: 'success'
+        });
+      })["catch"](function (response) {
+        _this2.connections = response;
       });
     },
     resetForm: function resetForm() {
       this.organization.id = this.nextId++;
       this.organization.organization_name = '';
-      this.connections = [];
+      this.nodes = [];
+      this.links = [];
       this.active = 0;
     },
 
@@ -4095,7 +4116,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "form",
+  name: "organization_form",
   components: {
     Visual: _components_Visual_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     UserForm: _components_AddNode_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
@@ -4202,6 +4223,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
  // import Selection from './Selection.vue'
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4212,6 +4234,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      renderComponent: true,
       nodeSize: 20,
       selected: {},
       linksSelected: {},
@@ -4219,7 +4242,7 @@ __webpack_require__.r(__webpack_exports__);
       organizations: []
     };
   },
-  mounted: function mounted() {
+  created: function created() {
     var _this = this;
 
     axios.get('api/connections').then(function (response) {
@@ -4246,15 +4269,16 @@ __webpack_require__.r(__webpack_exports__);
       var links = [];
 
       for (var i = 0; i < this.connections.length; i++) {
+        console.log('host: ' + this.connections[i].host_id, 'contact: ' + this.connections[i].contact_id);
         links.push({
           sid: this.connections[i].host_id,
           tid: this.connections[i].contact_id
         });
         /**
          * if host_id === contact_id
-         * 
-         * add 
-         * 
+         *
+         * add
+         *
          * _svgAttrs: {"stroke-width":4,opacity:1},name: "Mutual"
          */
       }
@@ -4263,20 +4287,16 @@ __webpack_require__.r(__webpack_exports__);
     },
     options: function options() {
       return {
-        force: 3000,
+        force: 2000,
         size: {
           w: 1400,
-          h: 1400
+          h: 1200
         },
         nodeSize: this.nodeSize,
         nodeLabels: true,
         linkLabels: true
       };
     }
-  },
-  methods: {
-    nodesDisplay: function nodesDisplay() {},
-    linksDisplay: function linksDisplay() {}
   }
 });
 
@@ -73080,8 +73100,6 @@ var render = function() {
               }
             },
             [
-              _c("span", [_vm._v(_vm._s(this.awareness.connections))]),
-              _vm._v(" "),
               _c("span", [
                 _vm._v(
                   "\n                    Think back over the past three months and consider any nonprofit events\n                    or collaboratives you’ve attended. Recall the people you noticed there\n                    and those you quickly connected with – such as a brief “Hello” before\n                    the event started, or a catch-up during a break.\n                "
@@ -73181,8 +73199,6 @@ var render = function() {
               }
             },
             [
-              _c("span", [_vm._v(_vm._s(_vm.awareness.connections))]),
-              _vm._v(" "),
               _c("span", [
                 _vm._v(
                   "\n                    Think back over the past six months, and consider situations in which you’ve\n                    encountered a challenge or concern at work, and needed to “pick someone’s brain”\n                    outside of your own organization.\n                "
@@ -73402,7 +73418,7 @@ var render = function() {
                             "el-button",
                             {
                               staticClass: "button",
-                              attrs: { type: "primary" },
+                              attrs: { type: "submit" },
                               on: {
                                 click: function($event) {
                                   return _vm.onSubmit()
@@ -73430,9 +73446,7 @@ var render = function() {
               )
             ]
           )
-        : _vm._e(),
-      _vm._v(" "),
-      _c("div", [_vm._v(_vm._s(_vm.connections))])
+        : _vm._e()
     ],
     1
   )
@@ -73653,14 +73667,16 @@ var render = function() {
         _vm._v(" "),
         _vm._m(0),
         _vm._v(" "),
-        _c("d3-network", {
-          ref: "net",
-          attrs: {
-            "net-nodes": _vm.nodes,
-            "net-links": _vm.links,
-            options: _vm.options
-          }
-        })
+        _vm.renderComponent
+          ? _c("d3-network", {
+              ref: "net",
+              attrs: {
+                "net-nodes": _vm.nodes,
+                "net-links": _vm.links,
+                options: _vm.options
+              }
+            })
+          : _vm._e()
       ],
       1
     )
@@ -73677,9 +73693,11 @@ var staticRenderFns = [
       ),
       _c("p", [
         _vm._v("Click "),
-        _c("a", { attrs: { href: "https://www.hellokrd.net/" } }, [
-          _vm._v("here")
-        ]),
+        _c(
+          "a",
+          { attrs: { href: "https://www.hellokrd.net/", target: "_blank" } },
+          [_vm._v("here")]
+        ),
         _vm._v(" to enter")
       ])
     ])
@@ -90152,16 +90170,14 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   }, {
     path: "/form",
     name: "form",
-    component: _views_Form_vue__WEBPACK_IMPORTED_MODULE_4__["default"] // route level code-splitting
-    // this generates a separate chunk (from.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    // component: () =>
-    //   import(/* webpackChunkName: "from" */ "./views/Form.vue")
-
+    component: _views_Form_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
   }, {
     path: "/network",
     name: "network",
-    component: _views_Network_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+    component: _views_Network_vue__WEBPACK_IMPORTED_MODULE_3__["default"] // afterEnter: (to, from, next) => {
+    //   vm.$forceUpdate();
+    // }
+
   }]
 }));
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/process/browser.js */ "./node_modules/process/browser.js")))
@@ -90190,86 +90206,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
     // for individual organizaitions and their connections
     links: [],
     // for individual organizaitions and their connections
-    organizations: [// for full network of organizaitions and connections
-      // {
-      //   id: 1,
-      //   name: "Gui",
-      //   is_member: 1,
-      //   info: { subsector: "Marketing" }
-      // },
-      // {
-      //   id: 2,
-      //   name: "Rupert",
-      //   is_member: 1,
-      //   info: { subsector: "Developer" }
-      // },
-      // {
-      //   id: 3,
-      //   name: "Ben",
-      //   is_member: 1,
-      //   info: { subsector: "Developer" }
-      // },
-      // {
-      //   id: 4,
-      //   name: "Alanya",
-      //   is_member: 1,
-      //   info: { subsector: "Communications" }
-      // },
-      // {
-      //   id: 5,
-      //   name: "Amanda",
-      //   is_member: 1,
-      //   info: { subsector: "Accounting" }
-      // },
-      // {
-      //   id: 6,
-      //   name: "Little Ben",
-      //   is_member: 1,
-      //   info: { subsector: "Train Conductor" }
-      // },
-      // {
-      //   id: 7,
-      //   name: "Scott",
-      //   is_member: 1,
-      //   info: { subsector: "Marketing" }
-      // },
-      // {
-      //   id: 8,
-      //   name: "Roman",
-      //   is_member: 1,
-      //   _color: "orange",
-      //   subsector: "Master Consultor"
-      // },
-      // {
-      //   id: 9,
-      //   name: "Christie",
-      //   is_member: 1,
-      //   info: { subsector: "Social Work" }
-      // },
-      // {
-      //   id: 10,
-      //   name: "Erin",
-      //   is_member: 1,
-      //   info: { subsector: "Social Work" }
-      // }
-    ],
-    connections: [// for full network of organizaitions and connections
-      // Temporary Test Data
-      // { sid: 1, tid: 2 },
-      // { sid: 2, tid: 8 },
-      // { sid: 3, tid: 4 },
-      // { sid: 4, tid: 5 },
-      // { sid: 5, tid: 6 },
-      // { sid: 7, tid: 8 },
-      // { sid: 5, tid: 8 },
-      // { sid: 3, tid: 8 },
-      // { sid: 7, tid: 9 },
-      // { sid: 4, tid: 2 },
-      // { sid: 8, tid: 4 },
-      // { sid: 3, tid: 2 },
-      // { sid: 10, tid: 9 }
-      //_svgAttrs:{"stroke-width":8,opacity:1},name: "test" 
-    ]
+    organizations: [],
+    // for full network of organizaitions and connections
+    connections: [] // for full network of organizaitions and connections
+
   },
   mutations: {
     ADD_NODE: function ADD_NODE(state, node) {
@@ -90549,7 +90489,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /var/www/osnapp/OSNApp/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\OSNApp\resources\js\main.js */"./resources/js/main.js");
 
 
 /***/ })
