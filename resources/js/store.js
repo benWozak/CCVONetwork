@@ -27,11 +27,5 @@ export default new Vuex.Store({
     getOrganizations() {
       axios.get('api/organizations').then(response => (this.connections = response));
     },
-    // submitForm({ state }) {
-        
-      
-
-    //   return request.store();
-    // }
   }
 });

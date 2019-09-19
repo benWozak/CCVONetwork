@@ -50,7 +50,7 @@
                     the event started, or a catch-up during a break.
                 </span><br><br>
                 <label for="">Please list up to 10 organizations represented by the people you connected with.</label>
-                <el-form-item v-for="(connection, index) in awareness.connections" :key="index" :label="'Connection' + (index + 1)" >
+                <el-form-item v-for="(connection, index) in awareness.connections" :key="index" :label="'Connection ' + (index + 1)" >
                     <el-autocomplete
                         v-model="connection.organization_name" @keyup.enter.native="$event.target.nextElementSibling.focus()"
                         :trigger-on-focus="false"
@@ -76,7 +76,7 @@
                     outside of your own organization.
                 </span><br><br>
                 <label for="">Please list up to 10 organizations represented by the people to whom you reached out.</label>
-                <el-form-item v-for="(connection, index) in shared.connections" :key="index" :label="'Connection' + (index + 1)" >
+                <el-form-item v-for="(connection, index) in shared.connections" :key="index" :label="'Connection ' + (index + 1)" >
                     <el-autocomplete
                         v-model="connection.organization_name" @keyup.enter.native="$event.target.nextElementSibling.focus()"
                         :trigger-on-focus="false"
@@ -102,7 +102,7 @@
                     decision-making would be made jointly.
                 </span><br><br>
                 <label for="">Please list up to 10 organizations involved in these collaborations.</label>
-                <el-form-item v-for="(connection, index) in partners.connections" :key="index" :label="'Connection' + (index + 1)" >
+                <el-form-item v-for="(connection, index) in partners.connections" :key="index" :label="'Connection ' + (index + 1)" >
                     <el-autocomplete
                         v-model="connection.organization_name" @keyup.enter.native="$event.target.nextElementSibling.focus()"
                         :trigger-on-focus="false"
@@ -130,7 +130,7 @@
             <div class="clearfix">
                 <el-form-item class="footer">
                     <span class="margin-right">
-                        <el-button type="submit" class="button" @click="onSubmit()" @submit.prevent="onSubmit()">Submit</el-button>
+                        <el-button type="primary" class="button" @click="onSubmit()" @submit.prevent="onSubmit()">Submit</el-button>
                     </span>
 
                     <el-button @click="resetForm">Cancel</el-button>
@@ -201,19 +201,19 @@ export default {
 
         addOrganization() {
             this.organization.id = this.nextId;
-            // for(let i = 0; i < this.organizations.lenth; i++) {
-            //     if(this.organization.organization_name === this.organizations[i].organization_name) {
-
-            //     }
-            // }
 
             this.nodes.push({
                 id: this.organization.id,
                 name: this.organization.organization_name
             })
 
-            this.nextId++;
+            axios.post('/api/connections', {
+                organization_name: this.organization.organization_name,
+                is_member: this.organization.is_member,
+                connections: []
+            });
 
+            this.nextId++;
             this.active = 1;
         },
         setAware() {
@@ -222,28 +222,27 @@ export default {
 			});
 
             for(let i = 0; i < this.awareness.connections.length; i++) {
-                    this.awareness.connections[i].id = this.nextId;
-                    this.awareness.connections[i].connection_type = 'awareness';
-					this.nextId++;
+                this.awareness.connections[i].id = this.nextId;
+                this.awareness.connections[i].connection_type = 'awareness';
+                this.nextId++;
 
-                    this.nodes.push(this.awareness.connections[i]);
+                this.nodes.push({
+                    id: this.awareness.connections[i].id,
+                    name: this.awareness.connections[i].organization_name
+                });
 
-                    this.links.push({
-                        sid: this.organization.id,
-                        tid: this.awareness.connections[i].id
-// <<<<<<< HEAD
-                    });
-// =======
-//                     })
-
-//                     // Might need to check if org exists first
-//                     axios.post('/api/organizations', {
-//                         organization_name: this.connecitons[i].name,
-//                     });
-//                 }
-// >>>>>>> 0ddce06f6c3e32e70325be0cca7e1270dbc79fbf
+                this.links.push({
+                    sid: this.organization.id,
+                    tid: this.awareness.connections[i].id
+                });
 
             }
+
+            axios.post('/api/connections', {
+                organization_name: this.organization.organization_name,
+                is_member: this.organization.is_member,
+                connections: this.awareness.connections
+            });
 
             this.active = 2;
         },
@@ -257,13 +256,23 @@ export default {
                     this.shared.connections[i].connection_type = 'shared knowledge';
 					this.nextId++;
 
-                    this.nodes.push(this.shared.connections[i]);
+                    this.nodes.push({
+                        id: this.shared.connections[i].id,
+                        name: this.shared.connections[i].organization_name,
+                    });
 
                     this.links.push({
                         sid: this.organization.id,
                         tid: this.shared.connections[i].id,
                     });
             }
+
+            axios.post('/api/connections', {
+                organization_name: this.organization.organization_name,
+                is_member: this.organization.is_member,
+                connections: this.shared.connections
+            });
+
             this.active = 3;
         },
         setPartners() {
@@ -277,13 +286,22 @@ export default {
                 this.partners.connections[i].connection_type = 'partnership';
 				this.nextId++;
 
-                this.nodes.push(this.partners.connections[i]);
+                this.nodes.push({
+                    id: this.partners.connections[i].id,
+                    name: this.partners.connections[i].organization_name,
+                });
 
                 this.links.push({
                     sid: this.organization.id,
                     tid: this.partners.connections[i].id,
                 })
             }
+
+            axios.post('/api/connections', {
+                organization_name: this.organization.organization_name,
+                is_member: this.organization.is_member,
+                connections: this.partners.connections
+            });
 
             this.active = 4;
         },
@@ -323,17 +341,17 @@ export default {
             }
         },
 
-        addConnections() {
-			this.connections = this.connections.concat(this.awareness.connections);
-			this.connections = this.connections.concat(this.shared.connections);
-			this.connections = this.connections.concat(this.partners.connections);
-		},
+        // addConnections() {
+		// 	this.connections = this.connections.concat(this.awareness.connections);
+		// 	this.connections = this.connections.concat(this.shared.connections);
+		// 	this.connections = this.connections.concat(this.partners.connections);
+		// },
 
         /**
          * Submits data to the backend
          */
         onSubmit() {
-            this.addConnections();
+            // this.addConnections();
 
 			const data = {
                 organization_name: this.organization.organization_name,

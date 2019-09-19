@@ -30,7 +30,7 @@ export default {
     data() {
         return {
             renderComponent: true,
-            nodeSize:20,
+            nodeSize:25,
             selected: {},
             linksSelected: {},
             connections: [],
@@ -63,7 +63,7 @@ export default {
         links() {
             let links = [];
                     for(let i = 0; i < this.connections.length; i++) {
-                    console.log('host: ' + this.connections[i].host_id, 'contact: ' +this.connections[i].contact_id)
+        
                     links.push({
                         sid: this.connections[i].host_id,
                         tid: this.connections[i].contact_id
@@ -81,8 +81,9 @@ export default {
 
         options(){
             return{
-                force: 2000,
-                size:{ w:1400, h:1200},
+                force: 6000,
+                size:{ w:1400, h:1400},
+                fontSize: 20,
                 nodeSize: this.nodeSize,
                 nodeLabels: true,
                 linkLabels:true,
@@ -92,6 +93,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="scss">
+.main h1{
+    color: #1aad8d !important;
+}
 </style>

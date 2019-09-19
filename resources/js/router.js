@@ -24,9 +24,6 @@ export default new Router({
       path: "/network",
       name: "network",
       component: Network,
-      // afterEnter: (to, from, next) => {
-      //   vm.$forceUpdate();
-      // }
     }
   ]
 });

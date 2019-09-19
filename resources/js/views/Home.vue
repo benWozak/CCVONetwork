@@ -5,7 +5,6 @@
             <h1>KRD Consulting Group: Organizational Social Network Analysis</h1>
         </div>
         <div class="container">
-            <!-- <h2>CCVO Members - Network Analysis </h2> -->
             <h3>Welcome to CCVO’s member network survey!</h3>
             <p>
                 Thank you for taking part in this important survey to determine the value of CCVO membership in the community. 

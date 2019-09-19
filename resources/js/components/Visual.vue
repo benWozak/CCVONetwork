@@ -41,8 +41,9 @@ export default {
 
         options(){
             return{
-                force: 3000,
-                size:{ w:600, h:600},
+                force: 6000,
+                size:{ w:800, h:800},
+                fontSize: 20,
                 nodeSize: this.nodeSize,
                 nodeLabels: true,
                 linkLabels:true,
@@ -57,57 +58,57 @@ export default {
     },
 
     methods: {
-        linkClick (event, link) {
-            if (this.tool === 'killer') {
-                this.removeLink(link)
-            } else {
-                if (this.linksSelected[link.id]) {
-                    this.unSelectLink(link.id)
-                } else {
-                    this.selectLink(link)
-                }
-            }
-            this.updateSelection()
-        },
-        updateSelection () {
-            this.showSelection = (Object.keys(this.selected).length | Object.keys(this.linksSelected).length)
-        },
-        clearSelection () {
-            this.selected = {}
-            this.linksSelected = {}
-        },
-        selectNodesLinks () {
-            for (let link of this.links) {
-                // node is selected
-                if (this.selected[link.sid] || this.selected[link.tid]) {
-                this.selectLink(link)
-                // node is not selected
-                } else {
-                this.unSelectLink(link.id)
-                }
-            }
-        },
-        selectNode(node) {
-            this.selected[node.id] = node
-        },
-        selectLink (link) {
-            this.$set(this.linksSelected, link.id, link)
-        },
-        unSelectNode (nodeId) {
-            if (this.selected[nodeId]) {
-                delete (this.selected[nodeId])
-            }
-            this.selectNodesLinks()
-        },
-        unSelectLink (linkId) {
-            if (this.linksSelected[linkId]) {
-                delete (this.linksSelected[linkId])
-            }
-        },
-        setShowMenu (show) {
-            this.showMenu = show
-            this.showHint = false
-        }
+        // linkClick (event, link) {
+        //     if (this.tool === 'killer') {
+        //         this.removeLink(link)
+        //     } else {
+        //         if (this.linksSelected[link.id]) {
+        //             this.unSelectLink(link.id)
+        //         } else {
+        //             this.selectLink(link)
+        //         }
+        //     }
+        //     this.updateSelection()
+        // },
+        // updateSelection () {
+        //     this.showSelection = (Object.keys(this.selected).length | Object.keys(this.linksSelected).length)
+        // },
+        // clearSelection () {
+        //     this.selected = {}
+        //     this.linksSelected = {}
+        // },
+        // selectNodesLinks () {
+        //     for (let link of this.links) {
+        //         // node is selected
+        //         if (this.selected[link.sid] || this.selected[link.tid]) {
+        //         this.selectLink(link)
+        //         // node is not selected
+        //         } else {
+        //         this.unSelectLink(link.id)
+        //         }
+        //     }
+        // },
+        // selectNode(node) {
+        //     this.selected[node.id] = node
+        // },
+        // selectLink (link) {
+        //     this.$set(this.linksSelected, link.id, link)
+        // },
+        // unSelectNode (nodeId) {
+        //     if (this.selected[nodeId]) {
+        //         delete (this.selected[nodeId])
+        //     }
+        //     this.selectNodesLinks()
+        // },
+        // unSelectLink (linkId) {
+        //     if (this.linksSelected[linkId]) {
+        //         delete (this.linksSelected[linkId])
+        //     }
+        // },
+        // setShowMenu (show) {
+        //     this.showMenu = show
+        //     this.showHint = false
+        // }
     }
 };
 </script>
