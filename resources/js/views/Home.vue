@@ -1,9 +1,11 @@
 <template>
     <div class="home">
-        <div class="header">
-            <img alt="Vue logo" src="../assets/abcd-logo.png" />
-            <h1>KRD Consulting Group: Organizational Social Network Analysis</h1>
-        </div>
+        <header class="header">
+            <el-card>
+                <img alt="ABCD logo" src="../assets/abcd-logo.png" class="logo" />
+                <h1>KRD Consulting Group: Organizational Social Network Analysis</h1>
+            </el-card>
+        </header>
         <div class="container">
             <h3>Welcome to CCVO’s member network survey!</h3>
             <p>
@@ -54,14 +56,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h1,a{
+.header {
+    background-color: white;
+    height: 100px;
+
+}
+.header .logo {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    
+}
+h1 {
   color: #1aad8d;
-  text-decoration: none;
 }
 h3, h4, p {
     text-align: left !important;
 }
 .container {
+    margin-top: 50px !important;
     display: flex;
     flex: 11 auto;
     flex-direction: column;
@@ -74,6 +87,10 @@ h3, h4, p {
 .button {
     background-color: #1aad8d;
     color: white;
+    width: 200px;
+    height: 50px;
+    font-size: 18px;
+    font-weight: 400;
 }
 
 a {

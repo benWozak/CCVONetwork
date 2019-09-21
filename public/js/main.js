@@ -4009,7 +4009,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     options: function options() {
       return {
-        force: 6000,
+        force: 0,
         size: {
           w: 800,
           h: 800
@@ -4173,6 +4173,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4218,18 +4220,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
  // import Selection from './Selection.vue'
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "network",
   components: {
-    D3Network: vue_d3_network__WEBPACK_IMPORTED_MODULE_0___default.a,
-    Selection: Selection
+    D3Network: vue_d3_network__WEBPACK_IMPORTED_MODULE_0___default.a // Selection
+
   },
   data: function data() {
     return {
+      opened: false,
       renderComponent: true,
+      zoom: 0,
       nodeSize: 25,
+      force: 5000,
       selected: {},
       linksSelected: {},
       connections: [],
@@ -4280,16 +4307,26 @@ __webpack_require__.r(__webpack_exports__);
     },
     options: function options() {
       return {
-        force: 6000,
+        canvas: false,
+        force: this.force,
         size: {
-          w: 1400,
+          w: 1600,
           h: 1400
         },
-        fontSize: 20,
+        fontSize: 25,
         nodeSize: this.nodeSize,
         nodeLabels: true,
         linkLabels: true
       };
+    }
+  },
+  methods: {
+    toggle: function toggle() {
+      this.opened = true;
+      this.divWidth = 350;
+    },
+    hide: function hide() {
+      this.opened = false;
     }
   }
 });
@@ -6149,7 +6186,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "html, body {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin: 0 auto;\n  background-color: #EEEEEE;\n  height: 100%;\n  width: 100%;\n}\n#app {\n  font-family: \"Avenir\", Helvetica, Arial, sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n}\n#nav {\n  padding: 30px;\n}\n#nav a {\n  font-weight: bold;\n  color: #2c3e50;\n}\n#nav a.router-link-exact-active {\n  color: #42b983;\n}", ""]);
+exports.push([module.i, "html, body {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin: 0 auto;\n  background-color: #EEEEEE;\n  height: 100%;\n  width: 100%;\n}\n#app {\n  font-family: \"Avenir\", Helvetica, Arial, sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n}", ""]);
 
 // exports
 
@@ -6244,7 +6281,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "h1[data-v-63cd6604], a[data-v-63cd6604] {\n  color: #1aad8d;\n  text-decoration: none;\n}\nh3[data-v-63cd6604], h4[data-v-63cd6604], p[data-v-63cd6604] {\n  text-align: left !important;\n}\n.container[data-v-63cd6604] {\n  display: flex;\n  flex: 11 auto;\n  flex-direction: column;\n  max-width: 50%;\n  margin: auto;\n}\n.main[data-v-63cd6604] {\n  margin: auto;\n}\n.button[data-v-63cd6604] {\n  background-color: #1aad8d;\n  color: white;\n}\na[data-v-63cd6604] {\n  text-decoration: none;\n  color: white;\n}\na[data-v-63cd6604]:hover {\n  color: white;\n}", ""]);
+exports.push([module.i, ".header[data-v-63cd6604] {\n  background-color: white;\n  height: 100px;\n}\n.header .logo[data-v-63cd6604] {\n  position: absolute;\n  top: 5px;\n  left: 10px;\n}\nh1[data-v-63cd6604] {\n  color: #1aad8d;\n}\nh3[data-v-63cd6604], h4[data-v-63cd6604], p[data-v-63cd6604] {\n  text-align: left !important;\n}\n.container[data-v-63cd6604] {\n  margin-top: 50px !important;\n  display: flex;\n  flex: 11 auto;\n  flex-direction: column;\n  max-width: 50%;\n  margin: auto;\n}\n.main[data-v-63cd6604] {\n  margin: auto;\n}\n.button[data-v-63cd6604] {\n  background-color: #1aad8d;\n  color: white;\n  width: 200px;\n  height: 50px;\n  font-size: 18px;\n  font-weight: 400;\n}\na[data-v-63cd6604] {\n  text-decoration: none;\n  color: white;\n}\na[data-v-63cd6604]:hover {\n  color: white;\n}", ""]);
 
 // exports
 
@@ -6263,7 +6300,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".main h1 {\n  color: #1aad8d !important;\n}", ""]);
+exports.push([module.i, ".header {\n  width: 100%;\n}\n.raffle-container {\n  width: 40%;\n  margin: 0 auto;\n}\n.toggle-enter-active {\n  transition: 1s ease;\n}\n.toggle-leave-active {\n  transition: 1s ease;\n}\n.toggle-enter, .toggle-leave-to {\n  transform: translateX(-100%);\n  /* opacity: 0; */\n}\n.main h1 {\n  color: #1aad8d !important;\n}\n.text {\n  font-size: 14px;\n}\n.item {\n  margin-bottom: 18px;\n}\n.clearfix:before,\n.clearfix:after {\n  display: table;\n  content: \"\";\n}\n.clearfix:after {\n  clear: both;\n}\n.menu-card-container {\n  position: fixed !important;\n  top: 0;\n  left: 0;\n}\n.menu-card-container .menu-button {\n  float: left !important;\n  position: fixed;\n  top: 50px !important;\n  left: 40px;\n}\n.menu-card {\n  width: 480px;\n}", ""]);
 
 // exports
 
@@ -73619,7 +73656,25 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "home" }, [
-    _vm._m(0),
+    _c(
+      "header",
+      { staticClass: "header" },
+      [
+        _c("el-card", [
+          _c("img", {
+            staticClass: "logo",
+            attrs: { alt: "ABCD logo", src: __webpack_require__(/*! ../assets/abcd-logo.png */ "./resources/js/assets/abcd-logo.png") }
+          }),
+          _vm._v(" "),
+          _c("h1", [
+            _vm._v(
+              "KRD Consulting Group: Organizational Social Network Analysis"
+            )
+          ])
+        ])
+      ],
+      1
+    ),
     _vm._v(" "),
     _c(
       "div",
@@ -73664,22 +73719,7 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "header" }, [
-      _c("img", {
-        attrs: { alt: "Vue logo", src: __webpack_require__(/*! ../assets/abcd-logo.png */ "./resources/js/assets/abcd-logo.png") }
-      }),
-      _vm._v(" "),
-      _c("h1", [
-        _vm._v("KRD Consulting Group: Organizational Social Network Analysis")
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -73706,46 +73746,146 @@ var render = function() {
       "div",
       { staticClass: "main" },
       [
-        _c("h1", [_vm._v("Organizational Social Network Analysis")]),
+        _c(
+          "header",
+          { staticClass: "header" },
+          [
+            _c("el-card", [
+              _c("h1", [_vm._v("Organizational Social Network Analysis")]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "raffle-container" },
+                [
+                  _vm._v(
+                    "\n                    Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020?\n                    "
+                  ),
+                  _c("br"),
+                  _c("br"),
+                  _c(
+                    "el-button",
+                    {
+                      attrs: {
+                        onclick:
+                          " window.open('https://www.hellokrd.net/', '_blank'); return false;"
+                      }
+                    },
+                    [_vm._v("Enter Here!")]
+                  )
+                ],
+                1
+              )
+            ])
+          ],
+          1
+        ),
         _vm._v(" "),
-        _vm._m(0),
-        _vm._v(" "),
-        _vm.renderComponent
-          ? _c("d3-network", {
-              ref: "net",
-              attrs: {
-                "net-nodes": _vm.nodes,
-                "net-links": _vm.links,
-                options: _vm.options
+        _c("d3-network", {
+          ref: "net",
+          attrs: {
+            "net-nodes": _vm.nodes,
+            "net-links": _vm.links,
+            options: _vm.options
+          }
+        })
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "menu-card-container" },
+      [
+        _c(
+          "el-button",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: !_vm.opened,
+                expression: "!opened"
               }
-            })
-          : _vm._e()
+            ],
+            staticClass: "menu-button",
+            attrs: { type: "primary" },
+            on: { click: _vm.toggle }
+          },
+          [_vm._v("Menu")]
+        ),
+        _vm._v(" "),
+        _c(
+          "transition",
+          { attrs: { name: "toggle" } },
+          [
+            _c(
+              "el-card",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.opened,
+                    expression: "opened"
+                  }
+                ],
+                staticClass: "menu-card"
+              },
+              [
+                _c(
+                  "div",
+                  {
+                    staticClass: "clearfix",
+                    attrs: { slot: "header" },
+                    slot: "header"
+                  },
+                  [
+                    _c("span", [_vm._v("Menu")]),
+                    _vm._v(" "),
+                    _c(
+                      "el-button",
+                      {
+                        staticStyle: { float: "right", padding: "3px 0" },
+                        attrs: { type: "text" },
+                        on: { click: _vm.hide }
+                      },
+                      [_vm._v("Close")]
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "block" },
+                  [
+                    _c("span", { staticClass: "demonstration" }, [
+                      _vm._v("Zoom")
+                    ]),
+                    _vm._v(" "),
+                    _c("el-slider", {
+                      model: {
+                        value: _vm.zoom,
+                        callback: function($$v) {
+                          _vm.zoom = $$v
+                        },
+                        expression: "zoom"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ]
+            )
+          ],
+          1
+        )
       ],
       1
     )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _vm._v(
-        "\n            Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020?\n                "
-      ),
-      _c("p", [
-        _vm._v("Click "),
-        _c(
-          "a",
-          { attrs: { href: "https://www.hellokrd.net/", target: "_blank" } },
-          [_vm._v("here")]
-        ),
-        _vm._v(" to enter")
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

@@ -1,17 +1,39 @@
 <template>
     <div class="network">
         <div class="main">
-            <h1>Organizational Social Network Analysis</h1>
-            <div>
-                Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020?
-                    <p>Click <a href="https://www.hellokrd.net/" target="_blank">here</a> to enter</p>
-            </div>
+            <header class="header">
+                <el-card >
+                    <h1>Organizational Social Network Analysis</h1>
+                    <div class="raffle-container">
+                        Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020?
+                        <br><br><el-button onclick=" window.open('https://www.hellokrd.net/', '_blank'); return false;">Enter Here!</el-button>
+                    </div>
+                </el-card>
+            </header>
+
             <d3-network ref='net'
                 :net-nodes="nodes"
                 :net-links="links"
                 :options="options"
-                v-if="renderComponent"/>
+            />
         </div>
+
+        <div class="menu-card-container">
+            <el-button type="primary" class="menu-button" v-show="!opened"  @click="toggle">Menu</el-button>
+            <transition name="toggle">
+                <el-card class="menu-card" v-show="opened">
+                    <div slot="header" class="clearfix">
+                        <span>Menu</span>
+                        <el-button style="float: right; padding: 3px 0" type="text" @click="hide">Close</el-button>
+                    </div>
+                    <div class="block">
+                        <span class="demonstration">Zoom</span>
+                        <el-slider v-model="zoom"></el-slider>
+                    </div>
+                </el-card>
+            </transition>
+        </div>
+
     </div>
 </template>
 
@@ -24,13 +46,16 @@ export default {
     name: "network",
     components: {
         D3Network,
-        Selection
+        // Selection
 
     },
     data() {
         return {
+            opened: false,
             renderComponent: true,
-            nodeSize:25,
+            zoom: 0,
+            nodeSize: 25,
+            force: 5000,
             selected: {},
             linksSelected: {},
             connections: [],
@@ -54,7 +79,7 @@ export default {
                 for(let i = 0; i < this.organizations.length; i++) {
                     nodes.push({
                         id: this.organizations[i].id,
-                        name: this.organizations[i].organization_name
+                        name: this.organizations[i].organization_name,
                     })
                 }
                 return nodes;
@@ -81,20 +106,80 @@ export default {
 
         options(){
             return{
-                force: 6000,
-                size:{ w:1400, h:1400},
-                fontSize: 20,
+                canvas: false,
+                force: this.force,
+                size:{ w:1600, h:1400},
+                fontSize: 25,
                 nodeSize: this.nodeSize,
                 nodeLabels: true,
                 linkLabels:true,
             }
         },
     },
+    methods: {
+        toggle() {
+            this.opened = true;
+            this.divWidth = 350;
+        
+        },
+        hide() {
+            this.opened = false
+        }
+    }
 };
 </script>
 
 <style lang="scss">
+.header {
+    width: 100%;
+}
+.raffle-container {
+    width: 40%;
+    margin: 0 auto;
+}
+
+.toggle-enter-active {
+    transition: 1s ease;
+}
+.toggle-leave-active {
+    transition: 1s ease;
+}
+.toggle-enter, .toggle-leave-to {
+    transform: translateX(-100%);
+    /* opacity: 0; */
+}
 .main h1{
     color: #1aad8d !important;
+}
+.text {
+    font-size: 14px;
+  }
+.item {
+    margin-bottom: 18px;
+  }
+
+.clearfix:before,
+.clearfix:after {
+    display: table;
+    content: "";
+}
+.clearfix:after {
+    clear: both
+}
+
+.menu-card-container {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+}
+.menu-card-container .menu-button {
+    float: left !important;
+    position: fixed;
+    top: 50px !important;
+    left: 40px;
+}
+
+.menu-card {
+    width: 480px;
 }
 </style>

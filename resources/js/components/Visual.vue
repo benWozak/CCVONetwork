@@ -41,7 +41,7 @@ export default {
 
         options(){
             return{
-                force: 6000,
+                force: 0,
                 size:{ w:800, h:800},
                 fontSize: 20,
                 nodeSize: this.nodeSize,
