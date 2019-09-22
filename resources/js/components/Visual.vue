@@ -24,7 +24,7 @@ export default {
     },
     data() {
         return {
-            nodeSize:20,
+            nodeSize:25,
             selected: {},
             linksSelected: {}
         }
@@ -41,7 +41,8 @@ export default {
 
         options(){
             return{
-                force: 0,
+                canvas: false,
+                force: 4000,
                 size:{ w:800, h:800},
                 fontSize: 20,
                 nodeSize: this.nodeSize,

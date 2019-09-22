@@ -459,7 +459,10 @@ export default {
     .el-form-item {
         margin-top: 20px;
     }
-    .el-autocomplete {
+    .el-autocomplete{
         width: 400px !important;
+    }
+    .el-form-item .el-form-item__label {
+        line-height: 20px !important;
     }
 </style>

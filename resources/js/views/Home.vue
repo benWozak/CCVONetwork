@@ -39,7 +39,7 @@
 
 <script>
 import Visual from "@/components/Visual.vue";
-import UserForm from '@/components/AddNode.vue'
+import UserForm from '@/components/DataEntry.vue'
 
 export default {
   name: "home",

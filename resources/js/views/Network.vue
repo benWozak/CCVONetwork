@@ -70,6 +70,7 @@ export default {
         axios.get('api/organizations?has_connections=true')
         .then(response => {
             this.organizations = response.data.data
+            // console.log(response.data.data)
         });
     },
     computed:{
@@ -77,10 +78,136 @@ export default {
         nodes() {
             let nodes = [];
                 for(let i = 0; i < this.organizations.length; i++) {
-                    nodes.push({
-                        id: this.organizations[i].id,
-                        name: this.organizations[i].organization_name,
-                    })
+                    console.log(this.organizations[i].subsector.id)
+                    switch(this.organizations[i].subsector.id) {
+                        case 1: 
+                            nodes.push({
+                                id: this.organizations[i].id,
+                                name: this.organizations[i].organization_name,
+                                _color: 'var(--light-blue)'
+                            })
+                            
+                            break;
+                        case 2:
+                             nodes.push({
+                                id: this.organizations[i].id,
+                                name: this.organizations[i].organization_name,
+                                _color: 'var(--blue)'
+                            })
+                            break;
+                        case 3:
+                            nodes.push({
+                                id: this.organizations[i].id,
+                                name: this.organizations[i].organization_name,
+                                _color: 'var(--olive)'
+                            })
+                            break;
+                        case 4:
+                            nodes.push({
+                                id: this.organizations[i].id,
+                                name: this.organizations[i].organization_name,
+                                _color: 'var(--light-green)'
+                            })
+                            break;
+                        case 21:
+                            nodes.push({
+                                id: this.organizations[i].id,
+                                name: this.organizations[i].organization_name,
+                                _color: 'var(--green)'
+                            })
+                            break;
+                        case 5:
+                             nodes.push({
+                                id: this.organizations[i].id,
+                                name: this.organizations[i].organization_name,
+                                _color: 'var(--slate-gray)'
+                            })
+                            break;
+                        case 14:
+                            nodes.push({
+                                id: this.organizations[i].id,
+                                name: this.organizations[i].organization_name,
+                                _color: 'var(--light-teal)'
+                            })
+                            break;
+                        case 6:
+                            nodes.push({
+                                id: this.organizations[i].id,
+                                name: this.organizations[i].organization_name,
+                                _color: 'var(--dark-teal)'
+                            })
+                            break;
+                        case 7:
+                            nodes.push({
+                                id: this.organizations[i].id,
+                                name: this.organizations[i].organization_name,
+                                _color: 'var(--pink)'
+                            })
+                            break;
+                        case 8:
+                            nodes.push({
+                                id: this.organizations[i].id,
+                                name: this.organizations[i].organization_name,
+                                _color: 'var(--dark-pink)'
+                            })
+                            break;
+                        case 9:
+                            nodes.push({
+                                id: this.organizations[i].id,
+                                name: this.organizations[i].organization_name,
+                                _color: 'var(--purple)'
+                            })
+                            break;
+                        case 10:
+                            nodes.push({
+                                id: this.organizations[i].id,
+                                name: this.organizations[i].organization_name,
+                                _color: 'var(--light-purple)'
+                            })
+                            break;
+                        case 12:
+                            nodes.push({
+                                id: this.organizations[i].id,
+                                name: this.organizations[i].organization_name,
+                                _color: 'var(--orange)'
+                            })
+                            break;
+                        case 13:
+                            nodes.push({
+                                id: this.organizations[i].id,
+                                name: this.organizations[i].organization_name,
+                                _color: 'var(--yellow)'
+                            })
+                            break;
+                        case 15:
+                            nodes.push({
+                                id: this.organizations[i].id,
+                                name: this.organizations[i].organization_name,
+                                _color: 'var(--tan)'
+                            })
+                            break;
+                        case 16:
+                            nodes.push({
+                                id: this.organizations[i].id,
+                                name: this.organizations[i].organization_name,
+                                _color: 'var(--brown)'
+                            })
+                            break;
+                        case 17:
+                            nodes.push({
+                                id: this.organizations[i].id,
+                                name: this.organizations[i].organization_name,
+                                _color: 'var(--red)'
+                            })
+                            break;
+                        default: 
+                            nodes.push({
+                                id: this.organizations[i].id,
+                                name: this.organizations[i].organization_name,
+                            })
+                            break;
+                    }
+                    
                 }
                 return nodes;
         },
@@ -91,7 +218,7 @@ export default {
         
                     links.push({
                         sid: this.connections[i].host_id,
-                        tid: this.connections[i].contact_id
+                        tid: this.connections[i].contact_id,
                     })
                 /**
                  * if host_id === contact_id
@@ -112,7 +239,7 @@ export default {
                 fontSize: 25,
                 nodeSize: this.nodeSize,
                 nodeLabels: true,
-                linkLabels:true,
+                linkLabels: true,
             }
         },
     },
@@ -130,6 +257,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import "~styles/colors";
+
 .header {
     width: 100%;
 }

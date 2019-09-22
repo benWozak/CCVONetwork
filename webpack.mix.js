@@ -17,8 +17,11 @@ mix.webpackConfig({
            "@": path.resolve(
                __dirname,
                "resources/js"
-           )
-       }
+           ),
+           "styles": path.resolve(
+               __dirname, 
+               './resources/scss'),
+       },
    }
 });
 
