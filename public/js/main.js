@@ -4306,6 +4306,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
  // import Selection from './Selection.vue'
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4334,6 +4335,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
+    this.raffle();
     axios.get('api/connections').then(function (response) {
       _this.connections = response.data.data;
     });
@@ -4348,6 +4350,7 @@ __webpack_require__.r(__webpack_exports__);
       for (var i = 0; i < this.organizations.length; i++) {
         switch (this.organizations[i].subsector.id) {
           case 1:
+            // Environment
             nodes.push({
               id: this.organizations[i].id,
               name: this.organizations[i].organization_name,
@@ -4356,6 +4359,7 @@ __webpack_require__.r(__webpack_exports__);
             break;
 
           case 2:
+            //social services
             nodes.push({
               id: this.organizations[i].id,
               name: this.organizations[i].organization_name,
@@ -4364,6 +4368,7 @@ __webpack_require__.r(__webpack_exports__);
             break;
 
           case 3:
+            //housing
             nodes.push({
               id: this.organizations[i].id,
               name: this.organizations[i].organization_name,
@@ -4372,6 +4377,8 @@ __webpack_require__.r(__webpack_exports__);
             break;
 
           case 4:
+          case 21:
+            // Art & culture
             nodes.push({
               id: this.organizations[i].id,
               name: this.organizations[i].organization_name,
@@ -4379,15 +4386,9 @@ __webpack_require__.r(__webpack_exports__);
             });
             break;
 
-          case 21:
-            nodes.push({
-              id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
-              _color: 'var(--green)'
-            });
-            break;
+          case 5: // business
 
-          case 5:
+          case 14:
             nodes.push({
               id: this.organizations[i].id,
               name: this.organizations[i].organization_name,
@@ -4395,15 +4396,8 @@ __webpack_require__.r(__webpack_exports__);
             });
             break;
 
-          case 14:
-            nodes.push({
-              id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
-              _color: 'var(--light-teal)'
-            });
-            break;
-
           case 6:
+            // Individual
             nodes.push({
               id: this.organizations[i].id,
               name: this.organizations[i].organization_name,
@@ -4412,6 +4406,7 @@ __webpack_require__.r(__webpack_exports__);
             break;
 
           case 7:
+            // health
             nodes.push({
               id: this.organizations[i].id,
               name: this.organizations[i].organization_name,
@@ -4420,6 +4415,7 @@ __webpack_require__.r(__webpack_exports__);
             break;
 
           case 8:
+            // development
             nodes.push({
               id: this.organizations[i].id,
               name: this.organizations[i].organization_name,
@@ -4427,7 +4423,9 @@ __webpack_require__.r(__webpack_exports__);
             });
             break;
 
-          case 9:
+          case 9: // education
+
+          case 17:
             nodes.push({
               id: this.organizations[i].id,
               name: this.organizations[i].organization_name,
@@ -4436,14 +4434,16 @@ __webpack_require__.r(__webpack_exports__);
             break;
 
           case 10:
+            //sports
             nodes.push({
               id: this.organizations[i].id,
               name: this.organizations[i].organization_name,
-              _color: 'var(--light-purple)'
+              _color: 'var(--red)'
             });
             break;
 
           case 12:
+            // law
             nodes.push({
               id: this.organizations[i].id,
               name: this.organizations[i].organization_name,
@@ -4452,6 +4452,7 @@ __webpack_require__.r(__webpack_exports__);
             break;
 
           case 13:
+            // government
             nodes.push({
               id: this.organizations[i].id,
               name: this.organizations[i].organization_name,
@@ -4460,6 +4461,7 @@ __webpack_require__.r(__webpack_exports__);
             break;
 
           case 15:
+            // religion
             nodes.push({
               id: this.organizations[i].id,
               name: this.organizations[i].organization_name,
@@ -4468,6 +4470,7 @@ __webpack_require__.r(__webpack_exports__);
             break;
 
           case 16:
+            // fundraising and volunteer
             nodes.push({
               id: this.organizations[i].id,
               name: this.organizations[i].organization_name,
@@ -4475,11 +4478,12 @@ __webpack_require__.r(__webpack_exports__);
             });
             break;
 
-          case 17:
+          case 19:
+            //international
             nodes.push({
               id: this.organizations[i].id,
               name: this.organizations[i].organization_name,
-              _color: 'var(--red)'
+              _color: 'var(--green)'
             });
             break;
 
@@ -4518,8 +4522,8 @@ __webpack_require__.r(__webpack_exports__);
         canvas: false,
         force: this.force,
         size: {
-          w: window.innerWidth * 1.5,
-          h: window.innerHeight * 1.5
+          w: window.innerWidth - 20,
+          h: window.innerHeight - 10
         },
         offset: {
           x: this.networkX,
@@ -4540,6 +4544,14 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    raffle: function raffle() {
+      this.$notify.info({
+        title: "CCVO's annual Connections conference",
+        dangerouslyUseHTMLString: true,
+        message: "Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020? <a href='https://www.hellokrd.net/' target='_blank'>Enter</a>",
+        duration: 0
+      });
+    },
     toggle: function toggle() {
       this.opened = true;
       this.divWidth = 350;
@@ -4547,10 +4559,23 @@ __webpack_require__.r(__webpack_exports__);
     hide: function hide() {
       this.opened = false;
     },
-    handleZoom: function handleZoom(value) {
+    handleZoom: function handleZoom($event) {
       this.fontSize = this.zoom / 1.5;
       this.nodeSize = this.zoom / 1.5;
       this.force = this.zoom * 300;
+    },
+    startDrag: function startDrag($event) {
+      // this.startX = $event.offsetX;
+      this.dragging = true;
+    },
+    drag: function drag($event) {
+      if (this.dragging) {
+        this.networkX = $event.offsetX - window.innerWidth / 2;
+        this.networkY = $event.offsetY - window.innerHeight / 2;
+      }
+    },
+    stopDrag: function stopDrag() {
+      this.dragging = false;
     }
   }
 });
@@ -6524,7 +6549,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ":root {\n  --light-blue: #7AD5FF;\n  --blue: #4169E1;\n  --olive: #808000;\n  --light-green: #98FB98;\n  --green: #2E8B57;\n  --slate-gray: #2F4F4F;\n  --light-teal: #33FFBD;\n  --dark-teal: #008080;\n  --pink: #EE82EE;\n  --dark-pink: #C00086;\n  --purple: #8B008B;\n  --light-purple: #E8ABFF;\n  --orange: #FF5733;\n  --yellow: #FFD700;\n  --tan: #D2B48C;\n  --brown: #8B4513;\n  --red: #DC143C;\n}\n.header {\n  width: 100%;\n  position: relative;\n}\n.raffle-container {\n  width: 40%;\n  margin: 0 auto;\n}\n#network-container {\n  cursor: grab;\n}\n#network-container:active {\n  cursor: grabbing;\n}\n.toggle-enter-active {\n  transition: 1s ease;\n}\n.toggle-leave-active {\n  transition: 1s ease;\n}\n.toggle-enter, .toggle-leave-to {\n  transform: translateX(-100%);\n  /* opacity: 0; */\n}\n.main h1 {\n  color: #1aad8d !important;\n}\n.text {\n  font-size: 14px;\n}\n.item {\n  margin-bottom: 18px;\n}\n.clearfix:before,\n.clearfix:after {\n  display: table;\n  content: \"\";\n}\n.clearfix:after {\n  clear: both;\n}\n.menu-card-container {\n  position: fixed !important;\n  top: 0;\n  left: 0;\n}\n.menu-card-container .menu-button {\n  float: left !important;\n  position: fixed;\n  top: 50px !important;\n  left: 40px;\n}\n.menu-button {\n  color: white;\n  background-color: #1aad8d;\n}\n.menu-card {\n  width: 480px;\n}\n.circle {\n  height: 15px;\n  width: 15px;\n  display: inline-block;\n  border-radius: 50%;\n}\nul {\n  list-style-type: none;\n}", ""]);
+exports.push([module.i, ":root {\n  --light-blue: #7AD5FF;\n  --blue: #4169E1;\n  --olive: #808000;\n  --light-green: #98FB98;\n  --green: #2E8B57;\n  --slate-gray: #2F4F4F;\n  --light-teal: #33FFBD;\n  --dark-teal: #008080;\n  --pink: #EE82EE;\n  --dark-pink: #C00086;\n  --purple: #8B008B;\n  --light-purple: #E8ABFF;\n  --orange: #FF5733;\n  --yellow: #FFD700;\n  --tan: #D2B48C;\n  --brown: #8B4513;\n  --red: #DC143C;\n}\n.title {\n  width: 100%;\n  position: fixed;\n}\n.raffle-container {\n  width: 40%;\n  margin: 0 auto;\n}\n#network-container {\n  cursor: grab;\n}\n#network-container:active {\n  cursor: grabbing;\n}\n.toggle-enter-active {\n  transition: 1s ease;\n}\n.toggle-leave-active {\n  transition: 1s ease;\n}\n.toggle-enter, .toggle-leave-to {\n  transform: translateX(-100%);\n  /* opacity: 0; */\n}\n.main h1 {\n  color: #1aad8d !important;\n}\n.text {\n  font-size: 14px;\n}\n.item {\n  margin-bottom: 18px;\n}\n.clearfix:before,\n.clearfix:after {\n  display: table;\n  content: \"\";\n}\n.clearfix:after {\n  clear: both;\n}\n.menu-card-container {\n  position: fixed !important;\n  top: 0;\n  left: 0;\n}\n.menu-card-container .menu-button {\n  float: left !important;\n  position: fixed;\n  top: 25px !important;\n  left: 40px;\n}\n.menu-button {\n  color: white;\n  background-color: #1aad8d;\n}\n.menu-button:hover {\n  color: #1aad8d;\n  background-color: #D5F0EA;\n}\n.menu-card {\n  width: 380px;\n}\n.menu-title {\n  margin-top: 10px;\n  margin-bottom: 10px;\n  color: #1aad8d;\n  font-weight: 800;\n  font-size: 16;\n}\n.circle {\n  height: 15px;\n  width: 15px;\n  display: inline-block;\n  border-radius: 50%;\n}\n.legend-text {\n  float: left !important;\n}", ""]);
 
 // exports
 
@@ -73984,44 +74009,23 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "network" }, [
     _c("div", { staticClass: "main" }, [
-      _c(
-        "header",
-        { staticClass: "header" },
-        [
-          _c("el-card", [
-            _c("h1", [_vm._v("Organizational Social Network Analysis")]),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "raffle-container" },
-              [
-                _vm._v(
-                  "\n                    Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020?\n                    "
-                ),
-                _c("br"),
-                _c("br"),
-                _c(
-                  "el-button",
-                  {
-                    staticClass: "button",
-                    attrs: {
-                      onclick:
-                        " window.open('https://www.hellokrd.net/', '_blank'); return false;"
-                    }
-                  },
-                  [_vm._v("Enter Here!")]
-                )
-              ],
-              1
-            )
-          ])
-        ],
-        1
-      ),
+      _vm._m(0),
       _vm._v(" "),
       _c(
         "div",
-        { attrs: { id: "network-container" } },
+        {
+          attrs: { id: "network-container" },
+          on: {
+            mousedown: _vm.startDrag,
+            mousemove: function($event) {
+              return _vm.drag($event)
+            },
+            mouseup: _vm.stopDrag,
+            wheel: function($event) {
+              return _vm.handleZoom($event)
+            }
+          }
+        },
         [
           _c("d3-network", {
             ref: "net",
@@ -74083,16 +74087,21 @@ var render = function() {
                     slot: "header"
                   },
                   [
-                    _c("span", [_vm._v("Menu")]),
+                    _c("span", { staticClass: "menu-title" }, [_vm._v("Menu")]),
                     _vm._v(" "),
                     _c(
                       "el-button",
                       {
-                        staticStyle: { float: "right", padding: "3px 0" },
+                        staticStyle: {
+                          float: "right",
+                          padding: "3px 0",
+                          color: "#1aad8d",
+                          "font-weight": "1000"
+                        },
                         attrs: { type: "text" },
                         on: { click: _vm.hide }
                       },
-                      [_vm._v("Close")]
+                      [_vm._v("X")]
                     )
                   ],
                   1
@@ -74102,11 +74111,15 @@ var render = function() {
                   "div",
                   { staticClass: "block" },
                   [
-                    _c("span", { staticClass: "title" }, [_vm._v("Zoom")]),
+                    _c("span", { staticClass: "menu-title" }, [_vm._v("Zoom")]),
                     _vm._v(" "),
                     _c("el-slider", {
                       attrs: { step: 10 },
-                      on: { input: _vm.handleZoom },
+                      on: {
+                        input: function($event) {
+                          return _vm.handleZoom($event)
+                        }
+                      },
                       model: {
                         value: _vm.zoom,
                         callback: function($$v) {
@@ -74119,179 +74132,346 @@ var render = function() {
                   1
                 ),
                 _vm._v(" "),
-                _c("div", { staticClass: "block" }, [
-                  _c("span", { staticClass: "title" }, [
-                    _vm._v("Sub-Sector Legend")
-                  ]),
-                  _vm._v(" "),
-                  _c("ul", [
-                    _c("li", [
-                      _c("div", {
-                        staticClass: "circle",
-                        staticStyle: { "background-color": "var(--light-blue)" }
-                      }),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("Environment & Animal Welfare")])
+                _c(
+                  "div",
+                  { staticClass: "block" },
+                  [
+                    _c("span", { staticClass: "menu-title" }, [
+                      _vm._v("Sub-Sector Legend")
                     ]),
                     _vm._v(" "),
-                    _c("li", [
-                      _c("div", {
-                        staticClass: "circle",
-                        staticStyle: { "background-color": "var(--blue)" }
-                      }),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("Social Services")])
-                    ]),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 20 } },
+                      [
+                        _c("el-col", { attrs: { span: 4 } }, [
+                          _c("div", {
+                            staticClass: "circle",
+                            staticStyle: {
+                              "background-color": "var(--light-blue)"
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("el-col", { attrs: { span: 16 } }, [
+                          _c("span", { staticClass: "legend-text" }, [
+                            _vm._v(" Environment & Animal Welfare")
+                          ])
+                        ])
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("li", [
-                      _c("div", {
-                        staticClass: "circle",
-                        staticStyle: { "background-color": "var(--olive)" }
-                      }),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("Housing")])
-                    ]),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 20 } },
+                      [
+                        _c("el-col", { attrs: { span: 4 } }, [
+                          _c("div", {
+                            staticClass: "circle",
+                            staticStyle: { "background-color": "var(--blue)" }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("el-col", { attrs: { span: 16 } }, [
+                          _c("span", { staticClass: "legend-text" }, [
+                            _vm._v("Social Services")
+                          ])
+                        ])
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("li", [
-                      _c("div", {
-                        staticClass: "circle",
-                        staticStyle: {
-                          "background-color": "var(--light-green)"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("Arts & Culture")])
-                    ]),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 20 } },
+                      [
+                        _c("el-col", { attrs: { span: 4 } }, [
+                          _c("div", {
+                            staticClass: "circle",
+                            staticStyle: { "background-color": "var(--olive)" }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("el-col", { attrs: { span: 16 } }, [
+                          _c("span", { staticClass: "legend-text" }, [
+                            _vm._v("Housing")
+                          ])
+                        ])
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("li", [
-                      _c("div", {
-                        staticClass: "circle",
-                        staticStyle: { "background-color": "var(--green)" }
-                      }),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("Business & Professional")])
-                    ]),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 20 } },
+                      [
+                        _c("el-col", { attrs: { span: 4 } }, [
+                          _c("div", {
+                            staticClass: "circle",
+                            staticStyle: {
+                              "background-color": "var(--light-green)"
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("el-col", { attrs: { span: 16 } }, [
+                          _c("span", { staticClass: "legend-text" }, [
+                            _vm._v("Arts & Culture")
+                          ])
+                        ])
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("li", [
-                      _c("div", {
-                        staticClass: "circle",
-                        staticStyle: { "background-color": "var(--slate-gray)" }
-                      }),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("Individual")])
-                    ]),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 20 } },
+                      [
+                        _c("el-col", { attrs: { span: 4 } }, [
+                          _c("div", {
+                            staticClass: "circle",
+                            staticStyle: {
+                              "background-color": "var(--slate-gray)"
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("el-col", { attrs: { span: 16 } }, [
+                          _c("span", { staticClass: "legend-text" }, [
+                            _vm._v("Business & Professional")
+                          ])
+                        ])
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("li", [
-                      _c("div", {
-                        staticClass: "circle",
-                        staticStyle: { "background-color": "var(--light-teal)" }
-                      }),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("Health")])
-                    ]),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 20 } },
+                      [
+                        _c("el-col", { attrs: { span: 4 } }, [
+                          _c("div", {
+                            staticClass: "circle",
+                            staticStyle: {
+                              "background-color": "var(--dark-teal)"
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("el-col", { attrs: { span: 16 } }, [
+                          _c("span", { staticClass: "legend-text" }, [
+                            _vm._v("Individual")
+                          ])
+                        ])
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("li", [
-                      _c("div", {
-                        staticClass: "circle",
-                        staticStyle: { "background-color": "var(--dark-teal)" }
-                      }),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("Development")])
-                    ]),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 20 } },
+                      [
+                        _c("el-col", { attrs: { span: 4 } }, [
+                          _c("div", {
+                            staticClass: "circle",
+                            staticStyle: { "background-color": "var(--pink)" }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("el-col", { attrs: { span: 16 } }, [
+                          _c("span", { staticClass: "legend-text" }, [
+                            _vm._v("Health")
+                          ])
+                        ])
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("li", [
-                      _c("div", {
-                        staticClass: "circle",
-                        staticStyle: { "background-color": "var(--pink)" }
-                      }),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("Education & Research")])
-                    ]),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 20 } },
+                      [
+                        _c("el-col", { attrs: { span: 4 } }, [
+                          _c("div", {
+                            staticClass: "circle",
+                            staticStyle: {
+                              "background-color": "var(--dark-pink)"
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("el-col", { attrs: { span: 16 } }, [
+                          _c("span", { staticClass: "legend-text" }, [
+                            _vm._v("Development")
+                          ])
+                        ])
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("li", [
-                      _c("div", {
-                        staticClass: "circle",
-                        staticStyle: { "background-color": "var(--dark-pink)" }
-                      }),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("Sports & Recreation")])
-                    ]),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 20 } },
+                      [
+                        _c("el-col", { attrs: { span: 4 } }, [
+                          _c("div", {
+                            staticClass: "circle",
+                            staticStyle: { "background-color": "var(--purple)" }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("el-col", { attrs: { span: 16 } }, [
+                          _c("span", { staticClass: "legend-text" }, [
+                            _vm._v("Education & Research")
+                          ])
+                        ])
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("li", [
-                      _c("div", {
-                        staticClass: "circle",
-                        staticStyle: { "background-color": "var(--purple)" }
-                      }),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("Law & Advocacy")])
-                    ]),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 20 } },
+                      [
+                        _c("el-col", { attrs: { span: 4 } }, [
+                          _c("div", {
+                            staticClass: "circle",
+                            staticStyle: { "background-color": "var(--red)" }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("el-col", { attrs: { span: 16 } }, [
+                          _c("span", { staticClass: "legend-text" }, [
+                            _vm._v("Sports & Recreation")
+                          ])
+                        ])
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("li", [
-                      _c("div", {
-                        staticClass: "circle",
-                        staticStyle: {
-                          "background-color": "var(--light-purple)"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("Government")])
-                    ]),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 20 } },
+                      [
+                        _c("el-col", { attrs: { span: 4 } }, [
+                          _c("div", {
+                            staticClass: "circle",
+                            staticStyle: { "background-color": "var(--orange)" }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("el-col", { attrs: { span: 16 } }, [
+                          _c("span", { staticClass: "legend-text" }, [
+                            _vm._v("Law & Advocacy")
+                          ])
+                        ])
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("li", [
-                      _c("div", {
-                        staticClass: "circle",
-                        staticStyle: { "background-color": "var(--orange)" }
-                      }),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("Faith & Religion")])
-                    ]),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 20 } },
+                      [
+                        _c("el-col", { attrs: { span: 4 } }, [
+                          _c("div", {
+                            staticClass: "circle",
+                            staticStyle: { "background-color": "var(--yellow)" }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("el-col", { attrs: { span: 16 } }, [
+                          _c("span", { staticClass: "legend-text" }, [
+                            _vm._v("Government")
+                          ])
+                        ])
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("li", [
-                      _c("div", {
-                        staticClass: "circle",
-                        staticStyle: { "background-color": "var(--yellow)" }
-                      }),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("Fundraising & Volunteerism")])
-                    ]),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 20 } },
+                      [
+                        _c("el-col", { attrs: { span: 4 } }, [
+                          _c("div", {
+                            staticClass: "circle",
+                            staticStyle: { "background-color": "var(--tan)" }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("el-col", { attrs: { span: 16 } }, [
+                          _c("span", { staticClass: "legend-text" }, [
+                            _vm._v("Faith & Religion")
+                          ])
+                        ])
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("li", [
-                      _c("div", {
-                        staticClass: "circle",
-                        staticStyle: { "background-color": "var(--tan)" }
-                      }),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("Student")])
-                    ]),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 20 } },
+                      [
+                        _c("el-col", { attrs: { span: 4 } }, [
+                          _c("div", {
+                            staticClass: "circle",
+                            staticStyle: { "background-color": "var(--brown)" }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("el-col", { attrs: { span: 16 } }, [
+                          _c("span", { staticClass: "legend-text" }, [
+                            _vm._v("Fundraising & Volunteerism")
+                          ])
+                        ])
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("li", [
-                      _c("div", {
-                        staticClass: "circle",
-                        staticStyle: { "background-color": "var(--brown)" }
-                      }),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("International")])
-                    ]),
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 20 } },
+                      [
+                        _c("el-col", { attrs: { span: 4 } }, [
+                          _c("div", {
+                            staticClass: "circle",
+                            staticStyle: { "background-color": "var(--green)" }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("el-col", { attrs: { span: 16 } }, [
+                          _c("span", { staticClass: "legend-text" }, [
+                            _vm._v("International")
+                          ])
+                        ])
+                      ],
+                      1
+                    ),
                     _vm._v(" "),
-                    _c("li", [
-                      _c("div", {
-                        staticClass: "circle",
-                        staticStyle: { "background-color": "var(--red)" }
-                      }),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("Nonprofit")])
-                    ]),
-                    _vm._v(" "),
-                    _c("li", [
-                      _c("div", {
-                        staticClass: "circle",
-                        staticStyle: { "background-color": "#DCFAF3" }
-                      }),
-                      _vm._v(" "),
-                      _c("span", [_vm._v("Other/Unknown")])
-                    ])
-                  ])
-                ])
+                    _c(
+                      "el-row",
+                      { attrs: { gutter: 20 } },
+                      [
+                        _c("el-col", { attrs: { span: 4 } }, [
+                          _c("div", {
+                            staticClass: "circle",
+                            staticStyle: { "background-color": "#DCFAF3" }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("el-col", { attrs: { span: 16 } }, [
+                          _c("span", { staticClass: "legend-text" }, [
+                            _vm._v("Other/Unknown")
+                          ])
+                        ])
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
               ]
             )
           ],
@@ -74302,7 +74482,16 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("header", { staticClass: "title" }, [
+      _c("h1", [_vm._v("Organizational Social Network Analysis")])
+    ])
+  }
+]
 render._withStripped = true
 
 

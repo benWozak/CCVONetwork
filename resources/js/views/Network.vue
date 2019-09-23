@@ -1,25 +1,18 @@
 <template>
     <div class="network">
         <div class="main">
-            <header class="header">
-                <el-card >
-                    <h1>Organizational Social Network Analysis</h1>
-                    <div class="raffle-container">
-                        Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020?
-                        <br><br><el-button class="button" onclick=" window.open('https://www.hellokrd.net/', '_blank'); return false;">Enter Here!</el-button>
-                    </div>
-                </el-card>
+            <header class="title">
+                <h1>Organizational Social Network Analysis</h1>
             </header>
-            <!--  @mousedown="startDrag" @mousemove="drag($event)" @mouseup="stopDrag" -->
-            <div id="network-container">
+
+            <!--  -->
+            <div id="network-container" @mousedown="startDrag" @mousemove="drag($event)" @mouseup="stopDrag" @wheel="handleZoom($event)">
                 <d3-network ref='net'
                     :net-nodes="nodes"
                     :net-links="links"
                     :options="options"
-                    
                 />
             </div>
-            
         </div>
 
         <div class="menu-card-container">
@@ -27,71 +20,79 @@
             <transition name="toggle">
                 <el-card class="menu-card" v-show="opened">
                     <div slot="header" class="clearfix">
-                        <span>Menu</span>
-                        <el-button style="float: right; padding: 3px 0" type="text" @click="hide">Close</el-button>
+                        <span class="menu-title">Menu</span>
+                        <el-button style="float: right; padding: 3px 0; color: #1aad8d; font-weight:1000" type="text" @click="hide">X</el-button>
                     </div>
                     <div class="block">
-                        <span class="title">Zoom</span>
-                        <el-slider :step="10" @input="handleZoom" v-model="zoom"></el-slider>
+                        <span class="menu-title">Zoom</span>
+                        <el-slider :step="10" @input="handleZoom($event)" v-model="zoom"></el-slider>
                     </div>
                     <div class="block">
-                        <span class="title">Sub-Sector Legend</span>
-                        <ul>
-                            <li>
-                                <div class="circle" style="background-color: var(--light-blue);" /> <span>Environment & Animal Welfare</span>
-                            </li>
-                            <li>
-                                <div class="circle" style="background-color: var(--blue);" /> <span>Social Services</span>
-                            </li>
-                            <li>
-                                <div class="circle" style="background-color: var(--olive);" /> <span>Housing</span>
-                            </li>
-                            <li>
-                                <div class="circle" style="background-color: var(--light-green);" /> <span>Arts & Culture</span>
-                            </li>
-                            <li>
-                                <div class="circle" style="background-color: var(--green);" /> <span>Business & Professional</span>
-                            </li>
-                            <li>
-                                <div class="circle" style="background-color: var(--slate-gray);" /> <span>Individual</span>
-                            </li>
-                            <li>
-                                <div class="circle" style="background-color: var(--light-teal);" /> <span>Health</span>
-                            </li>
-                            <li>
-                                <div class="circle" style="background-color: var(--dark-teal);" /> <span>Development</span>
-                            </li>
-                            <li>
-                                <div class="circle" style="background-color: var(--pink);" /> <span>Education & Research</span>
-                            </li>
-                            <li>
-                                <div class="circle" style="background-color: var(--dark-pink);" /> <span>Sports & Recreation</span>
-                            </li>
-                            <li>
-                                <div class="circle" style="background-color: var(--purple);" /> <span>Law & Advocacy</span>
-                            </li>
-                            <li>
-                                <div class="circle" style="background-color: var(--light-purple);" /> <span>Government</span>
-                            </li>
-                            <li>
-                                <div class="circle" style="background-color: var(--orange);" /> <span>Faith & Religion</span>
-                            </li>
-                            <li>
-                                <div class="circle" style="background-color: var(--yellow);" /> <span>Fundraising & Volunteerism</span>
-                            </li>
-                            <li>
-                                <div class="circle" style="background-color: var(--tan);" /> <span>Student</span>
-                            </li>
-                            <li>
-                                <div class="circle" style="background-color: var(--brown);" /> <span>International</span>
-                            </li>
-                            <li>
-                                <div class="circle" style="background-color: var(--red);" /> <span>Nonprofit</span>
-                            </li>
-                            <li>
-                                <div class="circle" style="background-color: #DCFAF3;" /> <span>Other/Unknown</span>
-                            </li>
-                        </ul>
+                        <span class="menu-title">Sub-Sector Legend</span>
+                        <el-row :gutter="20">
+                            <el-col :span="4"><div class="circle" style="background-color: var(--light-blue);" /></el-col>
+                            <el-col :span="16"><span class="legend-text"> Environment & Animal Welfare</span></el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="4"><div class="circle" style="background-color: var(--blue);" /> </el-col>
+                            <el-col :span="16"><span class="legend-text">Social Services</span></el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="4"><div class="circle" style="background-color: var(--olive);" /> </el-col>
+                            <el-col :span="16"><span class="legend-text">Housing</span></el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="4"><div class="circle" style="background-color: var(--light-green);" /></el-col>
+                            <el-col :span="16"><span class="legend-text">Arts & Culture</span></el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="4"><div class="circle" style="background-color: var(--slate-gray);" /></el-col>
+                            <el-col :span="16"><span class="legend-text">Business & Professional</span></el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="4"><div class="circle" style="background-color: var(--dark-teal);" /></el-col>
+                            <el-col :span="16"><span class="legend-text">Individual</span></el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="4"><div class="circle" style="background-color: var(--pink);" /></el-col>
+                            <el-col :span="16"><span class="legend-text">Health</span></el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="4"><div class="circle" style="background-color: var(--dark-pink);" /></el-col>
+                            <el-col :span="16"><span class="legend-text">Development</span></el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="4"><div class="circle" style="background-color: var(--purple);" /></el-col>
+                            <el-col :span="16"><span class="legend-text">Education & Research</span></el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="4"><div class="circle" style="background-color: var(--red);" /></el-col>
+                            <el-col :span="16"><span class="legend-text">Sports & Recreation</span></el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="4"><div class="circle" style="background-color: var(--orange);" /></el-col>
+                            <el-col :span="16"><span class="legend-text">Law & Advocacy</span></el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="4"><div class="circle" style="background-color: var(--yellow);" /></el-col>
+                            <el-col :span="16"><span class="legend-text">Government</span></el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="4"><div class="circle" style="background-color: var(--tan);" /></el-col>
+                            <el-col :span="16"><span class="legend-text">Faith & Religion</span></el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="4"><div class="circle" style="background-color: var(--brown);" /></el-col>
+                            <el-col :span="16"><span class="legend-text">Fundraising & Volunteerism</span></el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="4"><div class="circle" style="background-color: var(--green);" /></el-col>
+                            <el-col :span="16"><span class="legend-text">International</span></el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="4"><div class="circle" style="background-color: #DCFAF3;" /> </el-col>
+                            <el-col :span="16"><span class="legend-text">Other/Unknown</span></el-col>
+                        </el-row>
                     </div>
                 </el-card>
             </transition>
@@ -130,6 +131,7 @@ export default {
         }
     },
     created() {
+        this.raffle();
         axios.get('api/connections')
         .then(response => {
             this.connections = response.data.data;
@@ -145,7 +147,7 @@ export default {
             let nodes = [];
                 for(let i = 0; i < this.organizations.length; i++) {
                     switch(this.organizations[i].subsector.id) {
-                        case 1: 
+                        case 1: // Environment
                             nodes.push({
                                 id: this.organizations[i].id,
                                 name: this.organizations[i].organization_name,
@@ -153,116 +155,105 @@ export default {
                             })
                             
                             break;
-                        case 2:
+                        case 2: //social services
                              nodes.push({
                                 id: this.organizations[i].id,
                                 name: this.organizations[i].organization_name,
                                 _color: 'var(--blue)'
                             })
                             break;
-                        case 3:
+                        case 3: //housing
                             nodes.push({
                                 id: this.organizations[i].id,
                                 name: this.organizations[i].organization_name,
                                 _color: 'var(--olive)'
                             })
                             break;
-                        case 4:
+                        case 4: 
+                        case 21: // Art & culture
                             nodes.push({
                                 id: this.organizations[i].id,
                                 name: this.organizations[i].organization_name,
                                 _color: 'var(--light-green)'
                             })
                             break;
-                        case 21:
-                            nodes.push({
-                                id: this.organizations[i].id,
-                                name: this.organizations[i].organization_name,
-                                _color: 'var(--green)'
-                            })
-                            break;
-                        case 5:
+                        case 5: // business
+                        case 14:
                              nodes.push({
                                 id: this.organizations[i].id,
                                 name: this.organizations[i].organization_name,
                                 _color: 'var(--slate-gray)'
                             })
                             break;
-                        case 14:
-                            nodes.push({
-                                id: this.organizations[i].id,
-                                name: this.organizations[i].organization_name,
-                                _color: 'var(--light-teal)'
-                            })
-                            break;
-                        case 6:
+                        case 6: // Individual
                             nodes.push({
                                 id: this.organizations[i].id,
                                 name: this.organizations[i].organization_name,
                                 _color: 'var(--dark-teal)'
                             })
                             break;
-                        case 7:
+                        case 7: // health
                             nodes.push({
                                 id: this.organizations[i].id,
                                 name: this.organizations[i].organization_name,
                                 _color: 'var(--pink)'
                             })
                             break;
-                        case 8:
+                        case 8: // development
                             nodes.push({
                                 id: this.organizations[i].id,
                                 name: this.organizations[i].organization_name,
                                 _color: 'var(--dark-pink)'
                             })
                             break;
-                        case 9:
+                        case 9: // education
+                        case 17:
                             nodes.push({
                                 id: this.organizations[i].id,
                                 name: this.organizations[i].organization_name,
                                 _color: 'var(--purple)'
                             })
                             break;
-                        case 10:
+                        case 10: //sports
                             nodes.push({
                                 id: this.organizations[i].id,
                                 name: this.organizations[i].organization_name,
-                                _color: 'var(--light-purple)'
+                                _color: 'var(--red)'
                             })
                             break;
-                        case 12:
+                        case 12: // law
                             nodes.push({
                                 id: this.organizations[i].id,
                                 name: this.organizations[i].organization_name,
                                 _color: 'var(--orange)'
                             })
                             break;
-                        case 13:
+                        case 13: // government
                             nodes.push({
                                 id: this.organizations[i].id,
                                 name: this.organizations[i].organization_name,
                                 _color: 'var(--yellow)'
                             })
                             break;
-                        case 15:
+                        case 15: // religion
                             nodes.push({
                                 id: this.organizations[i].id,
                                 name: this.organizations[i].organization_name,
                                 _color: 'var(--tan)'
                             })
                             break;
-                        case 16:
+                        case 16: // fundraising and volunteer
                             nodes.push({
                                 id: this.organizations[i].id,
                                 name: this.organizations[i].organization_name,
                                 _color: 'var(--brown)'
                             })
                             break;
-                        case 17:
+                        case 19: //international
                             nodes.push({
                                 id: this.organizations[i].id,
                                 name: this.organizations[i].organization_name,
-                                _color: 'var(--red)'
+                                _color: 'var(--green)'
                             })
                             break;
                         default: 
@@ -300,7 +291,7 @@ export default {
             return{
                 canvas: false,
                 force: this.force,
-                size: { w: (window.innerWidth * 1.5), h: (window.innerHeight * 1.5)},
+                size: { w: window.innerWidth - 20, h: window.innerHeight - 10 },
                 offset: { x: this.networkX, y: this.networkY },
                 fontSize: this.fontSize,
                 nodeSize: this.nodeSize,
@@ -317,6 +308,14 @@ export default {
         },
     },
     methods: {
+        raffle() {
+            this.$notify.info({
+                title: "CCVO's annual Connections conference",
+                dangerouslyUseHTMLString: true,
+                message: "Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020? <a href='https://www.hellokrd.net/' target='_blank'>Enter</a>",
+                duration: 0
+            });
+        },
         toggle() {
             this.opened = true;
             this.divWidth = 350;
@@ -324,36 +323,25 @@ export default {
         hide() {
             this.opened = false
         },
-        handleZoom(value) {
+        handleZoom($event) {
             this.fontSize = this.zoom / 1.5;
             this.nodeSize = this.zoom / 1.5;
             this.force = this.zoom * 300;
         },
-        // startDrag() {
-        //     this.dragging = true;
-        // },
-        // drag($event) {
-        //     if(this.dragging) {
-        //         // var CTM = svg.getScreenCTM();
+        startDrag($event) {
+            // this.startX = $event.offsetX;
+            this.dragging = true;
+        },
+        drag($event) {
+            if(this.dragging) {
+                this.networkX = $event.offsetX - (window.innerWidth / 2);
+                this.networkY = $event.offsetY - ( window.innerHeight / 2);
+            }
+        },
+        stopDrag() {
+            this.dragging = false;
+        }
 
-        //         this.networkX = $event.offsetX;
-        //         this.networkY = $event.offsetY;
-        //     }
-
-        //     // return this.networkX, this.networkY;
-        // },
-        // stopDrag() {
-        //     this.dragging = false;
-        // },
-
-        // NOT CURRENTLY BEING USED
-        // getMousePosition($event) {
-        //     
-        //     return {
-        //         x: ($event.clientX - CTM.e) / CTM.a
-        //         y: ($event.clientY - CTM.f) / CTM.d
-        //     };
-        // }
     }
 };
 </script>
@@ -361,9 +349,10 @@ export default {
 <style lang="scss">
 @import "~styles/colors";
 
-.header {
+.title {
     width: 100%;
-    position: relative;
+    position: fixed;
+    
 }
 .raffle-container {
     width: 40%;
@@ -414,7 +403,7 @@ export default {
 .menu-card-container .menu-button {
     float: left !important;
     position: fixed;
-    top: 50px !important;
+    top: 25px !important;
     left: 40px;
 }
 
@@ -423,8 +412,21 @@ export default {
     background-color: #1aad8d;
 }
 
+.menu-button:hover {
+    color: #1aad8d;
+    background-color: #D5F0EA;
+}
+
 .menu-card {
-    width: 480px;
+    width: 380px;
+}
+
+.menu-title {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: #1aad8d;
+    font-weight: 800;
+    font-size: 16
 }
 
 .circle {
@@ -435,7 +437,8 @@ export default {
     // padding: 10px;
     // margin-left: 30px;
 }
-ul {
-    list-style-type: none;
+.legend-text {
+    float: left !important;
 }
+
 </style>
