@@ -4307,6 +4307,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
  // import Selection from './Selection.vue'
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4558,6 +4559,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     hide: function hide() {
       this.opened = false;
+    },
+    goToHome: function goToHome() {
+      window.location.pathname = '/';
     },
     handleZoom: function handleZoom($event) {
       this.fontSize = this.zoom / 1.5;
@@ -74087,6 +74091,17 @@ var render = function() {
                     slot: "header"
                   },
                   [
+                    _c("el-button", {
+                      staticStyle: {
+                        float: "left",
+                        padding: "3px 0",
+                        color: "#1aad8d",
+                        "font-size": "2rem"
+                      },
+                      attrs: { type: "text", icon: "el-icon-s-home" },
+                      on: { click: _vm.goToHome }
+                    }),
+                    _vm._v(" "),
                     _c("span", { staticClass: "menu-title" }, [_vm._v("Menu")]),
                     _vm._v(" "),
                     _c(

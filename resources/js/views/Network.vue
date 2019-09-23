@@ -20,6 +20,7 @@
             <transition name="toggle">
                 <el-card class="menu-card" v-show="opened">
                     <div slot="header" class="clearfix">
+                        <el-button style="float: left; padding: 3px 0; color: #1aad8d; font-size: 2rem;" type="text" icon="el-icon-s-home" @click="goToHome"></el-button>
                         <span class="menu-title">Menu</span>
                         <el-button style="float: right; padding: 3px 0; color: #1aad8d; font-weight:1000" type="text" @click="hide">X</el-button>
                     </div>
@@ -322,6 +323,9 @@ export default {
         },
         hide() {
             this.opened = false
+        },
+        goToHome() {
+            window.location.pathname = '/';
         },
         handleZoom($event) {
             this.fontSize = this.zoom / 1.5;
