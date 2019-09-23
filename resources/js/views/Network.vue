@@ -11,15 +11,16 @@
                 </el-card>
             </header>
             <!--  @mousedown="startDrag" @mousemove="drag($event)" @mouseup="stopDrag" -->
-            <div id="network-container">
+            <div id="network-container" @mousedown="startDrag" @mousemove="drag($event)" @mouseup="stopDrag">
                 <d3-network ref='net'
+                    style="border: 1px solid red; width: 100%; height: 100%;"
                     :net-nodes="nodes"
                     :net-links="links"
                     :options="options"
-                    
+
                 />
             </div>
-            
+
         </div>
 
         <div class="menu-card-container">
@@ -145,13 +146,13 @@ export default {
             let nodes = [];
                 for(let i = 0; i < this.organizations.length; i++) {
                     switch(this.organizations[i].subsector.id) {
-                        case 1: 
+                        case 1:
                             nodes.push({
                                 id: this.organizations[i].id,
                                 name: this.organizations[i].organization_name,
                                 _color: 'var(--light-blue)'
                             })
-                            
+
                             break;
                         case 2:
                              nodes.push({
@@ -265,14 +266,14 @@ export default {
                                 _color: 'var(--red)'
                             })
                             break;
-                        default: 
+                        default:
                             nodes.push({
                                 id: this.organizations[i].id,
                                 name: this.organizations[i].organization_name,
                             })
                             break;
                     }
-                    
+
                 }
                 return nodes;
         },
@@ -280,7 +281,7 @@ export default {
         links() {
             let links = [];
                     for(let i = 0; i < this.connections.length; i++) {
-        
+
                     links.push({
                         sid: this.connections[i].host_id,
                         tid: this.connections[i].contact_id,
@@ -300,7 +301,7 @@ export default {
             return{
                 canvas: false,
                 force: this.force,
-                size: { w: (window.innerWidth * 1.5), h: (window.innerHeight * 1.5)},
+                size: { w: (window.innerWidth), h: (window.innerHeight)},
                 offset: { x: this.networkX, y: this.networkY },
                 fontSize: this.fontSize,
                 nodeSize: this.nodeSize,
@@ -329,26 +330,28 @@ export default {
             this.nodeSize = this.zoom / 1.5;
             this.force = this.zoom * 300;
         },
-        // startDrag() {
-        //     this.dragging = true;
-        // },
-        // drag($event) {
-        //     if(this.dragging) {
-        //         // var CTM = svg.getScreenCTM();
+        startDrag($event) {
+            this.startX = $event.offsetX;
+            this.dragging = true;
+        },
+        drag($event) {
+            if(this.dragging) {
+                // var CTM = svg.getScreenCTM();
+                console.log(`${$event.offsetX}, ${event.offsetY}`);
 
-        //         this.networkX = $event.offsetX;
-        //         this.networkY = $event.offsetY;
-        //     }
+                this.networkX = ($event.offsetX) - window.innerWidth;
+                this.networkY = $event.offsetY - 500;
+            }
 
-        //     // return this.networkX, this.networkY;
-        // },
-        // stopDrag() {
-        //     this.dragging = false;
-        // },
+            // return this.networkX, this.networkY;
+        },
+        stopDrag() {
+            this.dragging = false;
+        },
 
         // NOT CURRENTLY BEING USED
         // getMousePosition($event) {
-        //     
+        //
         //     return {
         //         x: ($event.clientX - CTM.e) / CTM.a
         //         y: ($event.clientY - CTM.f) / CTM.d

@@ -4306,6 +4306,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
  // import Selection from './Selection.vue'
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4518,8 +4519,8 @@ __webpack_require__.r(__webpack_exports__);
         canvas: false,
         force: this.force,
         size: {
-          w: window.innerWidth * 1.5,
-          h: window.innerHeight * 1.5
+          w: window.innerWidth,
+          h: window.innerHeight
         },
         offset: {
           x: this.networkX,
@@ -4551,6 +4552,22 @@ __webpack_require__.r(__webpack_exports__);
       this.fontSize = this.zoom / 1.5;
       this.nodeSize = this.zoom / 1.5;
       this.force = this.zoom * 300;
+    },
+    startDrag: function startDrag($event) {
+      this.startX = $event.offsetX;
+      this.dragging = true;
+    },
+    drag: function drag($event) {
+      if (this.dragging) {
+        // var CTM = svg.getScreenCTM();
+        console.log("".concat($event.offsetX, ", ").concat(event.offsetY));
+        this.networkX = $event.offsetX - window.innerWidth;
+        this.networkY = $event.offsetY - 500;
+      } // return this.networkX, this.networkY;
+
+    },
+    stopDrag: function stopDrag() {
+      this.dragging = false;
     }
   }
 });
@@ -74021,10 +74038,24 @@ var render = function() {
       _vm._v(" "),
       _c(
         "div",
-        { attrs: { id: "network-container" } },
+        {
+          attrs: { id: "network-container" },
+          on: {
+            mousedown: _vm.startDrag,
+            mousemove: function($event) {
+              return _vm.drag($event)
+            },
+            mouseup: _vm.stopDrag
+          }
+        },
         [
           _c("d3-network", {
             ref: "net",
+            staticStyle: {
+              border: "1px solid red",
+              width: "100%",
+              height: "100%"
+            },
             attrs: {
               "net-nodes": _vm.nodes,
               "net-links": _vm.links,
@@ -91104,7 +91135,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\OSNApp\resources\js\main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /Users/rupert/www/sites/OSNApp/resources/js/main.js */"./resources/js/main.js");
 
 
 /***/ })
