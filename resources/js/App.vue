@@ -22,6 +22,19 @@ html, body {
   color: #2c3e50;
   
 }
+.button {
+    background-color: #1aad8d;
+    color: white;
+}
+
+.button:hover {
+  color: #1aad8d;
+  background-color: #D5F0EA;
+}
+
+.button-light:hover {
+  color: #1aad8d;
+}
 // #nav {
 //   padding: 30px;
 //   a {

@@ -4243,6 +4243,69 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
  // import Selection from './Selection.vue'
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4255,9 +4318,13 @@ __webpack_require__.r(__webpack_exports__);
     return {
       opened: false,
       renderComponent: true,
-      zoom: 0,
+      dragging: false,
+      zoom: 50,
+      fontSize: 25,
       nodeSize: 25,
       force: 5000,
+      networkX: 0,
+      networkY: 0,
       selected: {},
       linksSelected: {},
       connections: [],
@@ -4271,7 +4338,7 @@ __webpack_require__.r(__webpack_exports__);
       _this.connections = response.data.data;
     });
     axios.get('api/organizations?has_connections=true').then(function (response) {
-      _this.organizations = response.data.data; // console.log(response.data.data)
+      _this.organizations = response.data.data;
     });
   },
   computed: {
@@ -4279,8 +4346,6 @@ __webpack_require__.r(__webpack_exports__);
       var nodes = [];
 
       for (var i = 0; i < this.organizations.length; i++) {
-        console.log(this.organizations[i].subsector.id);
-
         switch (this.organizations[i].subsector.id) {
           case 1:
             nodes.push({
@@ -4453,13 +4518,24 @@ __webpack_require__.r(__webpack_exports__);
         canvas: false,
         force: this.force,
         size: {
-          w: 1600,
-          h: 1400
+          w: window.innerWidth * 1.5,
+          h: window.innerHeight * 1.5
         },
-        fontSize: 25,
+        offset: {
+          x: this.networkX,
+          y: this.networkY
+        },
+        fontSize: this.fontSize,
         nodeSize: this.nodeSize,
         nodeLabels: true,
-        linkLabels: true
+        linkLabels: true // forces: {
+        //     Center: true,
+        //     X: 0,
+        //     Y: 0,
+        //     ManyBody: false,
+        //     Link: false,
+        // },
+
       };
     }
   },
@@ -4470,6 +4546,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     hide: function hide() {
       this.opened = false;
+    },
+    handleZoom: function handleZoom(value) {
+      this.fontSize = this.zoom / 1.5;
+      this.nodeSize = this.zoom / 1.5;
+      this.force = this.zoom * 300;
     }
   }
 });
@@ -6329,7 +6410,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "html, body {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin: 0 auto;\n  background-color: #EEEEEE;\n  height: 100%;\n  width: 100%;\n}\n#app {\n  font-family: \"Avenir\", Helvetica, Arial, sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n}", ""]);
+exports.push([module.i, "html, body {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin: 0 auto;\n  background-color: #EEEEEE;\n  height: 100%;\n  width: 100%;\n}\n#app {\n  font-family: \"Avenir\", Helvetica, Arial, sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n}\n.button {\n  background-color: #1aad8d;\n  color: white;\n}\n.button:hover {\n  color: #1aad8d;\n  background-color: #D5F0EA;\n}\n.button-light:hover {\n  color: #1aad8d;\n}", ""]);
 
 // exports
 
@@ -6348,7 +6429,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".text-container[data-v-b4e54de6] {\n  max-width: 60%;\n  margin: auto;\n  margin-top: 30px;\n  margin-bottom: 30px;\n}\n.text[data-v-b4e54de6] {\n  font-size: 14px;\n  font-weight: bold;\n}\n.item[data-v-b4e54de6] {\n  margin-bottom: 18px;\n}\n.clearfix[data-v-b4e54de6]:before,\n.clearfix[data-v-b4e54de6]:after {\n  display: table;\n  content: \"\";\n}\n.clearfix[data-v-b4e54de6]:after {\n  clear: both;\n}\n.footer[data-v-b4e54de6] {\n  margin-top: 8px;\n  position: relative;\n  bottom: 0;\n  right: 0;\n}\n.box-card[data-v-b4e54de6] {\n  width: 780px;\n}\n.inside-box[data-v-b4e54de6] {\n  margin: 0 !important;\n  padding: 0 !important;\n}\nh3[data-v-b4e54de6] {\n  color: #1aad8d;\n}\n.margin-right[data-v-b4e54de6] {\n  margin-right: 12px;\n}\n.button-container[data-v-b4e54de6] {\n  display: inline;\n}\n.button[data-v-b4e54de6] {\n  background-color: #1aad8d;\n}\n.custom-label[data-v-b4e54de6] {\n  text-align: right;\n  float: left;\n  font-size: 14px;\n  color: #606266;\n  padding: 0 4px 0 0;\n}\n.el-form-item[data-v-b4e54de6] {\n  margin-top: 20px;\n}\n.el-autocomplete[data-v-b4e54de6] {\n  width: 400px !important;\n}\n.el-form-item .el-form-item__label[data-v-b4e54de6] {\n  line-height: 20px !important;\n}", ""]);
+exports.push([module.i, ".text-container[data-v-b4e54de6] {\n  max-width: 60%;\n  margin: auto;\n  margin-top: 30px;\n  margin-bottom: 30px;\n}\n.text[data-v-b4e54de6] {\n  font-size: 14px;\n  font-weight: bold;\n}\n.item[data-v-b4e54de6] {\n  margin-bottom: 18px;\n}\n.clearfix[data-v-b4e54de6]:before,\n.clearfix[data-v-b4e54de6]:after {\n  display: table;\n  content: \"\";\n}\n.clearfix[data-v-b4e54de6]:after {\n  clear: both;\n}\n.footer[data-v-b4e54de6] {\n  margin-top: 8px;\n  position: relative;\n  bottom: 0;\n  right: 0;\n}\n.box-card[data-v-b4e54de6] {\n  width: 780px;\n}\n.inside-box[data-v-b4e54de6] {\n  margin: 0 !important;\n  padding: 0 !important;\n}\nh3[data-v-b4e54de6] {\n  color: #1aad8d;\n}\n.margin-right[data-v-b4e54de6] {\n  margin-right: 12px;\n}\n.button-container[data-v-b4e54de6] {\n  display: inline;\n}\n.custom-label[data-v-b4e54de6] {\n  text-align: right;\n  float: left;\n  font-size: 14px;\n  color: #606266;\n  padding: 0 4px 0 0;\n}\n.el-form-item[data-v-b4e54de6] {\n  margin-top: 20px;\n}\n.el-autocomplete[data-v-b4e54de6] {\n  width: 400px !important;\n}\n.el-form-item .el-form-item__label[data-v-b4e54de6] {\n  line-height: 20px !important;\n}", ""]);
 
 // exports
 
@@ -6424,7 +6505,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".header[data-v-63cd6604] {\n  background-color: white;\n  height: 100px;\n}\n.header .logo[data-v-63cd6604] {\n  position: absolute;\n  top: 5px;\n  left: 10px;\n}\nh1[data-v-63cd6604] {\n  color: #1aad8d;\n}\nh3[data-v-63cd6604], h4[data-v-63cd6604], p[data-v-63cd6604] {\n  text-align: left !important;\n}\n.container[data-v-63cd6604] {\n  margin-top: 50px !important;\n  display: flex;\n  flex: 11 auto;\n  flex-direction: column;\n  max-width: 50%;\n  margin: auto;\n}\n.main[data-v-63cd6604] {\n  margin: auto;\n}\n.button[data-v-63cd6604] {\n  background-color: #1aad8d;\n  color: white;\n  width: 200px;\n  height: 50px;\n  font-size: 18px;\n  font-weight: 400;\n}\na[data-v-63cd6604] {\n  text-decoration: none;\n  color: white;\n}\na[data-v-63cd6604]:hover {\n  color: white;\n}", ""]);
+exports.push([module.i, ".header[data-v-63cd6604] {\n  background-color: white;\n  height: 100px;\n}\n.header .logo[data-v-63cd6604] {\n  position: absolute;\n  top: 5px;\n  left: 10px;\n}\nh1[data-v-63cd6604] {\n  color: #1aad8d;\n}\nh3[data-v-63cd6604], h4[data-v-63cd6604], p[data-v-63cd6604] {\n  text-align: left !important;\n}\n.container[data-v-63cd6604] {\n  margin-top: 50px !important;\n  display: flex;\n  flex: 11 auto;\n  flex-direction: column;\n  max-width: 50%;\n  margin: auto;\n}\n.main[data-v-63cd6604] {\n  margin: auto;\n}\n.hero-button[data-v-63cd6604] {\n  width: 200px;\n  height: 50px;\n  font-size: 18px;\n  font-weight: 400;\n}\na[data-v-63cd6604] {\n  text-decoration: none;\n  color: white;\n}\na[data-v-63cd6604]:hover {\n  color: white;\n}", ""]);
 
 // exports
 
@@ -6443,7 +6524,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ":root {\n  --light-blue: #7AD5FF;\n  --blue: #4169E1;\n  --olive: #808000;\n  --light-green: #98FB98;\n  --green: #2E8B57;\n  --slate-gray: #2F4F4F;\n  --light-teal: #33FFBD;\n  --dark-teal: #008080;\n  --pink: #EE82EE;\n  --dark-pink: #C00086;\n  --purple: #8B008B;\n  --light-purple: #E8ABFF;\n  --orange: #FF5733;\n  --yellow: #FFD700;\n  --tan: #D2B48C;\n  --brown: #8B4513;\n  --red: #DC143C;\n}\n.header {\n  width: 100%;\n}\n.raffle-container {\n  width: 40%;\n  margin: 0 auto;\n}\n.toggle-enter-active {\n  transition: 1s ease;\n}\n.toggle-leave-active {\n  transition: 1s ease;\n}\n.toggle-enter, .toggle-leave-to {\n  transform: translateX(-100%);\n  /* opacity: 0; */\n}\n.main h1 {\n  color: #1aad8d !important;\n}\n.text {\n  font-size: 14px;\n}\n.item {\n  margin-bottom: 18px;\n}\n.clearfix:before,\n.clearfix:after {\n  display: table;\n  content: \"\";\n}\n.clearfix:after {\n  clear: both;\n}\n.menu-card-container {\n  position: fixed !important;\n  top: 0;\n  left: 0;\n}\n.menu-card-container .menu-button {\n  float: left !important;\n  position: fixed;\n  top: 50px !important;\n  left: 40px;\n}\n.menu-card {\n  width: 480px;\n}", ""]);
+exports.push([module.i, ":root {\n  --light-blue: #7AD5FF;\n  --blue: #4169E1;\n  --olive: #808000;\n  --light-green: #98FB98;\n  --green: #2E8B57;\n  --slate-gray: #2F4F4F;\n  --light-teal: #33FFBD;\n  --dark-teal: #008080;\n  --pink: #EE82EE;\n  --dark-pink: #C00086;\n  --purple: #8B008B;\n  --light-purple: #E8ABFF;\n  --orange: #FF5733;\n  --yellow: #FFD700;\n  --tan: #D2B48C;\n  --brown: #8B4513;\n  --red: #DC143C;\n}\n.header {\n  width: 100%;\n  position: relative;\n}\n.raffle-container {\n  width: 40%;\n  margin: 0 auto;\n}\n#network-container {\n  cursor: grab;\n}\n#network-container:active {\n  cursor: grabbing;\n}\n.toggle-enter-active {\n  transition: 1s ease;\n}\n.toggle-leave-active {\n  transition: 1s ease;\n}\n.toggle-enter, .toggle-leave-to {\n  transform: translateX(-100%);\n  /* opacity: 0; */\n}\n.main h1 {\n  color: #1aad8d !important;\n}\n.text {\n  font-size: 14px;\n}\n.item {\n  margin-bottom: 18px;\n}\n.clearfix:before,\n.clearfix:after {\n  display: table;\n  content: \"\";\n}\n.clearfix:after {\n  clear: both;\n}\n.menu-card-container {\n  position: fixed !important;\n  top: 0;\n  left: 0;\n}\n.menu-card-container .menu-button {\n  float: left !important;\n  position: fixed;\n  top: 50px !important;\n  left: 40px;\n}\n.menu-button {\n  color: white;\n  background-color: #1aad8d;\n}\n.menu-card {\n  width: 480px;\n}\n.circle {\n  height: 15px;\n  width: 15px;\n  display: inline-block;\n  border-radius: 50%;\n}\nul {\n  list-style-type: none;\n}", ""]);
 
 // exports
 
@@ -73290,15 +73371,20 @@ var render = function() {
                         "el-button",
                         {
                           staticClass: "button",
-                          attrs: { type: "primary" },
                           on: { click: _vm.addOrganization }
                         },
                         [_vm._v("Next")]
                       ),
                       _vm._v(" "),
-                      _c("el-button", { on: { click: _vm.resetForm } }, [
-                        _vm._v("Cancel")
-                      ])
+                      _c(
+                        "el-button",
+                        {
+                          staticClass: "button-light",
+                          attrs: { disabled: "" },
+                          on: { click: _vm.resetForm }
+                        },
+                        [_vm._v("Cancel")]
+                      )
                     ],
                     1
                   )
@@ -73387,17 +73473,18 @@ var render = function() {
                     [
                       _c(
                         "el-button",
-                        {
-                          staticClass: "button",
-                          attrs: { type: "primary" },
-                          on: { click: _vm.setAware }
-                        },
+                        { staticClass: "button", on: { click: _vm.setAware } },
                         [_vm._v("Next")]
                       ),
                       _vm._v(" "),
-                      _c("el-button", { on: { click: _vm.resetForm } }, [
-                        _vm._v("Cancel")
-                      ])
+                      _c(
+                        "el-button",
+                        {
+                          staticClass: "button-light",
+                          on: { click: _vm.resetForm }
+                        },
+                        [_vm._v("Cancel")]
+                      )
                     ],
                     1
                   )
@@ -73486,17 +73573,18 @@ var render = function() {
                     [
                       _c(
                         "el-button",
-                        {
-                          staticClass: "button",
-                          attrs: { type: "primary" },
-                          on: { click: _vm.setShared }
-                        },
+                        { staticClass: "button", on: { click: _vm.setShared } },
                         [_vm._v("Next")]
                       ),
                       _vm._v(" "),
-                      _c("el-button", { on: { click: _vm.resetForm } }, [
-                        _vm._v("Cancel")
-                      ])
+                      _c(
+                        "el-button",
+                        {
+                          staticClass: "button-light",
+                          on: { click: _vm.resetForm }
+                        },
+                        [_vm._v("Cancel")]
+                      )
                     ],
                     1
                   )
@@ -73587,15 +73675,19 @@ var render = function() {
                         "el-button",
                         {
                           staticClass: "button",
-                          attrs: { type: "primary" },
                           on: { click: _vm.setPartners }
                         },
                         [_vm._v("Next")]
                       ),
                       _vm._v(" "),
-                      _c("el-button", { on: { click: _vm.resetForm } }, [
-                        _vm._v("Cancel")
-                      ])
+                      _c(
+                        "el-button",
+                        {
+                          staticClass: "button-light",
+                          on: { click: _vm.resetForm }
+                        },
+                        [_vm._v("Cancel")]
+                      )
                     ],
                     1
                   )
@@ -73641,7 +73733,6 @@ var render = function() {
                             "el-button",
                             {
                               staticClass: "button",
-                              attrs: { type: "primary" },
                               on: {
                                 click: function($event) {
                                   return _vm.onSubmit()
@@ -73658,9 +73749,14 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _c("el-button", { on: { click: _vm.resetForm } }, [
-                        _vm._v("Cancel")
-                      ])
+                      _c(
+                        "el-button",
+                        {
+                          staticClass: "button-light",
+                          on: { click: _vm.resetForm }
+                        },
+                        [_vm._v("Cancel")]
+                      )
                     ],
                     1
                   )
@@ -73853,7 +73949,9 @@ var render = function() {
           "router-link",
           { attrs: { tag: "a", to: "/form" } },
           [
-            _c("el-button", { staticClass: "button" }, [_vm._v("Get Started!")])
+            _c("el-button", { staticClass: "button hero-button" }, [
+              _vm._v("Get Started!")
+            ])
           ],
           1
         )
@@ -73885,55 +73983,58 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "network" }, [
-    _c(
-      "div",
-      { staticClass: "main" },
-      [
-        _c(
-          "header",
-          { staticClass: "header" },
-          [
-            _c("el-card", [
-              _c("h1", [_vm._v("Organizational Social Network Analysis")]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "raffle-container" },
-                [
-                  _vm._v(
-                    "\n                    Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020?\n                    "
-                  ),
-                  _c("br"),
-                  _c("br"),
-                  _c(
-                    "el-button",
-                    {
-                      attrs: {
-                        onclick:
-                          " window.open('https://www.hellokrd.net/', '_blank'); return false;"
-                      }
-                    },
-                    [_vm._v("Enter Here!")]
-                  )
-                ],
-                1
-              )
-            ])
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c("d3-network", {
-          ref: "net",
-          attrs: {
-            "net-nodes": _vm.nodes,
-            "net-links": _vm.links,
-            options: _vm.options
-          }
-        })
-      ],
-      1
-    ),
+    _c("div", { staticClass: "main" }, [
+      _c(
+        "header",
+        { staticClass: "header" },
+        [
+          _c("el-card", [
+            _c("h1", [_vm._v("Organizational Social Network Analysis")]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "raffle-container" },
+              [
+                _vm._v(
+                  "\n                    Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020?\n                    "
+                ),
+                _c("br"),
+                _c("br"),
+                _c(
+                  "el-button",
+                  {
+                    staticClass: "button",
+                    attrs: {
+                      onclick:
+                        " window.open('https://www.hellokrd.net/', '_blank'); return false;"
+                    }
+                  },
+                  [_vm._v("Enter Here!")]
+                )
+              ],
+              1
+            )
+          ])
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { attrs: { id: "network-container" } },
+        [
+          _c("d3-network", {
+            ref: "net",
+            attrs: {
+              "net-nodes": _vm.nodes,
+              "net-links": _vm.links,
+              options: _vm.options
+            }
+          })
+        ],
+        1
+      )
+    ]),
     _vm._v(" "),
     _c(
       "div",
@@ -73951,7 +74052,6 @@ var render = function() {
               }
             ],
             staticClass: "menu-button",
-            attrs: { type: "primary" },
             on: { click: _vm.toggle }
           },
           [_vm._v("Menu")]
@@ -74002,11 +74102,11 @@ var render = function() {
                   "div",
                   { staticClass: "block" },
                   [
-                    _c("span", { staticClass: "demonstration" }, [
-                      _vm._v("Zoom")
-                    ]),
+                    _c("span", { staticClass: "title" }, [_vm._v("Zoom")]),
                     _vm._v(" "),
                     _c("el-slider", {
+                      attrs: { step: 10 },
+                      on: { input: _vm.handleZoom },
                       model: {
                         value: _vm.zoom,
                         callback: function($$v) {
@@ -74017,7 +74117,181 @@ var render = function() {
                     })
                   ],
                   1
-                )
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "block" }, [
+                  _c("span", { staticClass: "title" }, [
+                    _vm._v("Sub-Sector Legend")
+                  ]),
+                  _vm._v(" "),
+                  _c("ul", [
+                    _c("li", [
+                      _c("div", {
+                        staticClass: "circle",
+                        staticStyle: { "background-color": "var(--light-blue)" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Environment & Animal Welfare")])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("div", {
+                        staticClass: "circle",
+                        staticStyle: { "background-color": "var(--blue)" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Social Services")])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("div", {
+                        staticClass: "circle",
+                        staticStyle: { "background-color": "var(--olive)" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Housing")])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("div", {
+                        staticClass: "circle",
+                        staticStyle: {
+                          "background-color": "var(--light-green)"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Arts & Culture")])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("div", {
+                        staticClass: "circle",
+                        staticStyle: { "background-color": "var(--green)" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Business & Professional")])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("div", {
+                        staticClass: "circle",
+                        staticStyle: { "background-color": "var(--slate-gray)" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Individual")])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("div", {
+                        staticClass: "circle",
+                        staticStyle: { "background-color": "var(--light-teal)" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Health")])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("div", {
+                        staticClass: "circle",
+                        staticStyle: { "background-color": "var(--dark-teal)" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Development")])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("div", {
+                        staticClass: "circle",
+                        staticStyle: { "background-color": "var(--pink)" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Education & Research")])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("div", {
+                        staticClass: "circle",
+                        staticStyle: { "background-color": "var(--dark-pink)" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Sports & Recreation")])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("div", {
+                        staticClass: "circle",
+                        staticStyle: { "background-color": "var(--purple)" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Law & Advocacy")])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("div", {
+                        staticClass: "circle",
+                        staticStyle: {
+                          "background-color": "var(--light-purple)"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Government")])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("div", {
+                        staticClass: "circle",
+                        staticStyle: { "background-color": "var(--orange)" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Faith & Religion")])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("div", {
+                        staticClass: "circle",
+                        staticStyle: { "background-color": "var(--yellow)" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Fundraising & Volunteerism")])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("div", {
+                        staticClass: "circle",
+                        staticStyle: { "background-color": "var(--tan)" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Student")])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("div", {
+                        staticClass: "circle",
+                        staticStyle: { "background-color": "var(--brown)" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("International")])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("div", {
+                        staticClass: "circle",
+                        staticStyle: { "background-color": "var(--red)" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Nonprofit")])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("div", {
+                        staticClass: "circle",
+                        staticStyle: { "background-color": "#DCFAF3" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Other/Unknown")])
+                    ])
+                  ])
+                ])
               ]
             )
           ],

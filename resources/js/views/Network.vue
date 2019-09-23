@@ -6,20 +6,24 @@
                     <h1>Organizational Social Network Analysis</h1>
                     <div class="raffle-container">
                         Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020?
-                        <br><br><el-button onclick=" window.open('https://www.hellokrd.net/', '_blank'); return false;">Enter Here!</el-button>
+                        <br><br><el-button class="button" onclick=" window.open('https://www.hellokrd.net/', '_blank'); return false;">Enter Here!</el-button>
                     </div>
                 </el-card>
             </header>
-
-            <d3-network ref='net'
-                :net-nodes="nodes"
-                :net-links="links"
-                :options="options"
-            />
+            <!--  @mousedown="startDrag" @mousemove="drag($event)" @mouseup="stopDrag" -->
+            <div id="network-container">
+                <d3-network ref='net'
+                    :net-nodes="nodes"
+                    :net-links="links"
+                    :options="options"
+                    
+                />
+            </div>
+            
         </div>
 
         <div class="menu-card-container">
-            <el-button type="primary" class="menu-button" v-show="!opened"  @click="toggle">Menu</el-button>
+            <el-button class="menu-button" v-show="!opened"  @click="toggle">Menu</el-button>
             <transition name="toggle">
                 <el-card class="menu-card" v-show="opened">
                     <div slot="header" class="clearfix">
@@ -27,8 +31,67 @@
                         <el-button style="float: right; padding: 3px 0" type="text" @click="hide">Close</el-button>
                     </div>
                     <div class="block">
-                        <span class="demonstration">Zoom</span>
-                        <el-slider v-model="zoom"></el-slider>
+                        <span class="title">Zoom</span>
+                        <el-slider :step="10" @input="handleZoom" v-model="zoom"></el-slider>
+                    </div>
+                    <div class="block">
+                        <span class="title">Sub-Sector Legend</span>
+                        <ul>
+                            <li>
+                                <div class="circle" style="background-color: var(--light-blue);" /> <span>Environment & Animal Welfare</span>
+                            </li>
+                            <li>
+                                <div class="circle" style="background-color: var(--blue);" /> <span>Social Services</span>
+                            </li>
+                            <li>
+                                <div class="circle" style="background-color: var(--olive);" /> <span>Housing</span>
+                            </li>
+                            <li>
+                                <div class="circle" style="background-color: var(--light-green);" /> <span>Arts & Culture</span>
+                            </li>
+                            <li>
+                                <div class="circle" style="background-color: var(--green);" /> <span>Business & Professional</span>
+                            </li>
+                            <li>
+                                <div class="circle" style="background-color: var(--slate-gray);" /> <span>Individual</span>
+                            </li>
+                            <li>
+                                <div class="circle" style="background-color: var(--light-teal);" /> <span>Health</span>
+                            </li>
+                            <li>
+                                <div class="circle" style="background-color: var(--dark-teal);" /> <span>Development</span>
+                            </li>
+                            <li>
+                                <div class="circle" style="background-color: var(--pink);" /> <span>Education & Research</span>
+                            </li>
+                            <li>
+                                <div class="circle" style="background-color: var(--dark-pink);" /> <span>Sports & Recreation</span>
+                            </li>
+                            <li>
+                                <div class="circle" style="background-color: var(--purple);" /> <span>Law & Advocacy</span>
+                            </li>
+                            <li>
+                                <div class="circle" style="background-color: var(--light-purple);" /> <span>Government</span>
+                            </li>
+                            <li>
+                                <div class="circle" style="background-color: var(--orange);" /> <span>Faith & Religion</span>
+                            </li>
+                            <li>
+                                <div class="circle" style="background-color: var(--yellow);" /> <span>Fundraising & Volunteerism</span>
+                            </li>
+                            <li>
+                                <div class="circle" style="background-color: var(--tan);" /> <span>Student</span>
+                            </li>
+                            <li>
+                                <div class="circle" style="background-color: var(--brown);" /> <span>International</span>
+                            </li>
+                            <li>
+                                <div class="circle" style="background-color: var(--red);" /> <span>Nonprofit</span>
+                            </li>
+                            <li>
+                                <div class="circle" style="background-color: #DCFAF3;" /> <span>Other/Unknown</span>
+                            </li>
+                        </ul>
                     </div>
                 </el-card>
             </transition>
@@ -53,9 +116,13 @@ export default {
         return {
             opened: false,
             renderComponent: true,
-            zoom: 0,
+            dragging: false,
+            zoom: 50,
+            fontSize: 25,
             nodeSize: 25,
             force: 5000,
+            networkX: 0,
+            networkY: 0,
             selected: {},
             linksSelected: {},
             connections: [],
@@ -70,7 +137,6 @@ export default {
         axios.get('api/organizations?has_connections=true')
         .then(response => {
             this.organizations = response.data.data
-            // console.log(response.data.data)
         });
     },
     computed:{
@@ -78,7 +144,6 @@ export default {
         nodes() {
             let nodes = [];
                 for(let i = 0; i < this.organizations.length; i++) {
-                    console.log(this.organizations[i].subsector.id)
                     switch(this.organizations[i].subsector.id) {
                         case 1: 
                             nodes.push({
@@ -235,11 +300,19 @@ export default {
             return{
                 canvas: false,
                 force: this.force,
-                size:{ w:1600, h:1400},
-                fontSize: 25,
+                size: { w: (window.innerWidth * 1.5), h: (window.innerHeight * 1.5)},
+                offset: { x: this.networkX, y: this.networkY },
+                fontSize: this.fontSize,
                 nodeSize: this.nodeSize,
                 nodeLabels: true,
                 linkLabels: true,
+                // forces: {
+                //     Center: true,
+                //     X: 0,
+                //     Y: 0,
+                //     ManyBody: false,
+                //     Link: false,
+                // },
             }
         },
     },
@@ -247,11 +320,40 @@ export default {
         toggle() {
             this.opened = true;
             this.divWidth = 350;
-        
         },
         hide() {
             this.opened = false
-        }
+        },
+        handleZoom(value) {
+            this.fontSize = this.zoom / 1.5;
+            this.nodeSize = this.zoom / 1.5;
+            this.force = this.zoom * 300;
+        },
+        // startDrag() {
+        //     this.dragging = true;
+        // },
+        // drag($event) {
+        //     if(this.dragging) {
+        //         // var CTM = svg.getScreenCTM();
+
+        //         this.networkX = $event.offsetX;
+        //         this.networkY = $event.offsetY;
+        //     }
+
+        //     // return this.networkX, this.networkY;
+        // },
+        // stopDrag() {
+        //     this.dragging = false;
+        // },
+
+        // NOT CURRENTLY BEING USED
+        // getMousePosition($event) {
+        //     
+        //     return {
+        //         x: ($event.clientX - CTM.e) / CTM.a
+        //         y: ($event.clientY - CTM.f) / CTM.d
+        //     };
+        // }
     }
 };
 </script>
@@ -261,10 +363,18 @@ export default {
 
 .header {
     width: 100%;
+    position: relative;
 }
 .raffle-container {
     width: 40%;
     margin: 0 auto;
+}
+
+#network-container {
+    cursor: grab;
+}
+#network-container:active {
+    cursor: grabbing
 }
 
 .toggle-enter-active {
@@ -308,7 +418,24 @@ export default {
     left: 40px;
 }
 
+.menu-button {
+    color: white;
+    background-color: #1aad8d;
+}
+
 .menu-card {
     width: 480px;
+}
+
+.circle {
+    height: 15px;
+    width: 15px;
+    display: inline-block;
+    border-radius: 50%;
+    // padding: 10px;
+    // margin-left: 30px;
+}
+ul {
+    list-style-type: none;
 }
 </style>

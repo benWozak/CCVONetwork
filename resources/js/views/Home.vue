@@ -29,7 +29,7 @@
             <p>Questions about this survey? Please contact me at roman@hellokrd.net</p>
 
             <router-link tag="a" to="/form">
-                <el-button class="button">Get Started!</el-button>
+                <el-button class="button hero-button">Get Started!</el-button>
             </router-link>
             
 
@@ -84,9 +84,7 @@ h3, h4, p {
 .main {
     margin: auto;
 }
-.button {
-    background-color: #1aad8d;
-    color: white;
+.hero-button {
     width: 200px;
     height: 50px;
     font-size: 18px;

@@ -33,8 +33,8 @@
 
             <div class="clearfix">
                 <el-form-item class="footer">
-                    <el-button type="primary" class="button" @click="addOrganization">Next</el-button>
-                    <el-button @click="resetForm">Cancel</el-button>
+                    <el-button class="button" @click="addOrganization">Next</el-button>
+                    <el-button class="button-light" @click="resetForm" disabled>Cancel</el-button>
                 </el-form-item>
             </div>
         </el-form>
@@ -60,8 +60,8 @@
 
                 <div class="clearfix">
                     <el-form-item class="footer">
-                        <el-button type="primary" class="button" @click="setAware">Next</el-button>
-                        <el-button @click="resetForm">Cancel</el-button>
+                        <el-button class="button" @click="setAware">Next</el-button>
+                        <el-button class="button-light" @click="resetForm">Cancel</el-button>
                     </el-form-item>
                 </div>
         </el-form>
@@ -86,8 +86,8 @@
 
                 <div class="clearfix">
                     <el-form-item class="footer">
-                        <el-button type="primary" class="button" @click="setShared">Next</el-button>
-                        <el-button @click="resetForm">Cancel</el-button>
+                        <el-button class="button" @click="setShared">Next</el-button>
+                        <el-button class="button-light" @click="resetForm">Cancel</el-button>
                     </el-form-item>
                 </div>
         </el-form>
@@ -112,8 +112,8 @@
 
                 <div class="clearfix">
                     <el-form-item class="footer">
-                        <el-button type="primary" class="button" @click="setPartners">Next</el-button>
-                        <el-button @click="resetForm">Cancel</el-button>
+                        <el-button class="button" @click="setPartners">Next</el-button>
+                        <el-button class="button-light" @click="resetForm">Cancel</el-button>
                     </el-form-item>
                 </div>
         </el-form>
@@ -130,10 +130,10 @@
             <div class="clearfix">
                 <el-form-item class="footer">
                     <span class="margin-right">
-                        <el-button type="primary" class="button" @click="onSubmit()" @submit.prevent="onSubmit()">Submit</el-button>
+                        <el-button class="button" @click="onSubmit()" @submit.prevent="onSubmit()">Submit</el-button>
                     </span>
 
-                    <el-button @click="resetForm">Cancel</el-button>
+                    <el-button class="button-light" @click="resetForm">Cancel</el-button>
                 </el-form-item>
             </div>
 
@@ -446,9 +446,7 @@ export default {
     .button-container {
         display: inline;
     }
-    .button {
-        background-color: #1aad8d;
-    }
+    
     .custom-label {
         text-align: right;
         float: left;
