@@ -4176,6 +4176,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4321,12 +4327,13 @@ __webpack_require__.r(__webpack_exports__);
       opened: false,
       renderComponent: true,
       dragging: false,
-      zoom: 50,
+      zoom: 20,
       fontSize: 25,
-      nodeSize: 25,
+      nodeSize: 35,
       force: 5000,
       networkX: 0,
       networkY: 0,
+      center: true,
       selected: {},
       linksSelected: {},
       connections: [],
@@ -4521,10 +4528,12 @@ __webpack_require__.r(__webpack_exports__);
     options: function options() {
       return {
         canvas: false,
-        force: this.force,
+        force: 2200,
+        //force: this.force,
+        //size: { w: window.innerWidth - 20, h: window.innerHeight - 10 },
         size: {
-          w: window.innerWidth - 20,
-          h: window.innerHeight - 10
+          w: 5000,
+          h: 5000
         },
         offset: {
           x: this.networkX,
@@ -4549,7 +4558,7 @@ __webpack_require__.r(__webpack_exports__);
       this.$notify.info({
         title: "CCVO's annual Connections conference",
         dangerouslyUseHTMLString: true,
-        message: "Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020? <a href='https://www.hellokrd.net/' target='_blank'>Enter</a>",
+        message: "Thanks for participating! To be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020, <a href='https://www.hellokrd.net/' target='_blank'>Click Here</a> (link opens in new window).",
         duration: 0
       });
     },
@@ -6534,7 +6543,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".header[data-v-63cd6604] {\n  background-color: white;\n  height: 100px;\n}\n.header .logo[data-v-63cd6604] {\n  position: absolute;\n  top: 5px;\n  left: 10px;\n}\nh1[data-v-63cd6604] {\n  color: #1aad8d;\n}\nh3[data-v-63cd6604], h4[data-v-63cd6604], p[data-v-63cd6604] {\n  text-align: left !important;\n}\n.container[data-v-63cd6604] {\n  margin-top: 50px !important;\n  display: flex;\n  flex: 11 auto;\n  flex-direction: column;\n  max-width: 50%;\n  margin: auto;\n}\n.main[data-v-63cd6604] {\n  margin: auto;\n}\n.hero-button[data-v-63cd6604] {\n  width: 200px;\n  height: 50px;\n  font-size: 18px;\n  font-weight: 400;\n}\na[data-v-63cd6604] {\n  text-decoration: none;\n  color: white;\n}\na[data-v-63cd6604]:hover {\n  color: white;\n}", ""]);
+exports.push([module.i, ".header[data-v-63cd6604] {\n  background-color: white;\n  height: 100px;\n}\n.header .logo[data-v-63cd6604] {\n  float: left;\n  margin: -6px 0 12px 25px;\n}\n.header .logo-right[data-v-63cd6604] {\n  float: right;\n  margin-right: 10px;\n}\nh1[data-v-63cd6604] {\n  color: #1aad8d;\n  width: 80%;\n  margin: auto;\n  float: left;\n  padding-top: 20px;\n}\nh3[data-v-63cd6604], h4[data-v-63cd6604], p[data-v-63cd6604] {\n  text-align: left !important;\n}\n.container[data-v-63cd6604] {\n  margin-top: 50px !important;\n  display: flex;\n  flex: 11 auto;\n  flex-direction: column;\n  max-width: 50%;\n  margin: auto;\n}\n.main[data-v-63cd6604] {\n  margin: auto;\n}\n.hero-button[data-v-63cd6604] {\n  width: 200px;\n  height: 50px;\n  font-size: 18px;\n  font-weight: 400;\n}\na[data-v-63cd6604] {\n  text-decoration: none;\n  color: white;\n}\na[data-v-63cd6604]:hover {\n  color: white;\n}", ""]);
 
 // exports
 
@@ -73931,14 +73940,17 @@ var render = function() {
         _c("el-card", [
           _c("img", {
             staticClass: "logo",
-            attrs: { alt: "ABCD logo", src: __webpack_require__(/*! ../assets/abcd-logo.png */ "./resources/js/assets/abcd-logo.png") }
+            staticStyle: { width: "86px" },
+            attrs: { alt: "KRD logo", src: __webpack_require__(/*! ../assets/krd-logo.png */ "./resources/js/assets/krd-logo.png") }
           }),
           _vm._v(" "),
-          _c("h1", [
-            _vm._v(
-              "KRD Consulting Group: Organizational Social Network Analysis"
-            )
-          ])
+          _c("h1", [_vm._v("Organizational Social Network App")]),
+          _vm._v(" "),
+          _c("img", {
+            staticClass: "logo-right",
+            staticStyle: { width: "86px" },
+            attrs: { alt: "CCVO logo", src: __webpack_require__(/*! ../assets/ccvo-logo.png */ "./resources/js/assets/ccvo-logo.png") }
+          })
         ])
       ],
       1
@@ -73948,31 +73960,20 @@ var render = function() {
       "div",
       { staticClass: "container" },
       [
-        _c("h3", [_vm._v("Welcome to CCVO’s member network survey!")]),
+        _c("h2", [_vm._v("Welcome to CCVO’s member network builder!")]),
         _vm._v(" "),
-        _c("p", [
+        _vm._m(0),
+        _vm._v(" "),
+        _vm._m(1),
+        _vm._v(" "),
+        _c("p", { staticStyle: { "line-spacing": "1.1em" } }, [
           _vm._v(
-            "\n            Thank you for taking part in this important survey to determine the value of CCVO membership in the community. \n            With your help we’ll be creating a network map – the first of its kind – of the connections among and beyond \n            CCVO members. We’ll ask a couple of introductory questions, and three questions specific to your networks. \n            Please take no more than two minutes per question to note up to ten organizations that come to mind. At the \n            end, be sure to enter your contact info to be entered to win a ticket to CCVO’s 9th annual Connections Conference \n            in April 2020 (a $199 value).\n        "
+            '\n                Please enter organizational names only \n                (except for individual members, where your name is your "organization").\n        '
           )
         ]),
         _vm._v(" "),
-        _c("p", [
-          _vm._v(
-            "\n            Your responses will help us identify new ways to connect CCVO members and increase the value of your membership. \n            Please be assured, your responses are confidential, only the name of your organization will be included in the \n            final network map.\n        "
-          )
-        ]),
-        _vm._v(" "),
-        _c("p", [_vm._v("With thanks,")]),
-        _vm._v(" "),
-        _c("h4", [_vm._v("Roman Katsnelson")]),
-        _vm._v(" "),
-        _c("h4", [_vm._v("KRD Consulting Group")]),
-        _vm._v(" "),
-        _c("p", [
-          _vm._v(
-            "Questions about this survey? Please contact me at roman@hellokrd.net"
-          )
-        ]),
+        _vm._m(2),
+        _c("p"),
         _vm._v(" "),
         _c(
           "router-link",
@@ -73989,7 +73990,64 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticStyle: { "line-spacing": "1.1em" } }, [
+      _c("b", [_vm._v("Have you ever wondered what your network looks like?")]),
+      _vm._v(" "),
+      _c("br"),
+      _c("br"),
+      _vm._v(
+        "We are working to find out! This sector-level Social Network Analysis will\n                not only let you visualize Calgary's non-profit network in a fun way, but will help us learn about some of its\n                key attributes. Where is there existing density, and where could new connections be helpful?\n                Where does information flow freely, and where are there bottlenecks? What are some key\n                leverage points for sector-level action?\n        "
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticStyle: { "line-spacing": "1.1em" } }, [
+      _vm._v("\n            Have a look below - answer some questions about "),
+      _c("i", [_vm._v("your")]),
+      _vm._v(
+        " connections and see where you land in Calgary's network at the end.\n        "
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _c("i", [
+        _vm._v(
+          "With questions about this survey or app, please get in touch with \n                "
+        ),
+        _c(
+          "a",
+          {
+            staticStyle: { color: "orange" },
+            attrs: { href: "mailto:roman@hellokrd.net" }
+          },
+          [_vm._v("Roman @ KRD")]
+        ),
+        _vm._v(" or \n                "),
+        _c(
+          "a",
+          {
+            staticStyle: { color: "orange" },
+            attrs: { href: "mailto:dsilver@calgarycvo.org" }
+          },
+          [_vm._v("Dana @ CCVO")]
+        )
+      ]),
+      _vm._v(".\n        ")
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -74017,19 +74075,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "div",
-        {
-          attrs: { id: "network-container" },
-          on: {
-            mousedown: _vm.startDrag,
-            mousemove: function($event) {
-              return _vm.drag($event)
-            },
-            mouseup: _vm.stopDrag,
-            wheel: function($event) {
-              return _vm.handleZoom($event)
-            }
-          }
-        },
+        { attrs: { id: "network-container" } },
         [
           _c("d3-network", {
             ref: "net",
@@ -90613,14 +90659,25 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/assets/abcd-logo.png":
+/***/ "./resources/js/assets/ccvo-logo.png":
 /*!*******************************************!*\
-  !*** ./resources/js/assets/abcd-logo.png ***!
+  !*** ./resources/js/assets/ccvo-logo.png ***!
   \*******************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/images/abcd-logo.png?2db7d341b1269b50f59508a554ad0f33";
+module.exports = "/images/ccvo-logo.png?3b10651aa062b94a7d0f995038fc0e79";
+
+/***/ }),
+
+/***/ "./resources/js/assets/krd-logo.png":
+/*!******************************************!*\
+  !*** ./resources/js/assets/krd-logo.png ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/krd-logo.png?676804375020bb1ac391821058745db9";
 
 /***/ }),
 
@@ -91308,7 +91365,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\OSNApp\resources\js\main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! /var/www/osnapp/OSNApp/resources/js/main.js */"./resources/js/main.js");
 
 
 /***/ })

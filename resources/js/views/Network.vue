@@ -5,8 +5,8 @@
                 <h1>Organizational Social Network Analysis</h1>
             </header>
 
-            <!--  -->
-            <div id="network-container" @mousedown="startDrag" @mousemove="drag($event)" @mouseup="stopDrag" @wheel="handleZoom($event)">
+            <!-- @mousedown="startDrag" @mousemove="drag($event)" @mouseup="stopDrag" @wheel="handleZoom($event)" -->
+            <div id="network-container">
                 <d3-network ref='net'
                     :net-nodes="nodes"
                     :net-links="links"
@@ -119,12 +119,13 @@ export default {
             opened: false,
             renderComponent: true,
             dragging: false,
-            zoom: 50,
+            zoom: 20,
             fontSize: 25,
-            nodeSize: 25,
+            nodeSize: 35,
             force: 5000,
             networkX: 0,
             networkY: 0,
+            center: true,
             selected: {},
             linksSelected: {},
             connections: [],
@@ -291,8 +292,10 @@ export default {
         options(){
             return{
                 canvas: false,
-                force: this.force,
-                size: { w: window.innerWidth - 20, h: window.innerHeight - 10 },
+                force: 2200,
+                //force: this.force,
+                //size: { w: window.innerWidth - 20, h: window.innerHeight - 10 },
+                size: { w: 5000, h: 5000 },
                 offset: { x: this.networkX, y: this.networkY },
                 fontSize: this.fontSize,
                 nodeSize: this.nodeSize,
@@ -313,7 +316,7 @@ export default {
             this.$notify.info({
                 title: "CCVO's annual Connections conference",
                 dangerouslyUseHTMLString: true,
-                message: "Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020? <a href='https://www.hellokrd.net/' target='_blank'>Enter</a>",
+                message: "Thanks for participating! To be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020, <a href='https://www.hellokrd.net/' target='_blank'>Click Here</a> (link opens in new window).",
                 duration: 0
             });
         },
