@@ -3767,73 +3767,93 @@ __webpack_require__.r(__webpack_exports__);
       this.active = 1;
     },
     setAware: function setAware() {
-      this.awareness.connections = this.awareness.connections.filter(function (connection) {
+      var awareConnections = this.awareness.connections.filter(function (connection) {
         return connection.organization_name != '';
       });
 
-      for (var i = 0; i < this.awareness.connections.length; i++) {
-        this.awareness.connections[i].id = this.nextId;
-        this.awareness.connections[i].connection_type = 'awareness';
-        this.nextId++;
+      for (var i = 0; i < awareConnections.length; i++) {
+        awareConnections[i].id = this.nextId;
+        awareConnections[i].connection_type = 'awareness';
         this.nodes.push({
-          id: this.awareness.connections[i].id,
-          name: this.awareness.connections[i].organization_name
+          id: awareConnections[i].id,
+          name: awareConnections[i].organization_name
         });
         this.links.push({
           sid: this.organization.id,
-          tid: this.awareness.connections[i].id
+          tid: awareConnections[i].id
         });
+        this.nextId++;
       }
 
       axios.post('/api/connections', {
         organization_name: this.organization.organization_name,
         is_member: this.organization.is_member,
-        connections: this.awareness.connections
+        connections: awareConnections
       });
       this.active = 2;
     },
     setShared: function setShared() {
-      this.shared.connections = this.shared.connections.filter(function (connection) {
+      var sharedConnections = this.shared.connections.filter(function (connection) {
         return connection.organization_name != '';
       });
 
-      for (var i = 0; i < this.shared.connections.length; i++) {
-        this.shared.connections[i].id = this.nextId;
-        this.shared.connections[i].connection_type = 'shared knowledge';
-        this.nextId++;
+      for (var i = 0; i < sharedConnections.length; i++) {
+        for (var j = 0; j < this.nodes.length; j++) {
+          if (sharedConnections[i].organization_name.toUpperCase() === this.nodes[j].name.toUpperCase()) {
+            this.links.push({
+              sid: this.organization.id,
+              tid: this.nodes[j].id
+            });
+            sharedConnections.splice(i, 1);
+          }
+        }
+
+        sharedConnections[i].id = this.nextId;
         this.nodes.push({
-          id: this.shared.connections[i].id,
-          name: this.shared.connections[i].organization_name
+          id: sharedConnections[i].id,
+          name: sharedConnections[i].organization_name
         });
         this.links.push({
           sid: this.organization.id,
-          tid: this.shared.connections[i].id
+          tid: sharedConnections[i].id
         });
+        sharedConnections[i].connection_type = 'shared knowledge';
+        this.nextId++;
       }
 
       axios.post('/api/connections', {
         organization_name: this.organization.organization_name,
         is_member: this.organization.is_member,
-        connections: this.shared.connections
+        connections: sharedConnections
       });
       this.active = 3;
     },
     setPartners: function setPartners() {
-      this.partners.connections = this.partners.connections.filter(function (connection) {
+      var partnerConnections = this.partners.connections.filter(function (connection) {
         return connection.organization_name != '';
       });
 
-      for (var i = 0; i < this.partners.connections.length; i++) {
-        this.partners.connections[i].id = this.nextId;
-        this.partners.connections[i].connection_type = 'partnership';
+      for (var i = 0; i < partnerConnections.length; i++) {
+        for (var j = 0; j < this.nodes.length; j++) {
+          if (partnerConnections[i].organization_name.toUpperCase() === this.nodes[j].name.toUpperCase()) {
+            this.links.push({
+              sid: this.organization.id,
+              tid: this.nodes[j].id
+            });
+            partnerConnections.splice(i, 1);
+          }
+        }
+
+        partnerConnections[i].id = this.nextId;
+        partnerConnections[i].connection_type = 'partnership';
         this.nextId++;
         this.nodes.push({
-          id: this.partners.connections[i].id,
-          name: this.partners.connections[i].organization_name
+          id: partnerConnections[i].id,
+          name: partnerConnections[i].organization_name
         });
         this.links.push({
           sid: this.organization.id,
-          tid: this.partners.connections[i].id
+          tid: partnerConnections[i].id
         });
       }
 
@@ -3852,7 +3872,7 @@ __webpack_require__.r(__webpack_exports__);
     checkExistingNodes: function checkExistingNodes() {
       for (var i = 0; i < this.nodes.length; i++) {
         for (var j = 0; j < this.connections.length; j++) {
-          if (this.nodes[i].organization_name.toUpperCase() === this.connections[j].organization_name.toUpperCase()) {
+          if (this.nodes[i].name.toUpperCase() === this.connections[j].organization_name.toUpperCase()) {
             this.links.push({
               sid: this.organization.id,
               tid: this.nodes[i].id
@@ -3879,11 +3899,6 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     },
-    // addConnections() {
-    // 	this.connections = this.connections.concat(this.awareness.connections);
-    // 	this.connections = this.connections.concat(this.shared.connections);
-    // 	this.connections = this.connections.concat(this.partners.connections);
-    // },
 
     /**
      * Submits data to the backend
@@ -4314,6 +4329,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
  // import Selection from './Selection.vue'
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4349,6 +4370,16 @@ __webpack_require__.r(__webpack_exports__);
     });
     axios.get('api/organizations?has_connections=true').then(function (response) {
       _this.organizations = response.data.data;
+    });
+  },
+  mounted: function mounted() {
+    var _this2 = this;
+
+    window.scrollTo(2000, 2000);
+    this.$nextTick(function () {
+      setTimeout(function () {
+        _this2.secureNodePlacement();
+      }, 8000);
     });
   },
   computed: {
@@ -4528,12 +4559,12 @@ __webpack_require__.r(__webpack_exports__);
     options: function options() {
       return {
         canvas: false,
-        force: 2200,
-        //force: this.force,
+        //force: 2200,
+        force: this.force,
         //size: { w: window.innerWidth - 20, h: window.innerHeight - 10 },
         size: {
-          w: 5000,
-          h: 5000
+          w: 4000,
+          h: 4000
         },
         offset: {
           x: this.networkX,
@@ -4542,18 +4573,34 @@ __webpack_require__.r(__webpack_exports__);
         fontSize: this.fontSize,
         nodeSize: this.nodeSize,
         nodeLabels: true,
-        linkLabels: true // forces: {
-        //     Center: true,
-        //     X: 0,
-        //     Y: 0,
-        //     ManyBody: false,
-        //     Link: false,
-        // },
-
+        linkLabels: true
       };
     }
   },
   methods: {
+    nodeClick: function nodeClick(event, node) {
+      this.pinNode(node);
+    },
+    secureNodePlacement: function secureNodePlacement() {
+      for (var i = 0; i < this.nodes.length; i++) {
+        this.nodes[i].pinned = true;
+        this.nodes[i].fx = this.nodes[i].x;
+        this.nodes[i].fy = this.nodes[i].y;
+      }
+    },
+    freeNodePlacement: function freeNodePlacement() {
+      for (var i = 0; i < this.nodes.length; i++) {
+        this.nodes[i].pinned = false;
+        this.nodes[i].fx = null;
+        this.nodes[i].fy = null;
+      }
+    },
+    selection: function selection() {
+      return {
+        nodes: this.selected,
+        links: this.linksSelected
+      };
+    },
     raffle: function raffle() {
       this.$notify.info({
         title: "CCVO's annual Connections conference",
@@ -4573,6 +4620,7 @@ __webpack_require__.r(__webpack_exports__);
       window.location.pathname = '/';
     },
     handleZoom: function handleZoom($event) {
+      this.freeNodePlacement();
       this.fontSize = this.zoom / 1.5;
       this.nodeSize = this.zoom / 1.5;
       this.force = this.zoom * 300;
@@ -4589,6 +4637,18 @@ __webpack_require__.r(__webpack_exports__);
     },
     stopDrag: function stopDrag() {
       this.dragging = false;
+    },
+    pinNode: function pinNode(node) {
+      // if (!node.pinned) {
+      node.pinned = true;
+      node.fx = node.x;
+      node.fy = node.y; // } else {
+      //     node.pinned = false
+      //     node.fx = null
+      //     node.fy = null
+      // }
+
+      this.nodes[node.index] = node;
     }
   }
 });
@@ -6562,7 +6622,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ":root {\n  --light-blue: #7AD5FF;\n  --blue: #4169E1;\n  --olive: #808000;\n  --light-green: #98FB98;\n  --green: #2E8B57;\n  --slate-gray: #2F4F4F;\n  --light-teal: #33FFBD;\n  --dark-teal: #008080;\n  --pink: #EE82EE;\n  --dark-pink: #C00086;\n  --purple: #8B008B;\n  --light-purple: #E8ABFF;\n  --orange: #FF5733;\n  --yellow: #FFD700;\n  --tan: #D2B48C;\n  --brown: #8B4513;\n  --red: #DC143C;\n}\n.title {\n  width: 100%;\n  position: fixed;\n}\n.raffle-container {\n  width: 40%;\n  margin: 0 auto;\n}\n#network-container {\n  cursor: grab;\n}\n#network-container:active {\n  cursor: grabbing;\n}\n.toggle-enter-active {\n  transition: 1s ease;\n}\n.toggle-leave-active {\n  transition: 1s ease;\n}\n.toggle-enter, .toggle-leave-to {\n  transform: translateX(-100%);\n  /* opacity: 0; */\n}\n.main h1 {\n  color: #1aad8d !important;\n}\n.text {\n  font-size: 14px;\n}\n.item {\n  margin-bottom: 18px;\n}\n.clearfix:before,\n.clearfix:after {\n  display: table;\n  content: \"\";\n}\n.clearfix:after {\n  clear: both;\n}\n.menu-card-container {\n  position: fixed !important;\n  top: 0;\n  left: 0;\n}\n.menu-card-container .menu-button {\n  float: left !important;\n  position: fixed;\n  top: 25px !important;\n  left: 40px;\n}\n.menu-button {\n  color: white;\n  background-color: #1aad8d;\n}\n.menu-button:hover {\n  color: #1aad8d;\n  background-color: #D5F0EA;\n}\n.menu-card {\n  width: 380px;\n}\n.menu-title {\n  margin-top: 10px;\n  margin-bottom: 10px;\n  color: #1aad8d;\n  font-weight: 800;\n  font-size: 16;\n}\n.circle {\n  height: 15px;\n  width: 15px;\n  display: inline-block;\n  border-radius: 50%;\n}\n.legend-text {\n  float: left !important;\n}", ""]);
+exports.push([module.i, ":root {\n  --light-blue: #7AD5FF;\n  --blue: #4169E1;\n  --olive: #808000;\n  --light-green: #98FB98;\n  --green: #2E8B57;\n  --slate-gray: #2F4F4F;\n  --light-teal: #33FFBD;\n  --dark-teal: #008080;\n  --pink: #EE82EE;\n  --dark-pink: #C00086;\n  --purple: #8B008B;\n  --light-purple: #E8ABFF;\n  --orange: #FF5733;\n  --yellow: #FFD700;\n  --tan: #D2B48C;\n  --brown: #8B4513;\n  --red: #DC143C;\n}\n.title {\n  width: 100%;\n  position: fixed;\n}\n.raffle-container {\n  width: 40%;\n  margin: 0 auto;\n}\n.toggle-enter-active {\n  transition: 1s ease;\n}\n.toggle-leave-active {\n  transition: 1s ease;\n}\n.toggle-enter, .toggle-leave-to {\n  transform: translateX(-100%);\n  /* opacity: 0; */\n}\n.main h1 {\n  color: #1aad8d !important;\n}\n.text {\n  font-size: 14px;\n}\n.item {\n  margin-bottom: 18px;\n}\n.clearfix:before,\n.clearfix:after {\n  display: table;\n  content: \"\";\n}\n.clearfix:after {\n  clear: both;\n}\n.menu-card-container {\n  position: fixed !important;\n  top: 0;\n  left: 0;\n}\n.menu-card-container .menu-button {\n  float: left !important;\n  position: fixed;\n  top: 25px !important;\n  left: 40px;\n}\n.menu-button {\n  color: white;\n  background-color: #1aad8d;\n}\n.menu-button:hover {\n  color: #1aad8d;\n  background-color: #D5F0EA;\n}\n.menu-card {\n  width: 380px;\n}\n.menu-title {\n  margin-top: 10px;\n  margin-bottom: 10px;\n  color: #1aad8d;\n  font-weight: 800;\n  font-size: 16;\n}\n.circle {\n  height: 15px;\n  width: 15px;\n  display: inline-block;\n  border-radius: 50%;\n}\n.legend-text {\n  float: left !important;\n}", ""]);
 
 // exports
 
@@ -74082,8 +74142,10 @@ var render = function() {
             attrs: {
               "net-nodes": _vm.nodes,
               "net-links": _vm.links,
-              options: _vm.options
-            }
+              options: _vm.options,
+              selection: { nodes: _vm.selected, links: _vm.linksSelected }
+            },
+            on: { "node-click": _vm.nodeClick }
           })
         ],
         1
@@ -74179,7 +74241,8 @@ var render = function() {
                       on: {
                         input: function($event) {
                           return _vm.handleZoom($event)
-                        }
+                        },
+                        change: _vm.secureNodePlacement
                       },
                       model: {
                         value: _vm.zoom,
@@ -91365,7 +91428,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /var/www/osnapp/OSNApp/resources/js/main.js */"./resources/js/main.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\OSNApp\resources\js\main.js */"./resources/js/main.js");
 
 
 /***/ })

@@ -154,7 +154,7 @@ export default {
         this.$nextTick(() => {
             setTimeout(() => {
                 this.secureNodePlacement(); 
-            }, 15000)
+            }, 8000)
         })
     },
     computed:{
