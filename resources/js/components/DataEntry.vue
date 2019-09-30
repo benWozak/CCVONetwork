@@ -217,83 +217,102 @@ export default {
             this.active = 1;
         },
         setAware() {
-			this.awareness.connections = this.awareness.connections.filter((connection) => {
+			const awareConnections = this.awareness.connections.filter((connection) => {
 				return connection.organization_name != '';
-			});
+            });
 
-            for(let i = 0; i < this.awareness.connections.length; i++) {
-                this.awareness.connections[i].id = this.nextId;
-                this.awareness.connections[i].connection_type = 'awareness';
-                this.nextId++;
+            for(let i = 0; i < awareConnections.length; i++) {
+                awareConnections[i].id = this.nextId;
+                awareConnections[i].connection_type = 'awareness';
 
                 this.nodes.push({
-                    id: this.awareness.connections[i].id,
-                    name: this.awareness.connections[i].organization_name
+                    id: awareConnections[i].id,
+                    name: awareConnections[i].organization_name
                 });
 
                 this.links.push({
                     sid: this.organization.id,
-                    tid: this.awareness.connections[i].id
+                    tid: awareConnections[i].id
                 });
 
+                this.nextId++;
             }
 
             axios.post('/api/connections', {
                 organization_name: this.organization.organization_name,
                 is_member: this.organization.is_member,
-                connections: this.awareness.connections
+                connections: awareConnections
             });
 
             this.active = 2;
         },
         setShared() {
-            this.shared.connections = this.shared.connections.filter((connection) => {
+            const sharedConnections = this.shared.connections.filter((connection) => {
 				return connection.organization_name != '';
-			});
+            });
+           
 
-			for(let i = 0; i < this.shared.connections.length; i++) {
-                    this.shared.connections[i].id = this.nextId;
-                    this.shared.connections[i].connection_type = 'shared knowledge';
-					this.nextId++;
-
+			for(let i = 0; i < sharedConnections.length; i++) {
+                for(let j = 0; j < this.nodes.length; j++) {
+                    if(sharedConnections[i].organization_name.toUpperCase() === 
+                        this.nodes[j].name.toUpperCase()) {
+                            this.links.push({
+                                sid: this.organization.id, tid: this.nodes[j].id
+                            })
+                            sharedConnections.splice(i, 1)
+                    }
+                }   
+                    sharedConnections[i].id = this.nextId;
                     this.nodes.push({
-                        id: this.shared.connections[i].id,
-                        name: this.shared.connections[i].organization_name,
+                        id: sharedConnections[i].id,
+                        name: sharedConnections[i].organization_name,
                     });
 
                     this.links.push({
                         sid: this.organization.id,
-                        tid: this.shared.connections[i].id,
+                        tid: sharedConnections[i].id,
                     });
+
+                sharedConnections[i].connection_type = 'shared knowledge';
+                this.nextId++;
             }
 
             axios.post('/api/connections', {
                 organization_name: this.organization.organization_name,
                 is_member: this.organization.is_member,
-                connections: this.shared.connections
+                connections: sharedConnections
             });
 
             this.active = 3;
         },
         setPartners() {
-    		this.partners.connections = this.partners.connections.filter((connection) => {
+    		const partnerConnections = this.partners.connections.filter((connection) => {
 				return connection.organization_name != '';
 			});
 
 
-			for(let i = 0; i < this.partners.connections.length; i++) {
-                this.partners.connections[i].id = this.nextId;
-                this.partners.connections[i].connection_type = 'partnership';
+			for(let i = 0; i < partnerConnections.length; i++) {
+                for(let j = 0; j < this.nodes.length; j++) {
+                    if(partnerConnections[i].organization_name.toUpperCase() === 
+                        this.nodes[j].name.toUpperCase()) {
+                            this.links.push({
+                                sid: this.organization.id, tid: this.nodes[j].id
+                            });
+                            partnerConnections.splice(i, 1)
+                    }
+                }
+                partnerConnections[i].id = this.nextId;
+                partnerConnections[i].connection_type = 'partnership';
 				this.nextId++;
 
                 this.nodes.push({
-                    id: this.partners.connections[i].id,
-                    name: this.partners.connections[i].organization_name,
+                    id: partnerConnections[i].id,
+                    name: partnerConnections[i].organization_name,
                 });
 
                 this.links.push({
                     sid: this.organization.id,
-                    tid: this.partners.connections[i].id,
+                    tid: partnerConnections[i].id,
                 })
             }
 
@@ -313,7 +332,7 @@ export default {
         checkExistingNodes(){
             for(let i = 0; i < this.nodes.length; i++) {
                 for(let j = 0; j < this.connections.length; j++) {
-                    if(this.nodes[i].organization_name.toUpperCase() === this.connections[j].organization_name.toUpperCase()) {
+                    if(this.nodes[i].name.toUpperCase() === this.connections[j].organization_name.toUpperCase()) {
                         this.links.push({
                             sid: this.organization.id, tid: this.nodes[i].id
                         })
@@ -340,12 +359,6 @@ export default {
                 })
             }
         },
-
-        // addConnections() {
-		// 	this.connections = this.connections.concat(this.awareness.connections);
-		// 	this.connections = this.connections.concat(this.shared.connections);
-		// 	this.connections = this.connections.concat(this.partners.connections);
-		// },
 
         /**
          * Submits data to the backend

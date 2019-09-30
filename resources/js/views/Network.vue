@@ -11,6 +11,8 @@
                     :net-nodes="nodes"
                     :net-links="links"
                     :options="options"
+                    :selection="{nodes: selected, links: linksSelected}"
+                    @node-click="nodeClick"
                 />
             </div>
         </div>
@@ -26,7 +28,11 @@
                     </div>
                     <div class="block">
                         <span class="menu-title">Zoom</span>
-                        <el-slider :step="10" @input="handleZoom($event)" v-model="zoom"></el-slider>
+                        <el-slider 
+                            :step="10" 
+                            @input="handleZoom($event)" 
+                            v-model="zoom"
+                            @change="secureNodePlacement"></el-slider>
                     </div>
                     <div class="block">
                         <span class="menu-title">Sub-Sector Legend</span>
@@ -142,6 +148,14 @@ export default {
         .then(response => {
             this.organizations = response.data.data
         });
+    },
+    mounted() {
+        window.scrollTo(2000, 2000);
+        this.$nextTick(() => {
+            setTimeout(() => {
+                this.secureNodePlacement(); 
+            }, 15000)
+        })
     },
     computed:{
 
@@ -292,26 +306,42 @@ export default {
         options(){
             return{
                 canvas: false,
-                force: 2200,
-                //force: this.force,
+                //force: 2200,
+                force: this.force,
                 //size: { w: window.innerWidth - 20, h: window.innerHeight - 10 },
-                size: { w: 5000, h: 5000 },
+                size: { w: 4000, h: 4000 },
                 offset: { x: this.networkX, y: this.networkY },
                 fontSize: this.fontSize,
                 nodeSize: this.nodeSize,
                 nodeLabels: true,
                 linkLabels: true,
-                // forces: {
-                //     Center: true,
-                //     X: 0,
-                //     Y: 0,
-                //     ManyBody: false,
-                //     Link: false,
-                // },
             }
         },
     },
     methods: {
+        nodeClick(event, node) {
+            this.pinNode(node)
+        },
+        secureNodePlacement() {
+            for(let i = 0; i < this.nodes.length; i++) {
+                this.nodes[i].pinned = true;
+                this.nodes[i].fx = this.nodes[i].x
+                this.nodes[i].fy = this.nodes[i].y
+            }
+        },
+        freeNodePlacement() {
+            for(let i = 0; i < this.nodes.length; i++) {
+                this.nodes[i].pinned = false;
+                this.nodes[i].fx = null;
+                this.nodes[i].fy = null;
+            }
+        },
+        selection () {
+            return {
+                nodes: this.selected,
+                links: this.linksSelected
+            }
+        },
         raffle() {
             this.$notify.info({
                 title: "CCVO's annual Connections conference",
@@ -331,6 +361,7 @@ export default {
             window.location.pathname = '/';
         },
         handleZoom($event) {
+            this.freeNodePlacement();
             this.fontSize = this.zoom / 1.5;
             this.nodeSize = this.zoom / 1.5;
             this.force = this.zoom * 300;
@@ -347,7 +378,19 @@ export default {
         },
         stopDrag() {
             this.dragging = false;
-        }
+        },
+        pinNode (node) {
+            // if (!node.pinned) {
+                node.pinned = true
+                node.fx = node.x
+                node.fy = node.y
+            // } else {
+            //     node.pinned = false
+            //     node.fx = null
+            //     node.fy = null
+            // }
+            this.nodes[node.index] = node
+        },
 
     }
 };
@@ -366,12 +409,12 @@ export default {
     margin: 0 auto;
 }
 
-#network-container {
-    cursor: grab;
-}
-#network-container:active {
-    cursor: grabbing
-}
+// #network-container {
+//     cursor: grab;
+// }
+// #network-container:active {
+//     cursor: grabbing
+// }
 
 .toggle-enter-active {
     transition: 1s ease;
@@ -441,8 +484,6 @@ export default {
     width: 15px;
     display: inline-block;
     border-radius: 50%;
-    // padding: 10px;
-    // margin-left: 30px;
 }
 .legend-text {
     float: left !important;
