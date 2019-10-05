@@ -19,9 +19,18 @@ class ConnectionController extends Controller
     	];
     }
 
+    
+    public function myEloquentNetwork($id) {
+        $myContactIDs = Connection::where('host_id',$id)->get()->pluck('contact_id')->toArray();
+        array_push($myContactIDs,$id);
+        return [
+            'data' => Connection::wherein('host_id',$myContactIDs)->get()
+        ];
+    }
+    
     public function mynetwork($id) {
         $returnArray = array();
-        $myContacts = Connection::where('host_id',$id)->get();
+        $myContact = Connection::where('host_id',$id)->get();
         $returnArray['data'] = $myContacts;
         
         foreach ($myContacts->toArray() as $contactData) {
