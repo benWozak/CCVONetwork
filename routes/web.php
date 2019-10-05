@@ -12,4 +12,4 @@ Route::get('/api/organizations', 'OrganizationController@index');
 
 Route::get('/api/connections', 'ConnectionController@index');
 Route::post('/api/connections', 'ConnectionController@store');
-Route::get('/api/mynetwork{id}', 'ConnectionController@mynetwork');
+Route::get('/api/mynetwork/{id}', 'ConnectionController@mynetwork');
