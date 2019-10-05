@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Organization extends Model
 {
     protected $guarded = [];
-    
-	protected $searchColumns = ['name'];
+    protected $searchColumns = ['name']; 
 
     public function subsector()
     {

@@ -19,6 +19,21 @@ class ConnectionController extends Controller
     	];
     }
 
+    public function mynetwork($id) {
+        $returnArray = array();
+        $myContacts = Connection::where('host_id',$id)->get();
+        $returnArray['data'] = $myContacts;
+        
+        foreach ($myContacts->toArray() as $contactData) {
+            $hostID = $contactData['contact_id'];
+            $hostContacts = Connection::where('host_id',$hostID)->get();
+            $mergedCollection = $returnArray['data']->toBase()->merge($hostContacts);
+            $returnArray['data'] = $mergedCollection;
+        }
+        
+        return $returnArray;
+    }
+    
     public function store(StoreConnection $request)
     {
 
