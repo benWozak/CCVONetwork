@@ -3,6 +3,17 @@
         <div class="main">
             <header class="title">
                 <h1>Organizational Social Network Analysis</h1>
+                <network-menu>
+                    <template  v-slot:block>
+                        <span class="menu-title">Zoom</span>
+                        <el-slider 
+                            :step="10" 
+                            @input="handleZoom($event)" 
+                            v-model="zoom"
+                            @change="secureNodePlacement">
+                        </el-slider>
+                    </template>
+                </network-menu>
             </header>
 
             <!-- @mousedown="startDrag" @mousemove="drag($event)" @mouseup="stopDrag" @wheel="handleZoom($event)" -->
@@ -17,112 +28,21 @@
             </div>
         </div>
 
-        <div class="menu-card-container">
-            <el-button class="menu-button" v-show="!opened"  @click="toggle">Menu</el-button>
-            <transition name="toggle">
-                <el-card class="menu-card" v-show="opened">
-                    <div slot="header" class="clearfix">
-                        <el-button style="float: left; padding: 3px 0; color: #1aad8d; font-size: 2rem;" type="text" icon="el-icon-s-home" @click="goToHome"></el-button>
-                        <span class="menu-title">Menu</span>
-                        <el-button style="float: right; padding: 3px 0; color: #1aad8d; font-weight:1000" type="text" @click="hide">X</el-button>
-                    </div>
-                    <div class="block">
-                        <span class="menu-title">Zoom</span>
-                        <el-slider 
-                            :step="10" 
-                            @input="handleZoom($event)" 
-                            v-model="zoom"
-                            @change="secureNodePlacement"></el-slider>
-                    </div>
-                    <div class="block">
-                        <span class="menu-title">Sub-Sector Legend</span>
-                        <el-row :gutter="20">
-                            <el-col :span="4"><div class="circle" style="background-color: var(--light-blue);" /></el-col>
-                            <el-col :span="16"><span class="legend-text"> Environment & Animal Welfare</span></el-col>
-                        </el-row>
-                        <el-row :gutter="20">
-                            <el-col :span="4"><div class="circle" style="background-color: var(--blue);" /> </el-col>
-                            <el-col :span="16"><span class="legend-text">Social Services</span></el-col>
-                        </el-row>
-                        <el-row :gutter="20">
-                            <el-col :span="4"><div class="circle" style="background-color: var(--olive);" /> </el-col>
-                            <el-col :span="16"><span class="legend-text">Housing</span></el-col>
-                        </el-row>
-                        <el-row :gutter="20">
-                            <el-col :span="4"><div class="circle" style="background-color: var(--light-green);" /></el-col>
-                            <el-col :span="16"><span class="legend-text">Arts & Culture</span></el-col>
-                        </el-row>
-                        <el-row :gutter="20">
-                            <el-col :span="4"><div class="circle" style="background-color: var(--slate-gray);" /></el-col>
-                            <el-col :span="16"><span class="legend-text">Business & Professional</span></el-col>
-                        </el-row>
-                        <el-row :gutter="20">
-                            <el-col :span="4"><div class="circle" style="background-color: var(--dark-teal);" /></el-col>
-                            <el-col :span="16"><span class="legend-text">Individual</span></el-col>
-                        </el-row>
-                        <el-row :gutter="20">
-                            <el-col :span="4"><div class="circle" style="background-color: var(--pink);" /></el-col>
-                            <el-col :span="16"><span class="legend-text">Health</span></el-col>
-                        </el-row>
-                        <el-row :gutter="20">
-                            <el-col :span="4"><div class="circle" style="background-color: var(--dark-pink);" /></el-col>
-                            <el-col :span="16"><span class="legend-text">Development</span></el-col>
-                        </el-row>
-                        <el-row :gutter="20">
-                            <el-col :span="4"><div class="circle" style="background-color: var(--purple);" /></el-col>
-                            <el-col :span="16"><span class="legend-text">Education & Research</span></el-col>
-                        </el-row>
-                        <el-row :gutter="20">
-                            <el-col :span="4"><div class="circle" style="background-color: var(--red);" /></el-col>
-                            <el-col :span="16"><span class="legend-text">Sports & Recreation</span></el-col>
-                        </el-row>
-                        <el-row :gutter="20">
-                            <el-col :span="4"><div class="circle" style="background-color: var(--orange);" /></el-col>
-                            <el-col :span="16"><span class="legend-text">Law & Advocacy</span></el-col>
-                        </el-row>
-                        <el-row :gutter="20">
-                            <el-col :span="4"><div class="circle" style="background-color: var(--yellow);" /></el-col>
-                            <el-col :span="16"><span class="legend-text">Government</span></el-col>
-                        </el-row>
-                        <el-row :gutter="20">
-                            <el-col :span="4"><div class="circle" style="background-color: var(--tan);" /></el-col>
-                            <el-col :span="16"><span class="legend-text">Faith & Religion</span></el-col>
-                        </el-row>
-                        <el-row :gutter="20">
-                            <el-col :span="4"><div class="circle" style="background-color: var(--brown);" /></el-col>
-                            <el-col :span="16"><span class="legend-text">Fundraising & Volunteerism</span></el-col>
-                        </el-row>
-                        <el-row :gutter="20">
-                            <el-col :span="4"><div class="circle" style="background-color: var(--green);" /></el-col>
-                            <el-col :span="16"><span class="legend-text">International</span></el-col>
-                        </el-row>
-                        <el-row :gutter="20">
-                            <el-col :span="4"><div class="circle" style="background-color: #DCFAF3;" /> </el-col>
-                            <el-col :span="16"><span class="legend-text">Other/Unknown</span></el-col>
-                        </el-row>
-                    </div>
-                </el-card>
-            </transition>
-        </div>
-
     </div>
 </template>
 
 <script>
 import D3Network from 'vue-d3-network'
-// import Selection from './Selection.vue'
-
+import NetworkMenu from '../components/NetworkMenu'
 
 export default {
     name: "network",
     components: {
         D3Network,
-        // Selection
-
+        NetworkMenu,
     },
     data() {
         return {
-            opened: false,
             renderComponent: true,
             dragging: false,
             zoom: 20,
@@ -139,7 +59,6 @@ export default {
         }
     },
     created() {
-        this.raffle();
         axios.get('api/connections')
         .then(response => {
             this.connections = response.data.data;
@@ -322,6 +241,12 @@ export default {
         nodeClick(event, node) {
             this.pinNode(node)
         },
+        handleZoom($event) {
+            this.freeNodePlacement();
+            this.fontSize = this.zoom / 1.5;
+            this.nodeSize = this.zoom / 1.5;
+            this.force = this.zoom * 300;
+        },
         secureNodePlacement() {
             for(let i = 0; i < this.nodes.length; i++) {
                 this.nodes[i].pinned = true;
@@ -342,29 +267,11 @@ export default {
                 links: this.linksSelected
             }
         },
-        raffle() {
-            this.$notify.info({
-                title: "CCVO's annual Connections conference",
-                dangerouslyUseHTMLString: true,
-                message: "Thanks for participating! To be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020, <a href='https://www.hellokrd.net/' target='_blank'>Click Here</a> (link opens in new window).",
-                duration: 0
-            });
-        },
-        toggle() {
-            this.opened = true;
-            this.divWidth = 350;
-        },
-        hide() {
-            this.opened = false
-        },
-        goToHome() {
-            window.location.pathname = '/';
-        },
-        handleZoom($event) {
-            this.freeNodePlacement();
-            this.fontSize = this.zoom / 1.5;
-            this.nodeSize = this.zoom / 1.5;
-            this.force = this.zoom * 300;
+        pinNode (node) {
+            node.pinned = true
+            node.fx = node.x
+            node.fy = node.y
+            this.nodes[node.index] = node
         },
         startDrag($event) {
             // this.startX = $event.offsetX;
@@ -379,19 +286,6 @@ export default {
         stopDrag() {
             this.dragging = false;
         },
-        pinNode (node) {
-            // if (!node.pinned) {
-                node.pinned = true
-                node.fx = node.x
-                node.fy = node.y
-            // } else {
-            //     node.pinned = false
-            //     node.fx = null
-            //     node.fy = null
-            // }
-            this.nodes[node.index] = node
-        },
-
     }
 };
 </script>
@@ -404,10 +298,6 @@ export default {
     position: fixed;
     
 }
-.raffle-container {
-    width: 40%;
-    margin: 0 auto;
-}
 
 // #network-container {
 //     cursor: grab;
@@ -415,78 +305,8 @@ export default {
 // #network-container:active {
 //     cursor: grabbing
 // }
-
-.toggle-enter-active {
-    transition: 1s ease;
-}
-.toggle-leave-active {
-    transition: 1s ease;
-}
-.toggle-enter, .toggle-leave-to {
-    transform: translateX(-100%);
-    /* opacity: 0; */
-}
 .main h1{
     color: #1aad8d !important;
-}
-.text {
-    font-size: 14px;
-  }
-.item {
-    margin-bottom: 18px;
-  }
-
-.clearfix:before,
-.clearfix:after {
-    display: table;
-    content: "";
-}
-.clearfix:after {
-    clear: both
-}
-
-.menu-card-container {
-    position: fixed !important;
-    top: 0;
-    left: 0;
-}
-.menu-card-container .menu-button {
-    float: left !important;
-    position: fixed;
-    top: 25px !important;
-    left: 40px;
-}
-
-.menu-button {
-    color: white;
-    background-color: #1aad8d;
-}
-
-.menu-button:hover {
-    color: #1aad8d;
-    background-color: #D5F0EA;
-}
-
-.menu-card {
-    width: 380px;
-}
-
-.menu-title {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    color: #1aad8d;
-    font-weight: 800;
-    font-size: 16
-}
-
-.circle {
-    height: 15px;
-    width: 15px;
-    display: inline-block;
-    border-radius: 50%;
-}
-.legend-text {
-    float: left !important;
 }
 
 </style>
