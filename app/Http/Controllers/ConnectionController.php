@@ -19,7 +19,7 @@ class ConnectionController extends Controller
     	];
     }
 
-    
+
     public function myEloquentNetwork($id) {
         $myContactIDs = Connection::where('host_id',$id)->get()->pluck('contact_id')->toArray();
         array_push($myContactIDs,$id);
@@ -27,22 +27,22 @@ class ConnectionController extends Controller
             'data' => Connection::wherein('host_id',$myContactIDs)->get()
         ];
     }
-    
+
     public function mynetwork($id) {
         $returnArray = array();
         $myContact = Connection::where('host_id',$id)->get();
         $returnArray['data'] = $myContacts;
-        
+
         foreach ($myContacts->toArray() as $contactData) {
             $hostID = $contactData['contact_id'];
             $hostContacts = Connection::where('host_id',$hostID)->get();
             $mergedCollection = $returnArray['data']->toBase()->merge($hostContacts);
             $returnArray['data'] = $mergedCollection;
         }
-        
+
         return $returnArray;
     }
-    
+
     public function store(StoreConnection $request)
     {
 
@@ -64,11 +64,15 @@ class ConnectionController extends Controller
 	    	);
 
 
-		$host->contacts()->attach(
-			$organization->id, ['connection_type' => $contact['connection_type']]
-		);
+    		$host->contacts()->attach(
+    			$organization->id, ['connection_type' => $contact['connection_type']]
+    		);
 
-	}
+    	}
+
+        return [
+            'data' => $host->load('contacts')
+        ];
 
     }
 }
