@@ -5,7 +5,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    nextId: 0,
+    // nextId: 0,
+    currentId: 0,
     nodes: [], // for individual organizaitions and their connections
     links: [], // for individual organizaitions and their connections
     organizations: [], // for full network of organizaitions and connections
@@ -18,14 +19,19 @@ export default new Vuex.Store({
 
     ADD_LINK: (state, link) => {
       state.links.push(link);
+    },
+
+    SET_CURRENT_ID: (state, payload) => {
+      state.currentId = payload;
     }
   },
   actions: {
-    getConnections() {
-      axios.get('api/connections').then(response => (this.connections = response));
-    },
-    getOrganizations() {
-      axios.get('api/organizations').then(response => (this.connections = response));
-    },
+    
+    // getConnections() {
+    //   axios.get('api/connections').then(response => (this.connections = response));
+    // },
+    // getOrganizations() {
+    //   axios.get('api/organizations').then(response => (this.connections = response));
+    // },
   }
 });

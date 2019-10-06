@@ -23,6 +23,7 @@ html, body {
   
 }
 .button {
+    font-weight: 550;
     background-color: #1aad8d;
     color: white;
 }

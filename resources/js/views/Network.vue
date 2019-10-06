@@ -3,6 +3,7 @@
         <div class="main">
             <header class="title">
                 <h1>Organizational Social Network Analysis</h1>
+                <el-button class="button" @click="goToMyNetwork">Your Network</el-button>
                 <network-menu>
                     <template  v-slot:block>
                         <span class="menu-title">Zoom</span>
@@ -69,11 +70,11 @@ export default {
         });
     },
     mounted() {
-        window.scrollTo(2000, 2000);
+        window.scrollTo(1200, 1500);
         this.$nextTick(() => {
             setTimeout(() => {
                 this.secureNodePlacement(); 
-            }, 8000)
+            }, 5000)
         })
     },
     computed:{
@@ -241,6 +242,9 @@ export default {
         nodeClick(event, node) {
             this.pinNode(node)
         },
+        goToMyNetwork() {
+            this.$router.push("/mynetwork");
+        },
         handleZoom($event) {
             this.freeNodePlacement();
             this.fontSize = this.zoom / 1.5;
@@ -298,7 +302,13 @@ export default {
     position: fixed;
     
 }
-
+.menu-title {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: #1aad8d;
+    font-weight: 800;
+    font-size: 16
+}
 // #network-container {
 //     cursor: grab;
 // }

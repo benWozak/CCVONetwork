@@ -3466,6 +3466,7 @@ function mergeFn (a, b) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 //
 //
 //
@@ -3609,6 +3610,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3753,6 +3755,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     addOrganization: function addOrganization() {
+      var _this2 = this;
+
       this.organization.id = this.nextId;
       this.nodes.push({
         id: this.organization.id,
@@ -3762,6 +3766,10 @@ __webpack_require__.r(__webpack_exports__);
         organization_name: this.organization.organization_name,
         is_member: this.organization.is_member,
         connections: []
+      }).then(function (response) {
+        var id = response.data.data.id;
+
+        _this2.$store.commit('SET_CURRENT_ID', id);
       });
       this.nextId++;
       this.active = 1;
@@ -3904,7 +3912,7 @@ __webpack_require__.r(__webpack_exports__);
      * Submits data to the backend
      */
     onSubmit: function onSubmit() {
-      var _this2 = this;
+      var _this3 = this;
 
       // this.addConnections();
       var data = {
@@ -3913,19 +3921,19 @@ __webpack_require__.r(__webpack_exports__);
         connections: this.connections
       };
       axios.post('/api/connections', data).then(function (response) {
-        _this2.connections = response;
+        _this3.connections = response;
 
-        _this2.resetForm();
+        _this3.resetForm();
 
-        _this2.$router.push("/network");
+        _this3.$router.push("/mynetwork");
 
-        _this2.$message({
+        _this3.$message({
           showClose: true,
           message: 'New Connection Established',
           type: 'success'
         });
       })["catch"](function (response) {
-        _this2.connections = response;
+        _this3.connections = response;
       });
     },
     resetForm: function resetForm() {
@@ -3944,8 +3952,6 @@ __webpack_require__.r(__webpack_exports__);
       this.organization.id = this.nextId;
       this.nextId++;
     }
-  },
-  created: function created() {// this.setIdValues();
   }
 });
 
@@ -3960,6 +3966,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -4157,58 +4165,6 @@ __webpack_require__.r(__webpack_exports__);
         links: this.linksSelected
       };
     }
-  },
-  methods: {// linkClick (event, link) {
-    //     if (this.tool === 'killer') {
-    //         this.removeLink(link)
-    //     } else {
-    //         if (this.linksSelected[link.id]) {
-    //             this.unSelectLink(link.id)
-    //         } else {
-    //             this.selectLink(link)
-    //         }
-    //     }
-    //     this.updateSelection()
-    // },
-    // updateSelection () {
-    //     this.showSelection = (Object.keys(this.selected).length | Object.keys(this.linksSelected).length)
-    // },
-    // clearSelection () {
-    //     this.selected = {}
-    //     this.linksSelected = {}
-    // },
-    // selectNodesLinks () {
-    //     for (let link of this.links) {
-    //         // node is selected
-    //         if (this.selected[link.sid] || this.selected[link.tid]) {
-    //         this.selectLink(link)
-    //         // node is not selected
-    //         } else {
-    //         this.unSelectLink(link.id)
-    //         }
-    //     }
-    // },
-    // selectNode(node) {
-    //     this.selected[node.id] = node
-    // },
-    // selectLink (link) {
-    //     this.$set(this.linksSelected, link.id, link)
-    // },
-    // unSelectNode (nodeId) {
-    //     if (this.selected[nodeId]) {
-    //         delete (this.selected[nodeId])
-    //     }
-    //     this.selectNodesLinks()
-    // },
-    // unSelectLink (linkId) {
-    //     if (this.linksSelected[linkId]) {
-    //         delete (this.linksSelected[linkId])
-    //     }
-    // },
-    // setShowMenu (show) {
-    //     this.showMenu = show
-    //     this.showHint = false
-    // }
   }
 });
 
@@ -4363,6 +4319,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4372,17 +4338,41 @@ __webpack_require__.r(__webpack_exports__);
     NetworkMenu: _components_NetworkMenu__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
-    return {};
+    return {
+      renderComponent: true,
+      dragging: false,
+      zoom: 20,
+      fontSize: 25,
+      nodeSize: 35,
+      force: 5000,
+      networkX: 0,
+      networkY: 0,
+      center: true,
+      selected: {},
+      linksSelected: {},
+      connections: [],
+      organizations: []
+    };
   },
   created: function created() {
+    this.raffle(); // axios.get("api/organizations?has_connections=true").then(response => {
+    //   this.organizations = response.data.data;
+    // });
+
+    axios.get("api/organizations/".concat(this.organizationId, "/network")).then(function (response) {
+      // this.organizations = response.data.data;
+      // this.connections = response.data.data;
+      console.log(response);
+    });
+  },
+  mounted: function mounted() {
     var _this = this;
 
-    this.raffle();
-    axios.get('api/connections').then(function (response) {
-      _this.connections = response.data.data;
-    });
-    axios.get('api/organizations?has_connections=true').then(function (response) {
-      _this.organizations = response.data.data;
+    // window.scrollTo(2000, 2000);
+    this.$nextTick(function () {
+      setTimeout(function () {
+        _this.secureNodePlacement();
+      }, 4000);
     });
   },
   methods: {
@@ -4393,6 +4383,9 @@ __webpack_require__.r(__webpack_exports__);
         message: "Thanks for participating! To be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020, <a href='https://www.hellokrd.net/' target='_blank'>Click Here</a> (link opens in new window).",
         duration: 0
       });
+    },
+    goToNetwork: function goToNetwork() {
+      this.$router.push("/network");
     },
     nodeClick: function nodeClick(event, node) {
       this.pinNode(node);
@@ -4429,6 +4422,199 @@ __webpack_require__.r(__webpack_exports__);
       node.fy = node.y;
       this.nodes[node.index] = node;
     }
+  },
+  computed: {
+    organizationId: {
+      get: function get() {
+        return this.$store.state.currentId;
+      }
+    },
+    nodes: function nodes() {
+      var nodes = [];
+
+      for (var i = 0; i < this.organizations.length; i++) {
+        switch (this.organizations[i].subsector.id) {
+          case 1:
+            // Environment
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--light-blue)"
+            });
+            break;
+
+          case 2:
+            //social services
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--blue)"
+            });
+            break;
+
+          case 3:
+            //housing
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--olive)"
+            });
+            break;
+
+          case 4:
+          case 21:
+            // Art & culture
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--light-green)"
+            });
+            break;
+
+          case 5: // business
+
+          case 14:
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--slate-gray)"
+            });
+            break;
+
+          case 6:
+            // Individual
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--dark-teal)"
+            });
+            break;
+
+          case 7:
+            // health
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--pink)"
+            });
+            break;
+
+          case 8:
+            // development
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--dark-pink)"
+            });
+            break;
+
+          case 9: // education
+
+          case 17:
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--purple)"
+            });
+            break;
+
+          case 10:
+            //sports
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--red)"
+            });
+            break;
+
+          case 12:
+            // law
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--orange)"
+            });
+            break;
+
+          case 13:
+            // government
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--yellow)"
+            });
+            break;
+
+          case 15:
+            // religion
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--tan)"
+            });
+            break;
+
+          case 16:
+            // fundraising and volunteer
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--brown)"
+            });
+            break;
+
+          case 19:
+            //international
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--green)"
+            });
+            break;
+
+          default:
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name
+            });
+            break;
+        }
+      }
+
+      return nodes;
+    },
+    links: function links() {
+      var links = [];
+
+      for (var i = 0; i < this.connections.length; i++) {
+        links.push({
+          sid: this.connections[i].host_id,
+          tid: this.connections[i].contact_id
+        });
+      }
+
+      return links;
+    },
+    options: function options() {
+      return {
+        canvas: false,
+        //force: 2200,
+        force: this.force,
+        size: {
+          w: window.innerWidth,
+          h: window.innerHeight
+        },
+        // size: { w: 1600, h: 900 },
+        offset: {
+          x: this.networkX,
+          y: this.networkY
+        },
+        fontSize: this.fontSize,
+        nodeSize: this.nodeSize,
+        nodeLabels: true,
+        linkLabels: true
+      };
+    }
   }
 });
 
@@ -4446,6 +4632,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_d3_network__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-d3-network */ "./node_modules/vue-d3-network/dist/vue-d3-network.umd.js");
 /* harmony import */ var vue_d3_network__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_d3_network__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_NetworkMenu__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/NetworkMenu */ "./resources/js/components/NetworkMenu.vue");
+//
 //
 //
 //
@@ -4517,11 +4704,11 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this2 = this;
 
-    window.scrollTo(2000, 2000);
+    window.scrollTo(1200, 1500);
     this.$nextTick(function () {
       setTimeout(function () {
         _this2.secureNodePlacement();
-      }, 8000);
+      }, 5000);
     });
   },
   computed: {
@@ -4722,6 +4909,9 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     nodeClick: function nodeClick(event, node) {
       this.pinNode(node);
+    },
+    goToMyNetwork: function goToMyNetwork() {
+      this.$router.push("/mynetwork");
     },
     handleZoom: function handleZoom($event) {
       this.freeNodePlacement();
@@ -6626,7 +6816,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "html, body {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin: 0 auto;\n  background-color: #EEEEEE;\n  height: 100%;\n  width: 100%;\n}\n#app {\n  font-family: \"Avenir\", Helvetica, Arial, sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n}\n.button {\n  background-color: #1aad8d;\n  color: white;\n}\n.button:hover {\n  color: #1aad8d;\n  background-color: #D5F0EA;\n}\n.button-light:hover {\n  color: #1aad8d;\n}", ""]);
+exports.push([module.i, "html, body {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin: 0 auto;\n  background-color: #EEEEEE;\n  height: 100%;\n  width: 100%;\n}\n#app {\n  font-family: \"Avenir\", Helvetica, Arial, sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n}\n.button {\n  font-weight: 550;\n  background-color: #1aad8d;\n  color: white;\n}\n.button:hover {\n  color: #1aad8d;\n  background-color: #D5F0EA;\n}\n.button-light:hover {\n  color: #1aad8d;\n}", ""]);
 
 // exports
 
@@ -6664,7 +6854,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".toggle-enter-active[data-v-7aabf912] {\n  transition: 1s ease;\n}\n.toggle-leave-active[data-v-7aabf912] {\n  transition: 1s ease;\n}\n.toggle-enter[data-v-7aabf912], .toggle-leave-to[data-v-7aabf912] {\n  transform: translateX(-100%);\n}\n.text[data-v-7aabf912] {\n  font-size: 14px;\n}\n.item[data-v-7aabf912] {\n  margin-bottom: 18px;\n}\n.clearfix[data-v-7aabf912]:before,\n.clearfix[data-v-7aabf912]:after {\n  display: table;\n  content: \"\";\n}\n.clearfix[data-v-7aabf912]:after {\n  clear: both;\n}\n.menu-card-container[data-v-7aabf912] {\n  position: fixed !important;\n  top: 0;\n  left: 0;\n}\n.menu-card-container .menu-button[data-v-7aabf912] {\n  float: left !important;\n  position: fixed;\n  top: 25px !important;\n  left: 40px;\n}\n.menu-button[data-v-7aabf912] {\n  color: white;\n  background-color: #1aad8d;\n}\n.menu-button[data-v-7aabf912]:hover {\n  color: #1aad8d;\n  background-color: #D5F0EA;\n}\n.menu-card[data-v-7aabf912] {\n  width: 380px;\n}\n.menu-title[data-v-7aabf912] {\n  margin-top: 10px;\n  margin-bottom: 10px;\n  color: #1aad8d;\n  font-weight: 800;\n  font-size: 16;\n}\n.circle[data-v-7aabf912] {\n  height: 15px;\n  width: 15px;\n  display: inline-block;\n  border-radius: 50%;\n}\n.legend-text[data-v-7aabf912] {\n  float: left !important;\n}", ""]);
+exports.push([module.i, ".toggle-enter-active[data-v-7aabf912] {\n  transition: 1s ease;\n}\n.toggle-leave-active[data-v-7aabf912] {\n  transition: 1s ease;\n}\n.toggle-enter[data-v-7aabf912], .toggle-leave-to[data-v-7aabf912] {\n  transform: translateX(-100%);\n}\n.text[data-v-7aabf912] {\n  font-size: 14px;\n}\n.item[data-v-7aabf912] {\n  margin-bottom: 18px;\n}\n.clearfix[data-v-7aabf912]:before,\n.clearfix[data-v-7aabf912]:after {\n  display: table;\n  content: \"\";\n}\n.clearfix[data-v-7aabf912]:after {\n  clear: both;\n}\n.menu-card-container[data-v-7aabf912] {\n  position: fixed !important;\n  top: 0;\n  left: 0;\n}\n.menu-card-container .menu-button[data-v-7aabf912] {\n  float: left !important;\n  position: fixed;\n  top: 25px !important;\n  left: 40px;\n}\n.menu-button[data-v-7aabf912] {\n  font-weight: 550;\n  color: white;\n  background-color: #1aad8d;\n}\n.menu-button[data-v-7aabf912]:hover {\n  color: #1aad8d;\n  background-color: #D5F0EA;\n}\n.menu-card[data-v-7aabf912] {\n  width: 380px;\n}\n.menu-title[data-v-7aabf912] {\n  margin-top: 10px;\n  margin-bottom: 10px;\n  color: #1aad8d;\n  font-weight: 800;\n  font-size: 16;\n}\n.circle[data-v-7aabf912] {\n  height: 15px;\n  width: 15px;\n  display: inline-block;\n  border-radius: 50%;\n}\n.legend-text[data-v-7aabf912] {\n  float: left !important;\n}", ""]);
 
 // exports
 
@@ -6759,7 +6949,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "[data-v-3a6ebbd3]:root {\n  --light-blue: #7AD5FF;\n  --blue: #4169E1;\n  --olive: #808000;\n  --light-green: #98FB98;\n  --green: #2E8B57;\n  --slate-gray: #2F4F4F;\n  --light-teal: #33FFBD;\n  --dark-teal: #008080;\n  --pink: #EE82EE;\n  --dark-pink: #C00086;\n  --purple: #8B008B;\n  --light-purple: #E8ABFF;\n  --orange: #FF5733;\n  --yellow: #FFD700;\n  --tan: #D2B48C;\n  --brown: #8B4513;\n  --red: #DC143C;\n}\n.title[data-v-3a6ebbd3] {\n  width: 100%;\n  position: fixed;\n}\n.raffle-container[data-v-3a6ebbd3] {\n  width: 40%;\n  margin: 0 auto;\n}\n.toggle-enter-active[data-v-3a6ebbd3] {\n  transition: 1s ease;\n}\n.toggle-leave-active[data-v-3a6ebbd3] {\n  transition: 1s ease;\n}\n.toggle-enter[data-v-3a6ebbd3], .toggle-leave-to[data-v-3a6ebbd3] {\n  transform: translateX(-100%);\n}\n.main h1[data-v-3a6ebbd3] {\n  color: #1aad8d !important;\n}\n.text[data-v-3a6ebbd3] {\n  font-size: 14px;\n}\n.item[data-v-3a6ebbd3] {\n  margin-bottom: 18px;\n}\n.clearfix[data-v-3a6ebbd3]:before,\n.clearfix[data-v-3a6ebbd3]:after {\n  display: table;\n  content: \"\";\n}\n.clearfix[data-v-3a6ebbd3]:after {\n  clear: both;\n}\n.menu-card-container[data-v-3a6ebbd3] {\n  position: fixed !important;\n  top: 0;\n  left: 0;\n}\n.menu-card-container .menu-button[data-v-3a6ebbd3] {\n  float: left !important;\n  position: fixed;\n  top: 25px !important;\n  left: 40px;\n}\n.menu-button[data-v-3a6ebbd3] {\n  color: white;\n  background-color: #1aad8d;\n}\n.menu-button[data-v-3a6ebbd3]:hover {\n  color: #1aad8d;\n  background-color: #D5F0EA;\n}\n.menu-card[data-v-3a6ebbd3] {\n  width: 380px;\n}\n.menu-title[data-v-3a6ebbd3] {\n  margin-top: 10px;\n  margin-bottom: 10px;\n  color: #1aad8d;\n  font-weight: 800;\n  font-size: 16;\n}\n.circle[data-v-3a6ebbd3] {\n  height: 15px;\n  width: 15px;\n  display: inline-block;\n  border-radius: 50%;\n}\n.legend-text[data-v-3a6ebbd3] {\n  float: left !important;\n}", ""]);
+exports.push([module.i, "[data-v-3a6ebbd3]:root {\n  --light-blue: #7AD5FF;\n  --blue: #4169E1;\n  --olive: #808000;\n  --light-green: #98FB98;\n  --green: #2E8B57;\n  --slate-gray: #2F4F4F;\n  --light-teal: #33FFBD;\n  --dark-teal: #008080;\n  --pink: #EE82EE;\n  --dark-pink: #C00086;\n  --purple: #8B008B;\n  --light-purple: #E8ABFF;\n  --orange: #FF5733;\n  --yellow: #FFD700;\n  --tan: #D2B48C;\n  --brown: #8B4513;\n  --red: #DC143C;\n}\n.title[data-v-3a6ebbd3] {\n  width: 100%;\n  position: fixed;\n}\n.menu-title[data-v-3a6ebbd3] {\n  margin-top: 10px;\n  margin-bottom: 10px;\n  color: #1aad8d;\n  font-weight: 800;\n  font-size: 16;\n}\n.main h1[data-v-3a6ebbd3] {\n  color: #1aad8d !important;\n}", ""]);
 
 // exports
 
@@ -6778,7 +6968,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ":root {\n  --light-blue: #7AD5FF;\n  --blue: #4169E1;\n  --olive: #808000;\n  --light-green: #98FB98;\n  --green: #2E8B57;\n  --slate-gray: #2F4F4F;\n  --light-teal: #33FFBD;\n  --dark-teal: #008080;\n  --pink: #EE82EE;\n  --dark-pink: #C00086;\n  --purple: #8B008B;\n  --light-purple: #E8ABFF;\n  --orange: #FF5733;\n  --yellow: #FFD700;\n  --tan: #D2B48C;\n  --brown: #8B4513;\n  --red: #DC143C;\n}\n.title {\n  width: 100%;\n  position: fixed;\n}\n.main h1 {\n  color: #1aad8d !important;\n}", ""]);
+exports.push([module.i, ":root {\n  --light-blue: #7AD5FF;\n  --blue: #4169E1;\n  --olive: #808000;\n  --light-green: #98FB98;\n  --green: #2E8B57;\n  --slate-gray: #2F4F4F;\n  --light-teal: #33FFBD;\n  --dark-teal: #008080;\n  --pink: #EE82EE;\n  --dark-pink: #C00086;\n  --purple: #8B008B;\n  --light-purple: #E8ABFF;\n  --orange: #FF5733;\n  --yellow: #FFD700;\n  --tan: #D2B48C;\n  --brown: #8B4513;\n  --red: #DC143C;\n}\n.title {\n  width: 100%;\n  position: fixed;\n}\n.menu-title {\n  margin-top: 10px;\n  margin-bottom: 10px;\n  color: #1aad8d;\n  font-weight: 800;\n  font-size: 16;\n}\n.main h1 {\n  color: #1aad8d !important;\n}", ""]);
 
 // exports
 
@@ -74184,7 +74374,7 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
-              _vm._t("block"),
+              _c("div", { staticClass: "block" }, [_vm._t("block")], 2),
               _vm._v(" "),
               _c(
                 "div",
@@ -74526,8 +74716,7 @@ var render = function() {
                 ],
                 1
               )
-            ],
-            2
+            ]
           )
         ],
         1
@@ -74804,7 +74993,11 @@ var render = function() {
       [
         _c("h1", [_vm._v("Your Organizational Network")]),
         _vm._v(" "),
-        _c("el-button", [_vm._v("info")]),
+        _c(
+          "el-button",
+          { staticClass: "button", on: { click: _vm.goToNetwork } },
+          [_vm._v("See Full Network")]
+        ),
         _vm._v(" "),
         _c("network-menu", {
           scopedSlots: _vm._u([
@@ -74835,6 +75028,24 @@ var render = function() {
               proxy: true
             }
           ])
+        })
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { attrs: { id: "network-container" } },
+      [
+        _c("d3-network", {
+          ref: "net",
+          attrs: {
+            "net-nodes": _vm.nodes,
+            "net-links": _vm.links,
+            options: _vm.options,
+            selection: { nodes: _vm.selected, links: _vm.linksSelected }
+          },
+          on: { "node-click": _vm.nodeClick }
         })
       ],
       1
@@ -74870,6 +75081,12 @@ var render = function() {
         { staticClass: "title" },
         [
           _c("h1", [_vm._v("Organizational Social Network Analysis")]),
+          _vm._v(" "),
+          _c(
+            "el-button",
+            { staticClass: "button", on: { click: _vm.goToMyNetwork } },
+            [_vm._v("Your Network")]
+          ),
           _vm._v(" "),
           _c("network-menu", {
             scopedSlots: _vm._u([
@@ -91525,7 +91742,8 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 /* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
-    nextId: 0,
+    // nextId: 0,
+    currentId: 0,
     nodes: [],
     // for individual organizaitions and their connections
     links: [],
@@ -91541,23 +91759,17 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
     },
     ADD_LINK: function ADD_LINK(state, link) {
       state.links.push(link);
+    },
+    SET_CURRENT_ID: function SET_CURRENT_ID(state, payload) {
+      state.currentId = payload;
     }
   },
-  actions: {
-    getConnections: function getConnections() {
-      var _this = this;
-
-      axios.get('api/connections').then(function (response) {
-        return _this.connections = response;
-      });
-    },
-    getOrganizations: function getOrganizations() {
-      var _this2 = this;
-
-      axios.get('api/organizations').then(function (response) {
-        return _this2.connections = response;
-      });
-    }
+  actions: {// getConnections() {
+    //   axios.get('api/connections').then(response => (this.connections = response));
+    // },
+    // getOrganizations() {
+    //   axios.get('api/organizations').then(response => (this.connections = response));
+    // },
   }
 }));
 

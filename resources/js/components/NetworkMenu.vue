@@ -8,9 +8,11 @@
                         <span class="menu-title">Menu</span>
                         <el-button style="float: right; padding: 3px 0; color: #1aad8d; font-weight:1000" type="text" @click="hide">X</el-button>
                     </div>
-                    <slot name="block">
+                    <div class="block">
+                        <slot name="block">
                         <!-- Zoom -->
-                    </slot>
+                        </slot>
+                    </div>
                     <div class="block">
                         <span class="menu-title">Sub-Sector Legend</span>
                         <el-row :gutter="20">
@@ -145,6 +147,7 @@ export default {
 }
 
 .menu-button {
+    font-weight: 550;
     color: white;
     background-color: #1aad8d;
 }

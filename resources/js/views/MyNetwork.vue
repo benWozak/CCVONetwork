@@ -1,174 +1,309 @@
 <template>
-    <div>
-        <header class="title">
-            <h1>Your Organizational Network</h1>
-            <el-button>info</el-button>
+  <div>
+    <header class="title">
+      <h1>Your Organizational Network</h1>
+      <el-button class="button" @click="goToNetwork">See Full Network</el-button>
 
-            <network-menu>
-                <template  v-slot:block>
-                    <span class="menu-title">Zoom</span>
-                    <el-slider 
-                        :step="10" 
-                        @input="handleZoom($event)" 
-                        v-model="zoom"
-                        @change="secureNodePlacement">
-                    </el-slider>
-                </template>
-            </network-menu>
-            
-        </header>
+      <network-menu>
+        <template v-slot:block>
+          <span class="menu-title">Zoom</span>
+          <el-slider
+            :step="10"
+            @input="handleZoom($event)"
+            v-model="zoom"
+            @change="secureNodePlacement"
+          ></el-slider>
+        </template>
+      </network-menu>
+    </header>
+
+    <div id="network-container">
+      <d3-network
+        ref="net"
+        :net-nodes="nodes"
+        :net-links="links"
+        :options="options"
+        :selection="{nodes: selected, links: linksSelected}"
+        @node-click="nodeClick"
+      />
     </div>
+  </div>
 </template>
 
 <script>
-import D3Network from 'vue-d3-network'
-import NetworkMenu from '../components/NetworkMenu'
+import D3Network from "vue-d3-network";
+import NetworkMenu from "../components/NetworkMenu";
 
 export default {
-    name: "mynetwork",
-    components: {
-        D3Network,
-        NetworkMenu
-    },
-    data() {
-        return {
+  name: "mynetwork",
+  components: {
+    D3Network,
+    NetworkMenu
+  },
+  data() {
+    return {
+      renderComponent: true,
+      dragging: false,
+      zoom: 20,
+      fontSize: 25,
+      nodeSize: 35,
+      force: 5000,
+      networkX: 0,
+      networkY: 0,
+      center: true,
+      selected: {},
+      linksSelected: {},
+      connections: [],
+      organizations: []
+    };
+  },
+  created() {
+    this.raffle();
 
-        }
+    // axios.get("api/organizations?has_connections=true").then(response => {
+    //   this.organizations = response.data.data;
+    // });
+
+    axios
+      .get(`api/organizations/${this.organizationId}/network`)
+      .then(response => {
+        // this.organizations = response.data.data;
+        // this.connections = response.data.data;
+        console.log(response);
+      });
+  },
+  mounted() {
+    // window.scrollTo(2000, 2000);
+    this.$nextTick(() => {
+      setTimeout(() => {
+        this.secureNodePlacement();
+      }, 4000);
+    });
+  },
+  methods: {
+    raffle() {
+      this.$notify.info({
+        title: "CCVO's annual Connections conference",
+        dangerouslyUseHTMLString: true,
+        message:
+          "Thanks for participating! To be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020, <a href='https://www.hellokrd.net/' target='_blank'>Click Here</a> (link opens in new window).",
+        duration: 0
+      });
     },
-    created() {
-        this.raffle();
-        axios.get('api/connections')
-        .then(response => {
-            this.connections = response.data.data;
-        });
-        axios.get('api/organizations?has_connections=true')
-        .then(response => {
-            this.organizations = response.data.data
-        });
+    goToNetwork() {
+      this.$router.push("/network");
     },
-    methods: {
-        raffle() {
-            this.$notify.info({
-                title: "CCVO's annual Connections conference",
-                dangerouslyUseHTMLString: true,
-                message: "Thanks for participating! To be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020, <a href='https://www.hellokrd.net/' target='_blank'>Click Here</a> (link opens in new window).",
-                duration: 0
-            });
-        },
-        nodeClick(event, node) {
-            this.pinNode(node)
-        },
-        handleZoom($event) {
-            this.freeNodePlacement();
-            this.fontSize = this.zoom / 1.5;
-            this.nodeSize = this.zoom / 1.5;
-            this.force = this.zoom * 300;
-        },
-        secureNodePlacement() {
-            for(let i = 0; i < this.nodes.length; i++) {
-                this.nodes[i].pinned = true;
-                this.nodes[i].fx = this.nodes[i].x
-                this.nodes[i].fy = this.nodes[i].y
-            }
-        },
-        freeNodePlacement() {
-            for(let i = 0; i < this.nodes.length; i++) {
-                this.nodes[i].pinned = false;
-                this.nodes[i].fx = null;
-                this.nodes[i].fy = null;
-            }
-        },
-        selection () {
-            return {
-                nodes: this.selected,
-                links: this.linksSelected
-            }
-        },
-        pinNode (node) {
-            node.pinned = true
-            node.fx = node.x
-            node.fy = node.y
-            this.nodes[node.index] = node
-        },
+    nodeClick(event, node) {
+      this.pinNode(node);
+    },
+    handleZoom($event) {
+      this.freeNodePlacement();
+      this.fontSize = this.zoom / 1.5;
+      this.nodeSize = this.zoom / 1.5;
+      this.force = this.zoom * 300;
+    },
+    secureNodePlacement() {
+      for (let i = 0; i < this.nodes.length; i++) {
+        this.nodes[i].pinned = true;
+        this.nodes[i].fx = this.nodes[i].x;
+        this.nodes[i].fy = this.nodes[i].y;
+      }
+    },
+    freeNodePlacement() {
+      for (let i = 0; i < this.nodes.length; i++) {
+        this.nodes[i].pinned = false;
+        this.nodes[i].fx = null;
+        this.nodes[i].fy = null;
+      }
+    },
+    selection() {
+      return {
+        nodes: this.selected,
+        links: this.linksSelected
+      };
+    },
+    pinNode(node) {
+      node.pinned = true;
+      node.fx = node.x;
+      node.fy = node.y;
+      this.nodes[node.index] = node;
     }
-}
+  },
+  computed: {
+    organizationId: {
+      get() {
+        return this.$store.state.currentId;
+      }
+    },
+
+    nodes() {
+      let nodes = [];
+      for (let i = 0; i < this.organizations.length; i++) {
+        switch (this.organizations[i].subsector.id) {
+          case 1: // Environment
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--light-blue)"
+            });
+
+            break;
+          case 2: //social services
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--blue)"
+            });
+            break;
+          case 3: //housing
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--olive)"
+            });
+            break;
+          case 4:
+          case 21: // Art & culture
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--light-green)"
+            });
+            break;
+          case 5: // business
+          case 14:
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--slate-gray)"
+            });
+            break;
+          case 6: // Individual
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--dark-teal)"
+            });
+            break;
+          case 7: // health
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--pink)"
+            });
+            break;
+          case 8: // development
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--dark-pink)"
+            });
+            break;
+          case 9: // education
+          case 17:
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--purple)"
+            });
+            break;
+          case 10: //sports
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--red)"
+            });
+            break;
+          case 12: // law
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--orange)"
+            });
+            break;
+          case 13: // government
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--yellow)"
+            });
+            break;
+          case 15: // religion
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--tan)"
+            });
+            break;
+          case 16: // fundraising and volunteer
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--brown)"
+            });
+            break;
+          case 19: //international
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name,
+              _color: "var(--green)"
+            });
+            break;
+          default:
+            nodes.push({
+              id: this.organizations[i].id,
+              name: this.organizations[i].organization_name
+            });
+            break;
+        }
+      }
+      return nodes;
+    },
+
+    links() {
+      let links = [];
+      for (let i = 0; i < this.connections.length; i++) {
+        links.push({
+          sid: this.connections[i].host_id,
+          tid: this.connections[i].contact_id
+        });
+      }
+      return links;
+    },
+
+    options() {
+      return {
+        canvas: false,
+        //force: 2200,
+        force: this.force,
+        size: { w: window.innerWidth, h: window.innerHeight },
+        // size: { w: 1600, h: 900 },
+        offset: { x: this.networkX, y: this.networkY },
+        fontSize: this.fontSize,
+        nodeSize: this.nodeSize,
+        nodeLabels: true,
+        linkLabels: true
+      };
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
 @import "~styles/colors";
 
 .title {
-    width: 100%;
-    position: fixed;
-    
-}
-.raffle-container {
-    width: 40%;
-    margin: 0 auto;
-}
-
-.toggle-enter-active {
-    transition: 1s ease;
-}
-.toggle-leave-active {
-    transition: 1s ease;
-}
-.toggle-enter, .toggle-leave-to {
-    transform: translateX(-100%);
-}
-.main h1{
-    color: #1aad8d !important;
-}
-.text {
-    font-size: 14px;
-}
-.item {
-    margin-bottom: 18px;
-}
-.clearfix:before,
-.clearfix:after {
-    display: table;
-    content: "";
-}
-.clearfix:after {
-    clear: both
-}
-.menu-card-container {
-    position: fixed !important;
-    top: 0;
-    left: 0;
-}
-.menu-card-container .menu-button {
-    float: left !important;
-    position: fixed;
-    top: 25px !important;
-    left: 40px;
-}
-.menu-button {
-    color: white;
-    background-color: #1aad8d;
-}
-.menu-button:hover {
-    color: #1aad8d;
-    background-color: #D5F0EA;
-}
-.menu-card {
-    width: 380px;
+  width: 100%;
+  position: fixed;
 }
 .menu-title {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    color: #1aad8d;
-    font-weight: 800;
-    font-size: 16
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #1aad8d;
+  font-weight: 800;
+  font-size: 16;
 }
-.circle {
-    height: 15px;
-    width: 15px;
-    display: inline-block;
-    border-radius: 50%;
-}
-.legend-text {
-    float: left !important;
+.main h1 {
+  color: #1aad8d !important;
 }
 </style>

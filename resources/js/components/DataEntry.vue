@@ -142,6 +142,8 @@
 </template>
 
 <script>
+import store from 'vuex';
+
 export default {
     data() {
       return {
@@ -211,7 +213,11 @@ export default {
                 organization_name: this.organization.organization_name,
                 is_member: this.organization.is_member,
                 connections: []
+            }).then(response => {
+                let id = response.data.data.id
+                this.$store.commit('SET_CURRENT_ID', id)
             });
+
 
             this.nextId++;
             this.active = 1;
@@ -379,7 +385,7 @@ export default {
 				this.connections = response;
 
                 this.resetForm();
-                this.$router.push("/network");
+                this.$router.push("/mynetwork");
                 this.$message({
                     showClose: true,
                     message: 'New Connection Established',
@@ -407,9 +413,6 @@ export default {
             this.nextId++;
         }
     },
-    created() {
-        // this.setIdValues();
-    }
 }
 </script>
 
