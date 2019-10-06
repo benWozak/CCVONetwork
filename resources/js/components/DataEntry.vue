@@ -122,10 +122,6 @@
             label-width="240px"
             @submit.native.prevent>
             <div class="text-container">Thank you for taking the time to fill out this Survey. Now lets see how your connections line up with other organizations!</div>
-                <!-- <el-form-item>
-                    <label for="" class="custom-label">Would you like to be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020?</label>
-                    <div>Click <a href="https://www.hellokrd.net/">here</a> to enter</p>
-                </el-form-item> -->
 
             <div class="clearfix">
                 <el-form-item class="footer">
@@ -325,7 +321,7 @@ export default {
             axios.post('/api/connections', {
                 organization_name: this.organization.organization_name,
                 is_member: this.organization.is_member,
-                connections: this.partners.connections
+                connections: partnerConnections,
             });
 
             this.active = 4;
