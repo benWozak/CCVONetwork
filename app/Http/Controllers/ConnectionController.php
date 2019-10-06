@@ -22,8 +22,10 @@ class ConnectionController extends Controller
 
     public function egoNetwork($id) {
         //$contactIDs = $organization->contacts->pluck('contact_id')->toArray();
-        $contactIDs = Connection::where('host_id',$id)->get()->pluck('contact_id')->toArray();
-        array_push($contactIDs,$id);
+        $hostedByMeIDs = Connection::where('host_id',$id)->get()->pluck('contact_id')->toArray();
+        $hostedByOthersIDs = Connection::where('contact_id',$id)->get()->pluck('host_id')->toArray();
+        array_push($hostedByMeIDs,$id);
+        $contactIDs = array_merge($hostedByMeIDs,$hostedByOthersIDs);
         $connections = Connection::wherein('host_id',$contactIDs)->get();
 
         $pairedIDs = $connections->pluck('host_id','contact_id')->toArray();
