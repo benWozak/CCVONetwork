@@ -20,27 +20,20 @@ class ConnectionController extends Controller
     }
 
 
-    public function myEloquentNetwork($id) {
-        $myContactIDs = Connection::where('host_id',$id)->get()->pluck('contact_id')->toArray();
-        array_push($myContactIDs,$id);
+    public function egoNetwork($id) {
+        //$contactIDs = $organization->contacts->pluck('contact_id')->toArray();
+        $contactIDs = Connection::where('host_id',$id)->get()->pluck('contact_id')->toArray();
+        array_push($contactIDs,$id);
+        $connections = Connection::wherein('host_id',$contactIDs)->get();
+
+        $pairedIDs = $connections->pluck('host_id','contact_id')->toArray();
+        $allContactIDs = array_unique(array_merge(array_values($pairedIDs),array_keys($pairedIDs)));
+        $organizations = Organization::wherein('id',$allContactIDs)->get();
+        
         return [
-            'data' => Connection::wherein('host_id',$myContactIDs)->get()
+            'data' => ['connections' => $connections, 'organizations' => $organizations]
+            
         ];
-    }
-
-    public function mynetwork($id) {
-        $returnArray = array();
-        $myContact = Connection::where('host_id',$id)->get();
-        $returnArray['data'] = $myContacts;
-
-        foreach ($myContacts->toArray() as $contactData) {
-            $hostID = $contactData['contact_id'];
-            $hostContacts = Connection::where('host_id',$hostID)->get();
-            $mergedCollection = $returnArray['data']->toBase()->merge($hostContacts);
-            $returnArray['data'] = $mergedCollection;
-        }
-
-        return $returnArray;
     }
 
     public function store(StoreConnection $request)
