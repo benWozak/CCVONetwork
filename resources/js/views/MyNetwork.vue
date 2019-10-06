@@ -60,16 +60,16 @@ export default {
   created() {
     this.raffle();
 
-    // axios.get("api/organizations?has_connections=true").then(response => {
-    //   this.organizations = response.data.data;
-    // });
-
-    axios
-      .get(`api/organizations/${this.organizationId}/network`)
+    axios.get(`api/organizations/${this.organizationId}/network`)
       .then(response => {
-        // this.organizations = response.data.data;
-        // this.connections = response.data.data;
-        console.log(response);
+        console.log(this.organizationId);
+        this.organizations = response.data.data.organizations;
+        this.connections = response.data.data.connections;
+        console.log(response.data.data);
+      }).catch(error => {
+        if (error) {
+          console.log(error);
+        }
       });
   },
   mounted() {
@@ -137,13 +137,14 @@ export default {
     },
 
     nodes() {
+      console.log(this.organizations);
       let nodes = [];
       for (let i = 0; i < this.organizations.length; i++) {
-        switch (this.organizations[i].subsector.id) {
+        switch (this.organizations[i].subsector_id) {
           case 1: // Environment
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--light-blue)"
             });
 
@@ -151,14 +152,14 @@ export default {
           case 2: //social services
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--blue)"
             });
             break;
           case 3: //housing
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--olive)"
             });
             break;
@@ -166,7 +167,7 @@ export default {
           case 21: // Art & culture
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--light-green)"
             });
             break;
@@ -174,28 +175,28 @@ export default {
           case 14:
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--slate-gray)"
             });
             break;
           case 6: // Individual
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--dark-teal)"
             });
             break;
           case 7: // health
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--pink)"
             });
             break;
           case 8: // development
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--dark-pink)"
             });
             break;
@@ -203,56 +204,56 @@ export default {
           case 17:
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--purple)"
             });
             break;
           case 10: //sports
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--red)"
             });
             break;
           case 12: // law
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--orange)"
             });
             break;
           case 13: // government
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--yellow)"
             });
             break;
           case 15: // religion
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--tan)"
             });
             break;
           case 16: // fundraising and volunteer
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--brown)"
             });
             break;
           case 19: //international
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--green)"
             });
             break;
           default:
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name
+              name: this.organizations[i].name
             });
             break;
         }
@@ -261,6 +262,7 @@ export default {
     },
 
     links() {
+      // console.log(this.connections)
       let links = [];
       for (let i = 0; i < this.connections.length; i++) {
         links.push({

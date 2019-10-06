@@ -3606,10 +3606,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -3868,7 +3864,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/api/connections', {
         organization_name: this.organization.organization_name,
         is_member: this.organization.is_member,
-        connections: this.partners.connections
+        connections: partnerConnections
       });
       this.active = 4;
     },
@@ -4355,23 +4351,27 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    this.raffle(); // axios.get("api/organizations?has_connections=true").then(response => {
-    //   this.organizations = response.data.data;
-    // });
+    var _this = this;
 
+    this.raffle();
     axios.get("api/organizations/".concat(this.organizationId, "/network")).then(function (response) {
-      // this.organizations = response.data.data;
-      // this.connections = response.data.data;
-      console.log(response);
+      console.log(_this.organizationId);
+      _this.organizations = response.data.data.organizations;
+      _this.connections = response.data.data.connections;
+      console.log(response.data.data);
+    })["catch"](function (error) {
+      if (error) {
+        console.log(error);
+      }
     });
   },
   mounted: function mounted() {
-    var _this = this;
+    var _this2 = this;
 
     // window.scrollTo(2000, 2000);
     this.$nextTick(function () {
       setTimeout(function () {
-        _this.secureNodePlacement();
+        _this2.secureNodePlacement();
       }, 4000);
     });
   },
@@ -4430,15 +4430,16 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     nodes: function nodes() {
+      console.log(this.organizations);
       var nodes = [];
 
       for (var i = 0; i < this.organizations.length; i++) {
-        switch (this.organizations[i].subsector.id) {
+        switch (this.organizations[i].subsector_id) {
           case 1:
             // Environment
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--light-blue)"
             });
             break;
@@ -4447,7 +4448,7 @@ __webpack_require__.r(__webpack_exports__);
             //social services
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--blue)"
             });
             break;
@@ -4456,7 +4457,7 @@ __webpack_require__.r(__webpack_exports__);
             //housing
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--olive)"
             });
             break;
@@ -4466,7 +4467,7 @@ __webpack_require__.r(__webpack_exports__);
             // Art & culture
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--light-green)"
             });
             break;
@@ -4476,7 +4477,7 @@ __webpack_require__.r(__webpack_exports__);
           case 14:
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--slate-gray)"
             });
             break;
@@ -4485,7 +4486,7 @@ __webpack_require__.r(__webpack_exports__);
             // Individual
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--dark-teal)"
             });
             break;
@@ -4494,7 +4495,7 @@ __webpack_require__.r(__webpack_exports__);
             // health
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--pink)"
             });
             break;
@@ -4503,7 +4504,7 @@ __webpack_require__.r(__webpack_exports__);
             // development
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--dark-pink)"
             });
             break;
@@ -4513,7 +4514,7 @@ __webpack_require__.r(__webpack_exports__);
           case 17:
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--purple)"
             });
             break;
@@ -4522,7 +4523,7 @@ __webpack_require__.r(__webpack_exports__);
             //sports
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--red)"
             });
             break;
@@ -4531,7 +4532,7 @@ __webpack_require__.r(__webpack_exports__);
             // law
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--orange)"
             });
             break;
@@ -4540,7 +4541,7 @@ __webpack_require__.r(__webpack_exports__);
             // government
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--yellow)"
             });
             break;
@@ -4549,7 +4550,7 @@ __webpack_require__.r(__webpack_exports__);
             // religion
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--tan)"
             });
             break;
@@ -4558,7 +4559,7 @@ __webpack_require__.r(__webpack_exports__);
             // fundraising and volunteer
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--brown)"
             });
             break;
@@ -4567,7 +4568,7 @@ __webpack_require__.r(__webpack_exports__);
             //international
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name,
+              name: this.organizations[i].name,
               _color: "var(--green)"
             });
             break;
@@ -4575,7 +4576,7 @@ __webpack_require__.r(__webpack_exports__);
           default:
             nodes.push({
               id: this.organizations[i].id,
-              name: this.organizations[i].organization_name
+              name: this.organizations[i].name
             });
             break;
         }
@@ -4584,6 +4585,7 @@ __webpack_require__.r(__webpack_exports__);
       return nodes;
     },
     links: function links() {
+      // console.log(this.connections)
       var links = [];
 
       for (var i = 0; i < this.connections.length; i++) {
