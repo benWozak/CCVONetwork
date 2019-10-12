@@ -1,21 +1,20 @@
 <template>
   <div>
-    <header class="title">
-      <h1>Your Organizational Network</h1>
-      <el-button class="button" @click="goToNetwork">See Full Network</el-button>
-
-      <network-menu>
-        <template v-slot:block>
-          <span class="menu-title">Zoom</span>
-          <el-slider
-            :step="10"
-            @input="handleZoom($event)"
-            v-model="zoom"
-            @change="secureNodePlacement"
-          ></el-slider>
-        </template>
-      </network-menu>
+    <header class="header">
+      <Navbar />
     </header>
+
+    <network-menu>
+      <template v-slot:block>
+        <span class="menu-title">Zoom</span>
+        <el-slider
+          :step="10"
+          @input="handleZoom($event)"
+          v-model="zoom"
+          @change="secureNodePlacement"
+        ></el-slider>
+      </template>
+    </network-menu>
 
     <div id="network-container">
       <d3-network
@@ -33,12 +32,14 @@
 <script>
 import D3Network from "vue-d3-network";
 import NetworkMenu from "../components/NetworkMenu";
+import Navbar from "../components/Navbar";
 
 export default {
   name: "mynetwork",
   components: {
     D3Network,
-    NetworkMenu
+    NetworkMenu,
+    Navbar
   },
   data() {
     return {
@@ -58,14 +59,14 @@ export default {
     };
   },
   created() {
-    this.raffle();
+    // this.raffle();
 
     axios.get(`api/organizations/${this.organizationId}/network`)
       .then(response => {
-        console.log(this.organizationId);
+        // console.log(this.organizationId);
         this.organizations = response.data.data.organizations;
         this.connections = response.data.data.connections;
-        console.log(response.data.data);
+        // console.log(response.data.data);
       }).catch(error => {
         if (error) {
           console.log(error);
@@ -75,24 +76,21 @@ export default {
   mounted() {
     // window.scrollTo(2000, 2000);
     this.$nextTick(() => {
-      setTimeout(() => {
+      setTimeout(() => { 
         this.secureNodePlacement();
       }, 4000);
     });
   },
   methods: {
-    raffle() {
-      this.$notify.info({
-        title: "CCVO's annual Connections conference",
-        dangerouslyUseHTMLString: true,
-        message:
-          "Thanks for participating! To be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020, <a href='https://www.hellokrd.net/' target='_blank'>Click Here</a> (link opens in new window).",
-        duration: 0
-      });
-    },
-    goToNetwork() {
-      this.$router.push("/network");
-    },
+    // raffle() {
+    //   this.$notify.info({
+    //     title: "CCVO's annual Connections conference",
+    //     dangerouslyUseHTMLString: true,
+    //     message:
+    //       "Thanks for participating! To be entered to win an individual ticket to CCVO's annual Connections conference on April 22, 2020, <a href='https://www.hellokrd.net/' target='_blank'>Click Here</a> (link opens in new window).",
+    //     duration: 0
+    //   });
+    // },
     nodeClick(event, node) {
       this.pinNode(node);
     },
@@ -137,7 +135,7 @@ export default {
     },
 
     nodes() {
-      console.log(this.organizations);
+      // console.log(this.organizations);
       let nodes = [];
       for (let i = 0; i < this.organizations.length; i++) {
         switch (this.organizations[i].subsector_id) {
@@ -294,10 +292,13 @@ export default {
 <style lang="scss" scoped>
 @import "~styles/colors";
 
-.title {
+.header {
   width: 100%;
+  height: 60px;
   position: fixed;
+  background-color: white;
 }
+
 .menu-title {
   margin-top: 10px;
   margin-bottom: 10px;

@@ -1,32 +1,30 @@
 <template>
     <div class="network">
-        <div class="main">
-            <header class="title">
-                <h1>Organizational Social Network Analysis</h1>
-                <el-button class="button" @click="goToMyNetwork">Your Network</el-button>
-                <network-menu>
-                    <template  v-slot:block>
-                        <span class="menu-title">Zoom</span>
-                        <el-slider 
-                            :step="10" 
-                            @input="handleZoom($event)" 
-                            v-model="zoom"
-                            @change="secureNodePlacement">
-                        </el-slider>
-                    </template>
-                </network-menu>
-            </header>
+        <header class="header">
+            <Navbar />
+        </header>
 
-            <!-- @mousedown="startDrag" @mousemove="drag($event)" @mouseup="stopDrag" @wheel="handleZoom($event)" -->
-            <div id="network-container">
-                <d3-network ref='net'
-                    :net-nodes="nodes"
-                    :net-links="links"
-                    :options="options"
-                    :selection="{nodes: selected, links: linksSelected}"
-                    @node-click="nodeClick"
-                />
-            </div>
+        <network-menu>
+        <template v-slot:block>
+            <span class="menu-title">Zoom</span>
+            <el-slider
+            :step="10"
+            @input="handleZoom($event)"
+            v-model="zoom"
+            @change="secureNodePlacement"
+            ></el-slider>
+        </template>
+        </network-menu>
+
+        <!-- @mousedown="startDrag" @mousemove="drag($event)" @mouseup="stopDrag" @wheel="handleZoom($event)" -->
+        <div id="network-container">
+            <d3-network ref='net'
+                :net-nodes="nodes"
+                :net-links="links"
+                :options="options"
+                :selection="{nodes: selected, links: linksSelected}"
+                @node-click="nodeClick"
+            />
         </div>
 
     </div>
@@ -35,12 +33,14 @@
 <script>
 import D3Network from 'vue-d3-network'
 import NetworkMenu from '../components/NetworkMenu'
+import Navbar from '../components/Navbar'
 
 export default {
     name: "network",
     components: {
         D3Network,
         NetworkMenu,
+        Navbar,
     },
     data() {
         return {
@@ -242,9 +242,6 @@ export default {
         nodeClick(event, node) {
             this.pinNode(node)
         },
-        goToMyNetwork() {
-            this.$router.push("/mynetwork");
-        },
         handleZoom($event) {
             this.freeNodePlacement();
             this.fontSize = this.zoom / 1.5;
@@ -297,11 +294,13 @@ export default {
 <style lang="scss">
 @import "~styles/colors";
 
-.title {
-    width: 100%;
-    position: fixed;
-    
+.header {
+  width: 100%;
+  height: 60px;
+  position: fixed;
+  background-color: white;
 }
+
 .menu-title {
     margin-top: 10px;
     margin-bottom: 10px;

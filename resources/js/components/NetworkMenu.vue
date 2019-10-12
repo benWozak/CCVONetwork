@@ -136,14 +136,14 @@ export default {
 
 .menu-card-container {
     position: fixed !important;
-    top: 0;
+    top: 60px;
     left: 0;
 }
 .menu-card-container .menu-button {
     float: left !important;
     position: fixed;
-    top: 25px !important;
-    left: 40px;
+    top: 10px !important;
+    left: 20px;
 }
 
 .menu-button {

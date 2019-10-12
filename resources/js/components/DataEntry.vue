@@ -14,9 +14,12 @@
         <el-form v-if="active === 0"
             ref="organization"
             :model="organization"
-            :rules="{ required: true, message: 'Please enter the name of your Organization', trigger: 'blur' }"
             label-width="240px" @submit.native.prevent>
-                <el-form-item  label="Your Organization" prop="organization_name">
+                <el-form-item  
+                    label="Your Organization" 
+                    prop="organization_name"
+                    :rules="{ required: true, message: 'Please enter the name of your Organization', trigger: 'blur' }"
+                >
                     <el-autocomplete
                         v-model="organization.organization_name"
                         :trigger-on-focus="false"
