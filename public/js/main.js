@@ -3608,6 +3608,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -3734,11 +3737,17 @@ __webpack_require__.r(__webpack_exports__);
     nodes: {
       get: function get() {
         return this.$store.state.nodes;
+      },
+      set: function set() {
+        this.$store.state.nodes = this.nodes;
       }
     },
     links: {
       get: function get() {
         return this.$store.state.links;
+      },
+      set: function set() {
+        this.$store.state.links = this.links;
       }
     }
   },
@@ -3935,11 +3944,111 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     resetForm: function resetForm() {
-      this.organization.id = this.nextId++;
+      this.organization.id = 0;
       this.organization.organization_name = '';
-      this.nodes = [];
-      this.links = [];
+      this.awareness = {
+        connections: [{
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }]
+      };
+      this.shared = {
+        connections: [{
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }]
+      };
+      this.partners = {
+        connections: [{
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }, {
+          id: 0,
+          organization_name: ''
+        }]
+      };
+      this.$store.commit('CLEAR_NODES');
+      this.$store.commit('CLEAR_LINKS');
       this.active = 0;
+      this.$forceUpdate();
     },
 
     /**
@@ -3980,6 +4089,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3990,8 +4101,10 @@ __webpack_require__.r(__webpack_exports__);
     handleSelect: function handleSelect() {
       if (this.activeIndex === '/mynetwork') {
         this.activeIndex = '/network';
+        this.$forceUpdate();
       } else {
         this.activeIndex = '/mynetwork';
+        this.$forceUpdate();
       }
     }
   }
@@ -6880,7 +6993,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".text-container[data-v-b4e54de6] {\n  max-width: 60%;\n  margin: auto;\n  margin-top: 30px;\n  margin-bottom: 30px;\n}\n.text[data-v-b4e54de6] {\n  font-size: 14px;\n  font-weight: bold;\n}\n.item[data-v-b4e54de6] {\n  margin-bottom: 18px;\n}\n.clearfix[data-v-b4e54de6]:before,\n.clearfix[data-v-b4e54de6]:after {\n  display: table;\n  content: \"\";\n}\n.clearfix[data-v-b4e54de6]:after {\n  clear: both;\n}\n.footer[data-v-b4e54de6] {\n  margin-top: 8px;\n  position: relative;\n  bottom: 0;\n  right: 0;\n}\n.box-card[data-v-b4e54de6] {\n  width: 780px;\n}\n.inside-box[data-v-b4e54de6] {\n  margin: 0 !important;\n  padding: 0 !important;\n}\nh3[data-v-b4e54de6] {\n  color: #1aad8d;\n}\n.margin-right[data-v-b4e54de6] {\n  margin-right: 12px;\n}\n.button-container[data-v-b4e54de6] {\n  display: inline;\n}\n.custom-label[data-v-b4e54de6] {\n  text-align: right;\n  float: left;\n  font-size: 14px;\n  color: #606266;\n  padding: 0 4px 0 0;\n}\n.el-form-item[data-v-b4e54de6] {\n  margin-top: 20px;\n}\n.el-autocomplete[data-v-b4e54de6] {\n  width: 400px !important;\n}\n.el-form-item .el-form-item__label[data-v-b4e54de6] {\n  line-height: 20px !important;\n}", ""]);
+exports.push([module.i, ".text-container[data-v-b4e54de6] {\n  max-width: 60%;\n  margin: auto;\n  margin-top: 30px;\n  margin-bottom: 30px;\n}\n.text[data-v-b4e54de6] {\n  font-size: 14px;\n  font-weight: bold;\n}\n.organization-item .organzation-input[data-v-b4e54de6] {\n  position: absolute !important;\n}\n.item[data-v-b4e54de6] {\n  margin-bottom: 18px;\n}\n.clearfix[data-v-b4e54de6]:before,\n.clearfix[data-v-b4e54de6]:after {\n  display: table;\n  content: \"\";\n}\n.clearfix[data-v-b4e54de6]:after {\n  clear: both;\n}\n.footer[data-v-b4e54de6] {\n  margin-top: 8px;\n  position: relative;\n  bottom: 0;\n  right: 0;\n}\n.box-card[data-v-b4e54de6] {\n  width: 780px;\n}\n.inside-box[data-v-b4e54de6] {\n  margin: 0 !important;\n  padding: 0 !important;\n}\nh3[data-v-b4e54de6] {\n  color: #1aad8d;\n}\n.margin-right[data-v-b4e54de6] {\n  margin-right: 12px;\n}\n.button-container[data-v-b4e54de6] {\n  display: inline;\n}\n.custom-label[data-v-b4e54de6] {\n  text-align: right;\n  float: left;\n  font-size: 14px;\n  color: #606266;\n  padding: 0 4px 0 0;\n}\n.el-form-item[data-v-b4e54de6] {\n  margin-top: 20px;\n}\n.el-autocomplete[data-v-b4e54de6] {\n  width: 400px !important;\n}\n.el-form-item .el-form-item__label[data-v-b4e54de6] {\n  line-height: 20px !important;\n}", ""]);
 
 // exports
 
@@ -73890,6 +74003,7 @@ var render = function() {
               _c(
                 "el-form-item",
                 {
+                  staticClass: "organization-item",
                   attrs: {
                     label: "Your Organization",
                     prop: "organization_name",
@@ -73902,6 +74016,7 @@ var render = function() {
                 },
                 [
                   _c("el-autocomplete", {
+                    staticClass: "organization-input",
                     attrs: {
                       "trigger-on-focus": false,
                       "fetch-suggestions": _vm.getOrganizations
@@ -74423,6 +74538,14 @@ var render = function() {
         ],
         1
       ),
+      _vm._v(" "),
+      _vm.activeIndex === "/mynetwork"
+        ? _c("h2", [_vm._v("Your Organizational Network")])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.activeIndex === "/network"
+        ? _c("h2", [_vm._v("Greater Organizational Network")])
+        : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "line" })
     ],
@@ -91498,15 +91621,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!********************************************!*\
   !*** ./resources/js/components/Navbar.vue ***!
   \********************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Navbar_vue_vue_type_template_id_6dde423b_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Navbar.vue?vue&type=template&id=6dde423b&scoped=true& */ "./resources/js/components/Navbar.vue?vue&type=template&id=6dde423b&scoped=true&");
 /* harmony import */ var _Navbar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Navbar.vue?vue&type=script&lang=js& */ "./resources/js/components/Navbar.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Navbar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Navbar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _Navbar_vue_vue_type_style_index_0_id_6dde423b_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Navbar.vue?vue&type=style&index=0&id=6dde423b&lang=scss&scoped=true& */ "./resources/js/components/Navbar.vue?vue&type=style&index=0&id=6dde423b&lang=scss&scoped=true&");
+/* empty/unused harmony star reexport *//* harmony import */ var _Navbar_vue_vue_type_style_index_0_id_6dde423b_lang_scss_scoped_true___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Navbar.vue?vue&type=style&index=0&id=6dde423b&lang=scss&scoped=true& */ "./resources/js/components/Navbar.vue?vue&type=style&index=0&id=6dde423b&lang=scss&scoped=true&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -91538,7 +91660,7 @@ component.options.__file = "resources/js/components/Navbar.vue"
 /*!*********************************************************************!*\
   !*** ./resources/js/components/Navbar.vue?vue&type=script&lang=js& ***!
   \*********************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -91983,6 +92105,12 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
     },
     ADD_LINK: function ADD_LINK(state, link) {
       state.links.push(link);
+    },
+    CLEAR_NODES: function CLEAR_NODES(state) {
+      state.nodes = [];
+    },
+    CLEAR_LINKS: function CLEAR_LINKS(state) {
+      state.links = [];
     },
     SET_CURRENT_ID: function SET_CURRENT_ID(state, payload) {
       state.currentId = payload;

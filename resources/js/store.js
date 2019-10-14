@@ -21,6 +21,14 @@ export default new Vuex.Store({
       state.links.push(link);
     },
 
+    CLEAR_NODES: (state) => {
+      state.nodes = [];
+    },
+
+    CLEAR_LINKS: (state) => {
+      state.links = [];
+    },
+
     SET_CURRENT_ID: (state, payload) => {
       state.currentId = payload;
     }

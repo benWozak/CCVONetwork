@@ -15,12 +15,14 @@
             ref="organization"
             :model="organization"
             label-width="240px" @submit.native.prevent>
-                <el-form-item  
+                <el-form-item 
+                    class="organization-item" 
                     label="Your Organization" 
                     prop="organization_name"
                     :rules="{ required: true, message: 'Please enter the name of your Organization', trigger: 'blur' }"
                 >
                     <el-autocomplete
+                        class="organization-input"
                         v-model="organization.organization_name"
                         :trigger-on-focus="false"
                         :fetch-suggestions="getOrganizations">
@@ -182,9 +184,11 @@ export default {
     computed: {
         nodes: {
             get() { return this.$store.state.nodes },
+            set() { this.$store.state.nodes = this.nodes }
         },
         links: {
             get() { return this.$store.state.links },
+            set() { this.$store.state.links = this.links }
         },
     },
     methods: {
@@ -397,11 +401,28 @@ export default {
         },
         resetForm() {
 
-            this.organization.id = this.nextId++;
+            this.organization.id = 0;
             this.organization.organization_name = '';
-            this.nodes = [];
-            this.links = [];
+            this.awareness = {
+                connections: [
+                    {id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},
+                ]
+            }
+            this.shared = {
+                connections: [
+                    {id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},
+                ]
+            }
+            this.partners = {
+                connections: [
+                    {id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},{id: 0, organization_name:''},
+                ]
+            }
+            this.$store.commit('CLEAR_NODES')
+            this.$store.commit('CLEAR_LINKS')
             this.active = 0;
+
+            this.$forceUpdate();
         },
         /**
          * Data inside this method should be replaced with a fetch of
@@ -426,6 +447,15 @@ export default {
         font-size: 14px;
         font-weight: bold;
     }
+
+    .organization-item .organzation-input {
+        position: absolute !important;
+    }
+    // .el-form-item .el-form-item__content .el-form-item__error {
+    //     position: relative !important;
+    //     margin-left: 55px !important;
+    // }
+    
 
     .item {
         margin-bottom: 18px;

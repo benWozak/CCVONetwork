@@ -10,6 +10,8 @@
             <el-menu-item route index="/mynetwork" class="navbar-text">Your Network</el-menu-item>
             <el-menu-item route index="/network" class="navbar-text">Greater Network</el-menu-item>
         </el-menu>
+        <h2 v-if="activeIndex === '/mynetwork'">Your Organizational Network</h2>
+        <h2 v-if="activeIndex === '/network'">Greater Organizational Network</h2>
       <div class="line"></div>
     </div>
 </template>
@@ -25,8 +27,10 @@ export default {
         handleSelect() {
             if(this.activeIndex === '/mynetwork') {
                 this.activeIndex = '/network'
+                this.$forceUpdate();
             } else {
                 this.activeIndex = '/mynetwork'
+                this.$forceUpdate();
             }
         }
     }
