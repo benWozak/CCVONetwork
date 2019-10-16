@@ -4,8 +4,7 @@
             <el-card>
                 <img alt="KRD logo" src="../assets/krd-logo.png" class="logo" style="width: 86px;"/>
                 <h1>Organizational Social Network App</h1>
-                <img alt="CCVO logo" src="../assets/ccvo-logo.png" class="logo-right" style="width: 86px;"/>
-                
+                <img alt="CCVO logo" src="../assets/ccvo-logo.png" class="logo-right" style="width: 86px;"/> 
             </el-card>
         </header>
         <div class="container">
@@ -65,7 +64,8 @@ export default {
 .header {
     background-color: white;
     height: 100px;
-
+    position: relative !important;
+    top: 0px !important;
 }
 .header .logo {
     float: left;

@@ -4089,23 +4089,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      activeIndex: '/mynetwork'
+      activeIndex: '1'
     };
   },
   methods: {
-    handleSelect: function handleSelect() {
-      if (this.activeIndex === '/mynetwork') {
-        this.activeIndex = '/network';
-        this.$forceUpdate();
-      } else {
-        this.activeIndex = '/mynetwork';
-        this.$forceUpdate();
-      }
+    routeNetwork: function routeNetwork() {
+      this.activeIndex = '2';
+      this.$router.replace("/network");
+    },
+    routeMyNetwork: function routeMyNetwork() {
+      this.activeIndex = '1';
+      this.$router.replace("/mynetwork");
     }
   }
 });
@@ -4378,7 +4375,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Visual_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/components/Visual.vue */ "./resources/js/components/Visual.vue");
 /* harmony import */ var _components_DataEntry_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/components/DataEntry.vue */ "./resources/js/components/DataEntry.vue");
-//
 //
 //
 //
@@ -6974,7 +6970,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "html, body {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin: 0 auto;\n  background-color: #EEEEEE;\n  height: 100%;\n  width: 100%;\n}\n#app {\n  font-family: \"Avenir\", Helvetica, Arial, sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n}\n.button {\n  font-weight: 550;\n  background-color: #1aad8d;\n  color: white;\n}\n.button:hover {\n  color: #1aad8d;\n  background-color: #D5F0EA;\n}\n.button-light:hover {\n  color: #1aad8d;\n}", ""]);
+exports.push([module.i, "html, body {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  margin: 0 auto;\n  background-color: #EEEEEE;\n  height: 100%;\n  width: 100%;\n}\n#app {\n  min-height: 100vh !important;\n  font-family: \"Avenir\", Helvetica, Arial, sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n}\n.button {\n  font-weight: 550;\n  background-color: #1aad8d;\n  color: white;\n}\n.button:hover {\n  color: #1aad8d;\n  background-color: #D5F0EA;\n}\n.button-light:hover {\n  color: #1aad8d;\n}", ""]);
 
 // exports
 
@@ -7012,7 +7008,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".navbar[data-v-6dde423b] {\n  margin-left: 120px;\n}\n.navbar-text[data-v-6dde423b] {\n  font-size: 18px;\n  font-weight: 600;\n}\n.title-text[data-v-6dde423b] {\n  display: inline-block;\n}", ""]);
+exports.push([module.i, ".navbar[data-v-6dde423b] {\n  margin-left: 120px;\n}\n.navbar-title[data-v-6dde423b] {\n  position: absolute;\n  top: 5px;\n  left: 45%;\n}\n.navbar-text[data-v-6dde423b] {\n  font-size: 18px;\n  font-weight: 600;\n}\n.title-text[data-v-6dde423b] {\n  display: inline-block;\n}", ""]);
 
 // exports
 
@@ -7107,7 +7103,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".header[data-v-63cd6604] {\n  background-color: white;\n  height: 100px;\n}\n.header .logo[data-v-63cd6604] {\n  float: left;\n  margin: -6px 0 12px 25px;\n}\n.header .logo-right[data-v-63cd6604] {\n  float: right;\n  margin-right: 10px;\n}\nh1[data-v-63cd6604] {\n  color: #1aad8d;\n  width: 80%;\n  margin: auto;\n  float: left;\n  padding-top: 20px;\n}\nh3[data-v-63cd6604], h4[data-v-63cd6604], p[data-v-63cd6604] {\n  text-align: left !important;\n}\n.container[data-v-63cd6604] {\n  margin-top: 50px !important;\n  display: flex;\n  flex: 11 auto;\n  flex-direction: column;\n  max-width: 50%;\n  margin: auto;\n}\n.main[data-v-63cd6604] {\n  margin: auto;\n}\n.hero-button[data-v-63cd6604] {\n  width: 200px;\n  height: 50px;\n  font-size: 18px;\n  font-weight: 400;\n}\na[data-v-63cd6604] {\n  text-decoration: none;\n  color: white;\n}\na[data-v-63cd6604]:hover {\n  color: white;\n}", ""]);
+exports.push([module.i, ".header[data-v-63cd6604] {\n  background-color: white;\n  height: 100px;\n  position: relative !important;\n  top: 0px !important;\n}\n.header .logo[data-v-63cd6604] {\n  float: left;\n  margin: -6px 0 12px 25px;\n}\n.header .logo-right[data-v-63cd6604] {\n  float: right;\n  margin-right: 10px;\n}\nh1[data-v-63cd6604] {\n  color: #1aad8d;\n  width: 80%;\n  margin: auto;\n  float: left;\n  padding-top: 20px;\n}\nh3[data-v-63cd6604], h4[data-v-63cd6604], p[data-v-63cd6604] {\n  text-align: left !important;\n}\n.container[data-v-63cd6604] {\n  margin-top: 50px !important;\n  display: flex;\n  flex: 11 auto;\n  flex-direction: column;\n  max-width: 50%;\n  margin: auto;\n}\n.main[data-v-63cd6604] {\n  margin: auto;\n}\n.hero-button[data-v-63cd6604] {\n  width: 200px;\n  height: 50px;\n  font-size: 18px;\n  font-weight: 400;\n}\na[data-v-63cd6604] {\n  text-decoration: none;\n  color: white;\n}\na[data-v-63cd6604]:hover {\n  color: white;\n}", ""]);
 
 // exports
 
@@ -74510,19 +74506,18 @@ var render = function() {
         {
           staticClass: "navbar",
           attrs: {
-            router: "",
             "default-active": _vm.activeIndex,
             "active-text-color": "#1aad8d",
             mode: "horizontal"
-          },
-          on: { select: _vm.handleSelect }
+          }
         },
         [
           _c(
             "el-menu-item",
             {
               staticClass: "navbar-text",
-              attrs: { route: "", index: "/mynetwork" }
+              attrs: { index: "1" },
+              on: { click: _vm.routeMyNetwork }
             },
             [_vm._v("Your Network")]
           ),
@@ -74531,7 +74526,8 @@ var render = function() {
             "el-menu-item",
             {
               staticClass: "navbar-text",
-              attrs: { route: "", index: "/network" }
+              attrs: { index: "2" },
+              on: { click: _vm.routeNetwork }
             },
             [_vm._v("Greater Network")]
           )
@@ -74539,12 +74535,16 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _vm.activeIndex === "/mynetwork"
-        ? _c("h2", [_vm._v("Your Organizational Network")])
+      _vm.activeIndex === "1"
+        ? _c("h2", { staticClass: "navbar-title" }, [
+            _vm._v("Your Organizational Network")
+          ])
         : _vm._e(),
       _vm._v(" "),
-      _vm.activeIndex === "/network"
-        ? _c("h2", [_vm._v("Greater Organizational Network")])
+      _vm.activeIndex === "2"
+        ? _c("h2", { staticClass: "navbar-title" }, [
+            _vm._v("Greater Organizational Network")
+          ])
         : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "line" })
